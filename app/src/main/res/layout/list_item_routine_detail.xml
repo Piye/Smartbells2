@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- NAME -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="2dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="routinename"
+            android:id="@+id/routineNameValue"
+            android:layout_margin="2dp"/>
+    </LinearLayout>
+
+    <!-- Exercise Groups fragment -->
+
+    <!-- SET GROUPS -->
+
+    <!-- EXERCISE -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="exercisename"
+        android:id="@+id/exerciseNameValue"
+        android:layout_margin="2dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Sets"
+        android:id="@+id/setsTextValue"
+        android:layout_margin="1dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Reps Per Set"
+        android:id="@+id/repsTextValue"
+        android:layout_margin="1dp"
+
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="2dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/blue"
+            android:textColor="@color/white"
+            android:text="Edit"
+            android:layout_weight=".5"
+            android:layout_margin="2dp"
+            android:id="@+id/editButton"/>
+        <!--android:onClick="saveRoutine"-->
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/blue"
+            android:textColor="@color/white"
+            android:text="Cancel"
+            android:layout_weight=".5"
+            android:layout_margin="2dp"
+            android:onClick="cancelCreateRoutine"/>
+
+    </LinearLayout>
+
+</LinearLayout>

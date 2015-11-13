@@ -1,0 +1,40 @@
+package teameleven.smartbells2.dashboardfragmenttabs;
+
+import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+
+/**
+ * Created by Jordan Medwid on 10/18/2015.
+ * This class will handle an array of achievement objects to show them to the user
+ * This class will be edited to accept JSON objects retrieved from a server- *Sprint 2
+ */
+public class Achievement_Fragment extends ListFragment {
+
+        //Temporary string array to populate list
+        String[] listOfAchievements = new String[] {"Walked 500 miles", "Walk 500 more", "running"};
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+        //Change adapter type to handle objects instead of strings later
+        //Set the adapter to show in application
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                        getActivity().getBaseContext(),
+                                        android.R.layout.simple_list_item_1, listOfAchievements);
+        setListAdapter(adapter);
+
+        return super.onCreateView(inflater, container, savedInstanceState);
+        }
+
+        //run list code on tab select
+        @Override
+        public void onStart()
+        {
+                super.onStart();
+                getListView();
+        }
+}

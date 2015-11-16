@@ -10,6 +10,9 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import teameleven.smartbells2.Dashboard;
+import teameleven.smartbells2.SmartBellsMainActivity;
+
 /**
  * Created by Jordan Medwid on 10/18/2015.
  * This class will handle an array of routine objects to show them to the user
@@ -30,6 +33,10 @@ public class Routines_Fragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        //Tells main activity ADD button what type of item to add (RECORD)
+        SmartBellsMainActivity.dashboardTab.setCheckTabPage(1);
+
         //Change adapter type to handle objects instead of strings later
         //List of routines
         /*

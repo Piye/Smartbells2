@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import teameleven.smartbells2.Dashboard;
+import teameleven.smartbells2.SmartBellsMainActivity;
+
 /** Created by Jordan Medwid on 10/18/2015.
  * This class will handle an array of workout objects to show them to the user
  * This class will be edited to accept JSON objects retrieved from a server- *Sprint 2
@@ -13,10 +16,15 @@ import android.view.ViewGroup;
 
 public class Workouts_Fragment extends ListFragment {
 
+    Dashboard dashboard;
     //Temporary string array to populate list
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        //Tells main activity ADD button what type of item to add (WORKOUT)
+        //Refer to ONCLICK- SmartBellsMainActivity
+        SmartBellsMainActivity.dashboardTab.setCheckTabPage(0);
+
         /*
         DatabaseAdapter db = new DatabaseAdapter(getActivity());
         try {

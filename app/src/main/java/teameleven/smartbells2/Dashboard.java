@@ -19,6 +19,7 @@ import teameleven.smartbells2.dashboardfragmenttabs.Workouts_Fragment;
 public class Dashboard extends Fragment {
 
     private FragmentTabHost dashboardTabHost;
+    private int checkTabPage;
 
     //Create the view and setup the tab host to view
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,27 +45,31 @@ public class Dashboard extends Fragment {
                 android.support.v4.app.FragmentTransaction fragTransaction = fragManager.beginTransaction();
 
                 //Detach Workout_Fragment if it exists
-                if (workout_Fragment != null)
+                if (workout_Fragment != null) {
                     fragTransaction.detach(workout_Fragment);
+                }
 
 
                 //Detach Routine_Fragment if it exists
-                if (routine_Fragment != null)
+                if (routine_Fragment != null) {
                     fragTransaction.detach(routine_Fragment);
-
+                }
 
                 //Detach Achievement_Fragment if it exists
-                if (achievement_Fragment != null)
+                if (achievement_Fragment != null) {
                     fragTransaction.detach(achievement_Fragment);
+                }
 
 
                 //Detach Records_Fragment if it exists
-                if (records_Fragment != null)
+                if (records_Fragment != null) {
                     fragTransaction.detach(records_Fragment);
+                }
 
 
                 //If the current tab is on workouts, show only workouts
                 if (tabId.equalsIgnoreCase("workouts")) {
+                    setCheckTabPage(0);
                     if (workout_Fragment == null) {
                         fragTransaction.add(R.id.realtabcontent, new Workouts_Fragment(), "workouts");
                     } else {
@@ -74,6 +79,7 @@ public class Dashboard extends Fragment {
 
                 //If the current tab is on routines, show only routines
                 if (tabId.equalsIgnoreCase("routines")) {
+                    setCheckTabPage(1);
                     if (routine_Fragment == null) {
                         fragTransaction.add(R.id.realtabcontent, new Routines_Fragment(), "routines");
                     } else {
@@ -83,6 +89,7 @@ public class Dashboard extends Fragment {
 
                 //If the current tab is on achievements show only achieves
                 if (tabId.equalsIgnoreCase("achievements")) {
+                    setCheckTabPage(2);
                     if (achievement_Fragment == null) {
                         fragTransaction.add(R.id.realtabcontent, new Achievement_Fragment(), "achievements");
                     } else {
@@ -92,6 +99,7 @@ public class Dashboard extends Fragment {
 
                 //If the current tab is on records show only records
                 if (tabId.equalsIgnoreCase("records")) {
+                    setCheckTabPage(3);
                     if (records_Fragment == null) {
                         fragTransaction.add(R.id.realtabcontent, new Records_Fragment(), "records");
                     } else {
@@ -139,4 +147,17 @@ public class Dashboard extends Fragment {
         //Return the view
         return rootView;
     }
+
+
+    public int getCheckTabPage() {
+        return checkTabPage;
+    }
+
+    public void setCheckTabPage(int checkTabPage) {
+        this.checkTabPage = checkTabPage;
+        //Use for debugging - Want to make sure variable is changing with tab clicks.
+        System.err.print(checkTabPage);
+    }
+
+
 }

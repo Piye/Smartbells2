@@ -18,6 +18,10 @@ import android.view.View;
 public class SmartBellsMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static Dashboard dashboardTab = new Dashboard();
+    private Fragment fragment = null;
+    private FragmentTransaction transaction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +36,43 @@ public class SmartBellsMainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                //Load Create a Workout on FAB click while on Workout Tab
+                if(dashboardTab.getCheckTabPage() == 0) {
+                    //Snackbar for debugging
+//                    Snackbar.make(view, "Add a workout!", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
+
+                    fragment = new CreateWorkout();
+                    transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.content_main, fragment);
+                    transaction.commit();
+
+                }
+
+                //Load Create a Routine on FAB click while on Routine Tab
+                if(dashboardTab.getCheckTabPage() == 1) {
+                    //Snackbar for debugging
+//                    Snackbar.make(view, "Add a Routine!", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
+                    fragment = new CreateRoutine();
+                    transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.content_main, fragment);
+                    transaction.commit();
+                }
+
+                //Probably going to remove this in favour for a new Exercise Class
+                if(dashboardTab.getCheckTabPage() == 2) {
+                    Snackbar.make(view, "Add an achievement?...", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+
+                //This might go all together? Will keep if we decide to add a new tab type.
+                if(dashboardTab.getCheckTabPage() == 3) {
+                    Snackbar.make(view, "Add a record!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+
             }
         });
         //******************************************************************************************
@@ -88,8 +127,9 @@ public class SmartBellsMainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        Fragment fragment = null;
-        FragmentTransaction transaction;
+        // Moved above to the top of the class to be used class wide.
+/*        Fragment fragment = null;
+        FragmentTransaction transaction;*/
 
         //Handle the Actions
         if (id == R.id.nav_dashboard) {

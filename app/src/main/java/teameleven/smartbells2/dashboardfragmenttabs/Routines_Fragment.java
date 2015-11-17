@@ -10,7 +10,6 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import teameleven.smartbells2.Dashboard;
 import teameleven.smartbells2.SmartBellsMainActivity;
 
 /**
@@ -43,7 +42,7 @@ public class Routines_Fragment extends ListFragment {
         DatabaseAdapter db = new DatabaseAdapter(getActivity());
         try {
             db.openLocalDatabase();
-        } catch (SQLException e) {
+        } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
 

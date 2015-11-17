@@ -127,19 +127,16 @@ public class SmartBellsMainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        // Moved above to the top of the class to be used class wide.
-/*        Fragment fragment = null;
-        FragmentTransaction transaction;*/
-
+        //Drawer Selected Items
         //Handle the Actions
         if (id == R.id.nav_dashboard) {
             fragment = new Dashboard();
         } else if (id == R.id.nav_beginworkout) {
             fragment = new BeginWorkout();
         } else if (id == R.id.nav_achievements) {
-
+            fragment = new AchievementDashboard();
         } else if (id == R.id.nav_about) {
-
+            fragment = new About();
         } else if (id == R.id.nav_profile) {
 
         } else if (id == R.id.nav_logout) {

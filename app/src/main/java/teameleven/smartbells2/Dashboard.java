@@ -10,8 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import teameleven.smartbells2.dashboardfragmenttabs.Achievement_Fragment;
-import teameleven.smartbells2.dashboardfragmenttabs.Records_Fragment;
+import teameleven.smartbells2.dashboardfragmenttabs.Exercises_Fragment;
 import teameleven.smartbells2.dashboardfragmenttabs.Routines_Fragment;
 import teameleven.smartbells2.dashboardfragmenttabs.Workouts_Fragment;
 
@@ -39,8 +38,8 @@ public class Dashboard extends Fragment {
 
                 Workouts_Fragment workout_Fragment = (Workouts_Fragment) fragManager.findFragmentByTag("workouts");
                 Routines_Fragment routine_Fragment = (Routines_Fragment) fragManager.findFragmentByTag("routines");
-                Achievement_Fragment achievement_Fragment = (Achievement_Fragment) fragManager.findFragmentByTag("achievements");
-                Records_Fragment records_Fragment = (Records_Fragment) fragManager.findFragmentByTag("records");
+                Exercises_Fragment exercises_Fragment = (Exercises_Fragment) fragManager.findFragmentByTag("exercises");
+
 
                 android.support.v4.app.FragmentTransaction fragTransaction = fragManager.beginTransaction();
 
@@ -56,16 +55,9 @@ public class Dashboard extends Fragment {
                 }
 
                 //Detach Achievement_Fragment if it exists
-                if (achievement_Fragment != null) {
-                    fragTransaction.detach(achievement_Fragment);
+                if (exercises_Fragment != null) {
+                    fragTransaction.detach(exercises_Fragment);
                 }
-
-
-                //Detach Records_Fragment if it exists
-                if (records_Fragment != null) {
-                    fragTransaction.detach(records_Fragment);
-                }
-
 
                 //If the current tab is on workouts, show only workouts
                 if (tabId.equalsIgnoreCase("workouts")) {
@@ -88,22 +80,12 @@ public class Dashboard extends Fragment {
                 }
 
                 //If the current tab is on achievements show only achieves
-                if (tabId.equalsIgnoreCase("achievements")) {
+                if (tabId.equalsIgnoreCase("exercises")) {
                     setCheckTabPage(2);
-                    if (achievement_Fragment == null) {
-                        fragTransaction.add(R.id.realtabcontent, new Achievement_Fragment(), "achievements");
+                    if (exercises_Fragment == null) {
+                        fragTransaction.add(R.id.realtabcontent, new Exercises_Fragment(), "exercises");
                     } else {
-                        fragTransaction.attach(achievement_Fragment);
-                    }
-                }
-
-                //If the current tab is on records show only records
-                if (tabId.equalsIgnoreCase("records")) {
-                    setCheckTabPage(3);
-                    if (records_Fragment == null) {
-                        fragTransaction.add(R.id.realtabcontent, new Records_Fragment(), "records");
-                    } else {
-                        fragTransaction.attach(records_Fragment);
+                        fragTransaction.attach(exercises_Fragment);
                     }
                 }
 
@@ -126,20 +108,17 @@ public class Dashboard extends Fragment {
         dashboardTabHost.addTab(dashboardTabHost.newTabSpec("routines").setIndicator("Routines"), Routines_Fragment.class, null);
 
         //Achievements Tab creation
-        dashboardTabHost.addTab(dashboardTabHost.newTabSpec("achievements").setIndicator("Achievements"), Achievement_Fragment.class, null);
-
-        //Records Tab creation
-        dashboardTabHost.addTab(dashboardTabHost.newTabSpec("records").setIndicator("Records"), Records_Fragment.class, null);
+        dashboardTabHost.addTab(dashboardTabHost.newTabSpec("exercises").setIndicator("Exercises"), Exercises_Fragment.class, null);
 
 
         //Adjusting the text within the tabs to properly show titles
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
         {
             TextView x = (TextView) dashboardTabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
             if (i == 2)
             {
-                x.setTextSize(7);
-            } else {x.setTextSize(10);}
+                x.setTextSize(15);
+            } else {x.setTextSize(15);}
 
 
         }

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import teameleven.smartbells2.Dashboard;
+import teameleven.smartbells2.AchievementDashboard;
 import teameleven.smartbells2.SmartBellsMainActivity;
 
 /**
@@ -17,7 +17,7 @@ import teameleven.smartbells2.SmartBellsMainActivity;
  */
 public class Achievement_Fragment extends ListFragment {
 
-        Dashboard dashboard;
+        AchievementDashboard dashboard;
         //Temporary string array to populate list
         String[] listOfAchievements = new String[] {"Walked 500 miles", "Walk 500 more", "running"};
 

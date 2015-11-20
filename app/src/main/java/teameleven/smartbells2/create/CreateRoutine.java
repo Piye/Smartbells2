@@ -1,4 +1,4 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.create;
 
 /**
  * CreateRoutine class makes a Routine of Exercises(Set Group)
@@ -25,6 +25,9 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
+import teameleven.smartbells2.Dashboard;
+import teameleven.smartbells2.R;
+
 //import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
 //import teameleven.smartbells2.BusinessLayer.tableclasses.Exercise;
 //import teameleven.smartbells2.BusinessLayer.tableclasses.Routine;
@@ -46,6 +49,8 @@ public class CreateRoutine extends Fragment implements View.OnClickListener{
     private RadioGroup radioGroup;
     private RadioButton publicButton;
     int numberOfGroups = 1;
+
+
     private Button cancel;
     private FloatingActionButton fab;
     /**
@@ -224,6 +229,15 @@ public class CreateRoutine extends Fragment implements View.OnClickListener{
 
         switch (v.getId()) {
             //START NEW INTENT for each button
+            case R.id.add_setgroup:
+                //Pop set group dialog window
+                /*
+                fragment = new CreateSetGroupDialog();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_main, fragment);
+                transaction.commit();
+                */
+                break;
             case R.id.design_routine:
                 //Add new Routine
                 break;
@@ -231,7 +245,6 @@ public class CreateRoutine extends Fragment implements View.OnClickListener{
 
                 fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
                 fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-
                 fragment = new Dashboard();
                 transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.content_main, fragment);

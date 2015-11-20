@@ -1,4 +1,4 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.create;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

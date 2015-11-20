@@ -28,7 +28,7 @@
         </intent-filter>
         </activity>
 
-        <activity android:name=".CreateCustomSession"/>
+        <activity android:name=".create.CreateCustomSession"/>
 
         <!-- ACTIVITIES
         <activity android:name=".ViewLayer.login.SignupActivity"/>

@@ -1,4 +1,4 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.create;
 //// TODO: 08/11/2015 add database connectivity - also get exerciseId from spinner and pass to restCall
 
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import teameleven.smartbells2.R;
 
 /**
  * Created by Jare on 2015-10-06.

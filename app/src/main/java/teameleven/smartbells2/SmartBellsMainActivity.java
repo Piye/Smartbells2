@@ -17,6 +17,10 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
+import teameleven.smartbells2.create.CreateExercise;
+import teameleven.smartbells2.create.CreateRoutine;
+import teameleven.smartbells2.create.CreateWorkout;
+
 public class SmartBellsMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -46,8 +50,10 @@ public class SmartBellsMainActivity extends AppCompatActivity
                     //Snackbar for debugging
 //                    Snackbar.make(view, "Add a workout!", Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
+
                     //hide the fab
-                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(new AccelerateInterpolator(2)).start();
+                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
+                                                            new AccelerateInterpolator(2)).start();
                     fragment = new CreateWorkout();
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
@@ -61,7 +67,8 @@ public class SmartBellsMainActivity extends AppCompatActivity
 //                    Snackbar.make(view, "Add a Routine!", Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
                     //hide the fab
-                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(new AccelerateInterpolator(2)).start();
+                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
+                                                            new AccelerateInterpolator(2)).start();
                     fragment = new CreateRoutine();
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
@@ -71,8 +78,17 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
                 //Probably going to remove this in favour for a new Exercise Class
                 if(dashboardTab.getCheckTabPage() == 2) {
-                    Snackbar.make(view, "Add an achievement?...", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    //Snackbar.make(view, "Add Exercise", Snackbar.LENGTH_LONG)
+                            //.setAction("Action", null).show();
+
+                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
+                            new AccelerateInterpolator(2)).start();
+                    fragment = new CreateExercise();
+                    transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.content_main, fragment);
+                    transaction.commit();
+
+
                 }
 
                 //This might go all together? Will keep if we decide to add a new tab type.

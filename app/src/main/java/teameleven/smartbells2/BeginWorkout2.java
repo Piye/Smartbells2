@@ -41,17 +41,17 @@ public class BeginWorkout2 extends Fragment {
 
                 android.support.v4.app.FragmentTransaction fragTransaction = fragManager.beginTransaction();
 
-                //Detach Achievement_Fragment if it exists
+                //Detach myroutines_fragment if it exists
                 if (myroutines_fragment != null) {
                     fragTransaction.detach(myroutines_fragment);
                 }
 
-                //Detach Records_Fragment if it exists
+                //Detach publicroutines_fragment if it exists
                 if (publicroutines_fragment != null) {
                     fragTransaction.detach(publicroutines_fragment);
                 }
 
-                //If the current tab is on achievements show only achieves
+                //If the current tab is on myroutines show only private routines
                 if (tabId.equalsIgnoreCase("myroutines")) {
                     setCheckTabPage(1);
                     if (myroutines_fragment == null) {
@@ -61,7 +61,7 @@ public class BeginWorkout2 extends Fragment {
                     }
                 }
 
-                //If the current tab is on records show only records
+                //If the current tab is on publicroutines show only public routines
                 if (tabId.equalsIgnoreCase("publicroutines")) {
                     setCheckTabPage(2);
                     if (publicroutines_fragment == null) {

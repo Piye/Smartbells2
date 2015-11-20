@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 
 public class SmartBellsMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -21,6 +23,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
     public static Dashboard dashboardTab = new Dashboard();
     private Fragment fragment = null;
     private FragmentTransaction transaction;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,8 @@ public class SmartBellsMainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         //******************************************************************************************
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -42,7 +46,8 @@ public class SmartBellsMainActivity extends AppCompatActivity
                     //Snackbar for debugging
 //                    Snackbar.make(view, "Add a workout!", Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
-
+                    //hide the fab
+                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(new AccelerateInterpolator(2)).start();
                     fragment = new CreateWorkout();
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
@@ -55,10 +60,13 @@ public class SmartBellsMainActivity extends AppCompatActivity
                     //Snackbar for debugging
 //                    Snackbar.make(view, "Add a Routine!", Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
+                    //hide the fab
+                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(new AccelerateInterpolator(2)).start();
                     fragment = new CreateRoutine();
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();
+
                 }
 
                 //Probably going to remove this in favour for a new Exercise Class
@@ -87,6 +95,13 @@ public class SmartBellsMainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //show the fab
+        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     @Override
@@ -132,7 +147,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
         if (id == R.id.nav_dashboard) {
             fragment = new Dashboard();
         } else if (id == R.id.nav_beginworkout) {
-            fragment = new BeginWorkout();
+            fragment = new BeginWorkout2();
         } else if (id == R.id.nav_achievements) {
             fragment = new AchievementDashboard();
         } else if (id == R.id.nav_about) {

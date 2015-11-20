@@ -33,7 +33,7 @@
         <!-- ACTIVITIES
         <activity android:name=".ViewLayer.login.SignupActivity"/>
         <activity android:name=".ViewLayer.login.LoginActivity" android:launchMode="singleTop"/>
-        <activity android:name=".ViewLayer.create.CreateRoutine"/>
+
 
         <activity android:name=".ViewLayer.create.CreateExercise"/>
         <activity android:name=".ViewLayer.record.RecordWorkoutRoutine"/>

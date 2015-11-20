@@ -11,29 +11,26 @@ package teameleven.smartbells2;
 
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-//import teameleven.smartbells_prototype0001.BusinessLayer.localdatabase.DatabaseAdapter;
-//import teameleven.smartbells_prototype0001.BusinessLayer.tableclasses.Exercise;
-//import teameleven.smartbells_prototype0001.BusinessLayer.tableclasses.Routine;
-//import teameleven.smartbells_prototype0001.BusinessLayer.tableclasses.SetGroup;
+//import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
+//import teameleven.smartbells2.BusinessLayer.tableclasses.Exercise;
+//import teameleven.smartbells2.BusinessLayer.tableclasses.Routine;
+//import teameleven.smartbells2.BusinessLayer.tableclasses.SetGroup;
 
-public class CreateRoutine extends Fragment {
+public class CreateRoutine extends Fragment implements View.OnClickListener{
 
     //private DatabaseAdapter database;
     //private Routine routine;
@@ -49,17 +46,23 @@ public class CreateRoutine extends Fragment {
     private RadioGroup radioGroup;
     private RadioButton publicButton;
     int numberOfGroups = 1;
-
+    private Button cancel;
+    private FloatingActionButton fab;
     /**
      * onCreate
      *
      * @param savedInstanceState
      */
-    @Override
+    //@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //Main view
         View view = inflater.inflate(R.layout.create_routine, container, false);
+
+        //CancelButton
+        cancel = (Button) view.findViewById(R.id.cancelCreateRoutine);
+        cancel.setOnClickListener(this);
+
         return view;
        // addListenerOnSpinnerExerciseSelection();
 
@@ -78,8 +81,8 @@ public class CreateRoutine extends Fragment {
 /*        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         exerciseSpinner.setAdapter(adapter);*/
-   /* }
-
+    }
+/*
 
     //Add Routine Name
     public String addRoutineName() {
@@ -212,12 +215,36 @@ public class CreateRoutine extends Fragment {
         return true;
     }
 
-*//*
+*/
+
+    @Override
+    public void onClick(View v) {
+        Fragment fragment;
+        FragmentTransaction transaction;
+
+        switch (v.getId()) {
+            //START NEW INTENT for each button
+            case R.id.design_routine:
+                //Add new Routine
+                break;
+            case R.id.cancelCreateRoutine:
+
+                fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+                fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+
+                fragment = new Dashboard();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_main, fragment);
+                transaction.commit();
+                //Kill the fragment
+                //getFragmentManager().beginTransaction().remove(this).commit();
+                break;
+        }
+    }
+
     //Cancel - back to menu
     public void cancelCreateRoutine(View view) {
-
-        CreateRoutine.this.finish();
-    }*/
-
+        getFragmentManager().beginTransaction().remove(this).commit();
+        //CreateRoutine.this.finish();
     }
 }

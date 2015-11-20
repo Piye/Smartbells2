@@ -11,13 +11,13 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 
-public class SplashScreen extends Activity {
+public class LoadingSplashScreen extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_screen);
+        setContentView(R.layout.splash_loading_screen);
 
         //Run splash screen on a seperate thread to avoid interupting the main program.
         Thread timedThread = new Thread(){
@@ -28,7 +28,7 @@ public class SplashScreen extends Activity {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    Intent intent = new Intent(SplashScreen.this, SmartBellsMainActivity.class);
+                    Intent intent = new Intent(LoadingSplashScreen.this, SmartBellsMainActivity.class);
                     startActivity(intent);
                 }
             }

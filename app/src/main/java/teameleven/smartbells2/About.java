@@ -22,7 +22,7 @@ public class About extends Fragment {
 
         //Hide the FAB
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
+        fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
                 new AccelerateInterpolator(2)).start();
 
         View rootView = inflater.inflate(R.layout.about_page, container, false);

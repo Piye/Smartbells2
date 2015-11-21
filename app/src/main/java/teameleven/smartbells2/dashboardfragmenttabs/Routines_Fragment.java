@@ -12,6 +12,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import teameleven.smartbells2.SmartBellsMainActivity;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
  * Created by Jordan Medwid on 10/18/2015.

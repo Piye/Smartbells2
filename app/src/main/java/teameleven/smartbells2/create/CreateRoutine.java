@@ -71,19 +71,18 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
 
         //Main view
         View view = inflater.inflate(R.layout.create_routine, container, false);
-
         //Save Button
-        save = (Button) view.findViewById(R.id.saveExercise);
+        save = (Button) view.findViewById(R.id.createNewRoutine);
         save.setOnClickListener(this);
         //CancelButton
         cancel = (Button) view.findViewById(R.id.cancelCreateRoutine);
         cancel.setOnClickListener(this);
-
+        //Spinner
+        exerciseSpinner = (Spinner) view.findViewById(R.id.exerciseSpinner);
         addListenerOnSpinnerExerciseSelection();
 
-        //Set up the exercise Spinner
+        //Open Database
         database = new DatabaseAdapter(getActivity());
-
         try {
             database.openLocalDatabase();
         } catch (java.sql.SQLException e) {
@@ -92,12 +91,10 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
 
         //Get list of Exercises from the database
         ArrayList<String> exerciseList = database.getExercisesAsStrings();
-
-
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, exerciseList);
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         exerciseSpinner.setAdapter(adapter);
-
 
         return view;
     }
@@ -154,7 +151,6 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
 
     //Add Exercise
     public String addListenerOnSpinnerExerciseSelection() {
-        exerciseSpinner = (Spinner) getActivity().findViewById(R.id.exerciseSpinner);
         exerciseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

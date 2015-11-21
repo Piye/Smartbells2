@@ -18,10 +18,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import teameleven.smartbells2.businesslayer.SessionManager;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
 import teameleven.smartbells2.businesslayer.tableclasses.Routine;
+import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSession;
 
 
 /**
@@ -153,13 +156,15 @@ public class LoginActivity extends Activity {
                 DatabaseAdapter db = new DatabaseAdapter(getBaseContext());
                 try {
                     db.openLocalDatabase();
-                    //recreateDatabase(db);
 
+                    JSONObject json = new JSONObject(authorized);
 
-                    db.insertToken((String) new JSONObject(authorized).get("authentication_token"));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
+                    String accessToken = json.getString("authentication_token");
+                    int user_id = json.getInt("id");
+                    Log.d("LoginActivity.validate - token checking - ", user_id + "<-id token ->" +  accessToken);
+                    db.insertToken(accessToken, user_id);
+                    initialDatabaseSync(db);
+                } catch (SQLException | JSONException e) {
                     e.printStackTrace();
                 }
                 db.closeLocalDatabase();
@@ -171,16 +176,31 @@ public class LoginActivity extends Activity {
         return valid;
     }
 
-    private void recreateDatabase(DatabaseAdapter db) {
-        //db.updateDB();
-        //ArrayList<Exercise> exercise = Exercise.getAllExercise(Exercise.restGetAll());
-        //db.loadAllExercises(exercise);
-        Routine.restGetAll();
-        //SetGroup.restGetAll();
-        //WorkoutSetGroup.restGetall();
-        //WorkoutSession.restGetAll();
+    private void initialDatabaseSync(DatabaseAdapter db) {
+        db.updateDB();
+        long x = System.currentTimeMillis();
+        long y;
 
 
+        ArrayList<Exercise> exercise = Exercise.restGetAll();
+        Log.d("LoginActivity.initialDatabaseSync - Exercise row count = ", String.valueOf(exercise.size()));
+        y = (System.currentTimeMillis() - x);
+        Log.d("time taken = ", String.format("%s milliseconds", y));
+        db.loadAllExercises(exercise);
+
+
+        ArrayList<Routine> routines = Routine.restGetAll(db.getUserIDForSession());
+        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
+        y = (System.currentTimeMillis() - x);
+        Log.d("time taken = ", String.format("%s milliseconds", y));
+        db.loadAllRoutines(routines);
+
+
+        ArrayList<WorkoutSession> workoutSessions = WorkoutSession.
+                restGetAll(db.getUserIDForSession());
+        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
+        y = (System.currentTimeMillis() - x);
+        Log.d("time taken = ", String.format("%s milliseconds", y));
+        db.loadAllWorkoutSessions(workoutSessions);
     }
-
 }

@@ -33,7 +33,7 @@ import teameleven.smartbells2.R;
 //import teameleven.smartbells2.BusinessLayer.tableclasses.Routine;
 //import teameleven.smartbells2.BusinessLayer.tableclasses.SetGroup;
 
-public class CreateRoutine extends Fragment implements View.OnClickListener{
+public class CreateRoutine extends Fragment implements View.OnClickListener {
 
     //private DatabaseAdapter database;
     //private Routine routine;

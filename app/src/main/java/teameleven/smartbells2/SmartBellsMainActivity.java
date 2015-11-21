@@ -3,7 +3,6 @@ package teameleven.smartbells2;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -11,20 +10,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
+import teameleven.smartbells2.create.CreateCustomSession;
 import teameleven.smartbells2.create.CreateExercise;
 import teameleven.smartbells2.create.CreateRoutine;
 import teameleven.smartbells2.create.CreateWorkout;
 
 public class SmartBellsMainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+                                    implements NavigationView.OnNavigationItemSelectedListener {
 
     public static Dashboard dashboardTab = new Dashboard();
+    public static BeginWorkout2 bw2 = new BeginWorkout2();
     private Fragment fragment = null;
     private FragmentTransaction transaction;
     private FloatingActionButton fab;
@@ -32,24 +32,31 @@ public class SmartBellsMainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_smart_bells_main);
+
+        //Go to the Dashboard
+        fragment = new Dashboard();
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_main, fragment);
+        transaction.commit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //******************************************************************************************
+        //*************************************FAB**************************************************
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                /* DASHBOARD TAB SELECTED */
+
                 //Load Create a Workout on FAB click while on Workout Tab
                 if(dashboardTab.getCheckTabPage() == 0) {
                     //Snackbar for debugging
-//                    Snackbar.make(view, "Add a workout!", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show();
+                    //Snackbar.make(view, "Add a workout!", Snackbar.LENGTH_LONG)
+                            //.setAction("Action", null).show();
 
                     //hide the fab
                     fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
@@ -63,9 +70,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
                 //Load Create a Routine on FAB click while on Routine Tab
                 if(dashboardTab.getCheckTabPage() == 1) {
-                    //Snackbar for debugging
-//                    Snackbar.make(view, "Add a Routine!", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show();
                     //hide the fab
                     fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
                                                             new AccelerateInterpolator(2)).start();
@@ -78,9 +82,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
                 //Probably going to remove this in favour for a new Exercise Class
                 if(dashboardTab.getCheckTabPage() == 2) {
-                    //Snackbar.make(view, "Add Exercise", Snackbar.LENGTH_LONG)
-                            //.setAction("Action", null).show();
-
+                    //hide the fab
                     fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
                             new AccelerateInterpolator(2)).start();
                     fragment = new CreateExercise();
@@ -91,16 +93,26 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
                 }
 
+                /* BEGIN WORKOUT FRAGMENT TAB SELECTED */
+
                 //This might go all together? Will keep if we decide to add a new tab type.
-                if(dashboardTab.getCheckTabPage() == 3) {
-                    Snackbar.make(view, "Add a record!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                if(bw2.getCheckTabPage() == 0) {
+                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
+                            new AccelerateInterpolator(2)).start();
+                    fragment = new CreateCustomSession();
+                    transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.content_main, fragment);
+                    transaction.commit();
+                }
+                //This might go all together? Will keep if we decide to add a new tab type.
+                if(bw2.getCheckTabPage() == 1) {
+
                 }
 
             }
         });
-        //******************************************************************************************
 
+        //*******************************DRAWER****************************************************
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -128,13 +140,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.smart_bells_main, menu);
-        return true;
     }
 
     @Override
@@ -169,16 +174,15 @@ public class SmartBellsMainActivity extends AppCompatActivity
         } else if (id == R.id.nav_about) {
             fragment = new About();
         } else if (id == R.id.nav_profile) {
-
+            //View and edit profile
         } else if (id == R.id.nav_logout) {
-
+            //logout
         }
 
         if (fragment != null) {
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.content_main, fragment);
             transaction.commit();
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

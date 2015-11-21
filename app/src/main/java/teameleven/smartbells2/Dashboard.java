@@ -30,6 +30,7 @@ public class Dashboard extends Fragment {
         dashboardTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);
         dashboardTabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);
 
+        //Show the FAB
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 

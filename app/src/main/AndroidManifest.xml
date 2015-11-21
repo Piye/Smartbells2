@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".LoadingSplashScreen"
+            android:name=".OpeningSplashScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -28,13 +28,9 @@
         </intent-filter>
         </activity>
 
-        <activity android:name=".create.CreateCustomSession"/>
-
         <!-- ACTIVITIES
         <activity android:name=".ViewLayer.login.SignupActivity"/>
         <activity android:name=".ViewLayer.login.LoginActivity" android:launchMode="singleTop"/>
-
-
         <activity android:name=".ViewLayer.create.CreateExercise"/>
         <activity android:name=".ViewLayer.record.RecordWorkoutRoutine"/>
         <activity android:name=".ViewLayer.edit.EditRoutine"/>

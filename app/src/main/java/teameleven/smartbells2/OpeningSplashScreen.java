@@ -1,34 +1,31 @@
 package teameleven.smartbells2;
 
-import android.os.Bundle;
-
-
-/**
- * Created by Jordan on 11/16/2015.
- * Splash Screen handler
- */
-
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 
-public class LoadingSplashScreen extends Activity {
+/**
+ * Created by Jare on 2015-11-20.
+ */
+public class OpeningSplashScreen extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_loading_screen);
+        setContentView(R.layout.splash_opening_screen);
 
         //Run splash screen on a seperate thread to avoid interupting the main program.
         Thread timedThread = new Thread(){
             public void run(){
                 try{
-                    //Allow this to run for 3 seconds
-                    sleep(7000);
+                    //Allow this to run for 4 seconds
+                    sleep(4000);
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    Intent intent = new Intent(LoadingSplashScreen.this, SmartBellsMainActivity.class);
+                    //Start the next Activity
+                    Intent intent = new Intent(OpeningSplashScreen.this, SmartBellsMainActivity.class);
                     startActivity(intent);
                 }
             }
@@ -42,5 +39,4 @@ public class LoadingSplashScreen extends Activity {
         super.onPause();
         finish();
     }
-
 }

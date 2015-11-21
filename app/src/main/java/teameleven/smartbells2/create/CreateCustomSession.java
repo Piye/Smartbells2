@@ -2,19 +2,26 @@ package teameleven.smartbells2.create;
 //// TODO: 08/11/2015 add database connectivity - also get exerciseId from spinner and pass to restCall
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import teameleven.smartbells2.BeginWorkout2;
 import teameleven.smartbells2.R;
 
 /**
  * Created by Jare on 2015-10-06.
  *
  */
-public class CreateCustomSession extends AppCompatActivity {
+public class CreateCustomSession extends Fragment implements View.OnClickListener {
 
     //private String exerciseName = "curls";
     private int numberOfGroups = 1;
@@ -26,12 +33,19 @@ public class CreateCustomSession extends AppCompatActivity {
     private EditText mRepsPerSet;
     //WorkoutSession session = new WorkoutSession();
 
+    private Button cancel;
+    private FloatingActionButton fab;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_custom_session);
-        addListenerOnSpinnerExerciseSelection();
+    //@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        //Main view
+        View view = inflater.inflate(R.layout.create_routine, container, false);
+        //CancelButton
+        cancel = (Button) view.findViewById(R.id.cancelCreateRoutine);
+        cancel.setOnClickListener(this);
+
+        return view;
 /*
         //Set up the exercise Spinner
         database = new DatabaseAdapter(this);
@@ -50,7 +64,7 @@ public class CreateCustomSession extends AppCompatActivity {
 
     //Add Name
     public String addName() {
-        mName = (EditText) findViewById(R.id.editCustomRoutineName);
+       // mName = (EditText) findViewById(R.id.editCustomRoutineName);
         //Call setName() in Routine class
         return mName.getText().toString();
     }
@@ -70,7 +84,7 @@ public class CreateCustomSession extends AppCompatActivity {
 
     //Add Exercise
     public String addListenerOnSpinnerExerciseSelection() {
-        exerciseSpinner = (Spinner) findViewById(R.id.exerciseSpinner);
+        //exerciseSpinner = (Spinner) findViewById(R.id.exerciseSpinner);
         exerciseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -87,14 +101,14 @@ public class CreateCustomSession extends AppCompatActivity {
 
     //Add Reps Per Set
     public String addRepsPerSet() throws NumberFormatException {
-        mRepsPerSet = (EditText) findViewById(R.id.editRepsText);
+        //mRepsPerSet = (EditText) findViewById(R.id.editRepsText);
         //call set method in routine class
         return mRepsPerSet.getText().toString();
     }
 
     //Add Number of Sets
     public String addNumberOfSets() throws NumberFormatException {
-        mNumOfSets = (EditText) findViewById(R.id.editSetsText);
+        //mNumOfSets = (EditText) findViewById(R.id.editSetsText);
         //call set method in routine class
         return mNumOfSets.getText().toString();
     }
@@ -142,9 +156,37 @@ public class CreateCustomSession extends AppCompatActivity {
 */
     }
 
-    //Cancel - back to menu
-    public void cancelCreateCustomSession(View view) {
-        CreateCustomSession.this.finish();
+    @Override
+    public void onClick(View v) {
+        Fragment fragment;
+        FragmentTransaction transaction;
+
+        switch (v.getId()) {
+            //START NEW INTENT for each button
+            case R.id.add_setgroup:
+                //Pop set group dialog window
+                /*
+                fragment = new CreateSetGroupDialog();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_main, fragment);
+                transaction.commit();
+                */
+                break;
+            case R.id.design_routine:
+                //Add new workout
+                break;
+            case R.id.cancelCreateRoutine:
+
+                fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+                fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                fragment = new BeginWorkout2();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_main, fragment);
+                transaction.commit();
+                //Kill the fragment
+                //getFragmentManager().beginTransaction().remove(this).commit();
+                break;
+        }
     }
 
 }

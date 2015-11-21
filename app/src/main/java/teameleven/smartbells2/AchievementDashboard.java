@@ -1,11 +1,13 @@
 package teameleven.smartbells2;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -19,11 +21,17 @@ public class AchievementDashboard extends Fragment {
 
     private FragmentTabHost dashboardTabHost;
     private int checkTabPage;
+    private FloatingActionButton fab;
 
     //Create the view and setup the tab host to view
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.tab_achievement_dashboard, container, false);
+
+        //Hide the FAB
+        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
+                new AccelerateInterpolator(2)).start();
 
         dashboardTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);
         dashboardTabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);

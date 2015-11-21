@@ -1,11 +1,13 @@
 package teameleven.smartbells2;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ public class BeginWorkout2 extends Fragment {
 
     private FragmentTabHost dashboardTabHost;
     private int checkTabPage;
+    private FloatingActionButton fab;
 
     //Create the view and setup the tab host to view
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,6 +30,10 @@ public class BeginWorkout2 extends Fragment {
 
         dashboardTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);
         dashboardTabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);
+
+        //Show the FAB
+        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 
         //Creates a listener, and handles fragment manager to swap between list fragments
         TabHost.OnTabChangeListener tabChangeListener = new TabHost.OnTabChangeListener() {

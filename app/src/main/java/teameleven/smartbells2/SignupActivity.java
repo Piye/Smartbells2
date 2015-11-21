@@ -1,4 +1,4 @@
-package teameleven.smartbells2.ViewLayer.login;
+package teameleven.smartbells2;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,8 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import teameleven.smartbells2.BusinessLayer.tableclasses.User;
-import teameleven.smartbells2.R;
+import teameleven.smartbells2.businesslayer.tableclasses.User;
 
 /**
  * Created by Brian McMahon on 14/10/2015.

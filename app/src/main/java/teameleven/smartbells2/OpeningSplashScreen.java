@@ -1,10 +1,8 @@
-package teameleven.smartbells2.ViewLayer.login;
+package teameleven.smartbells2;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import teameleven.smartbells2.R;
 
 /**
  * Created by Jare on 2015-11-20.
@@ -26,6 +24,7 @@ public class OpeningSplashScreen extends Activity {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
+
                     //Start the next Activity
                     Intent intent = new Intent(OpeningSplashScreen.this, LoginActivity.class);
                     startActivity(intent);

@@ -1,4 +1,4 @@
-package teameleven.smartbells2.BusinessLayer.tableclasses;
+package teameleven.smartbells2.businesslayer.tableclasses;
 
 import android.os.AsyncTask;
 
@@ -7,9 +7,9 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
-import teameleven.smartbells2.BusinessLayer.RESTCall;
-import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
-import teameleven.smartbells2.ViewLayer.login.Authentication;
+import teameleven.smartbells2.businesslayer.RESTCall;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.Authentication;
 
 /**
  * Base SetGroup Class that represents a number of numOfSets with a given number of repsPerSet
@@ -17,6 +17,7 @@ import teameleven.smartbells2.ViewLayer.login.Authentication;
  */
 public class SetGroup {
 
+    /*************************************Attributes***********************************************/
     private Exercise exercise = new Exercise();
     private int exerciseId;
     private int routineId;
@@ -26,9 +27,9 @@ public class SetGroup {
     private String creationDate;
     private String lastUpdated;
     private String TAG = "DEBUGGING!!!!!!!!!!!!!!!!!";
-
     /**************************************Constructors********************************************/
     public SetGroup(){}
+
     /**
      * Constructor for Creation of Objects for Insertion into JSON Object
      * @param exerciseId
@@ -40,13 +41,12 @@ public class SetGroup {
         this.numOfSets = num_of_sets;
         this.repsPerSet = reps_per_set;
     }
+
     /**
      * @param setGroup
      */
     public SetGroup (JSONObject setGroup){
         try {
-            //exercise = (Exercise) setGroup.get("exercise");
-            //exercises = (ArrayList) setGroup.get("exercises");
             exerciseId = (int) setGroup.get("exercise_id");
             routineId = (int) setGroup.get("routine_id");
             id = (int) setGroup.get("id");
@@ -54,13 +54,20 @@ public class SetGroup {
             repsPerSet = (int) setGroup.get("reps_per_set");
             creationDate = (String) setGroup.get("created_at");
             lastUpdated = (String) setGroup.get("updated_at");
-            //Log.d("SetGroup, Constructor - ", setGroup.toString(4));
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    /*************************************Attributes***********************************************/
+    public int getExerciseId() {
+        return exerciseId;
+    }
+
+    public void setExerciseId(int exerciseId){
+        this.exerciseId = exerciseId;
+    }
+
+    /**************************************Base Methods********************************************/
 
     public int getRoutineId() {
         return routineId;
@@ -68,10 +75,6 @@ public class SetGroup {
 
     public void setRoutineId(int routineId) {
         this.routineId = routineId;
-    }
-
-    public void setExerciseId(int exerciseId){
-        this.exerciseId = exerciseId;
     }
 
     public void setExerciseId(){
@@ -82,12 +85,17 @@ public class SetGroup {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int id) {        this.id = id;    }
+
+    public String getCreationDate() {        return creationDate;    }
+
+    public void setCreationDate(String creationDate) {        this.creationDate = creationDate;    }
+
+    public String getLastUpdated() {        return lastUpdated;    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
-
-    /**************************************Base Methods********************************************/
-
     /**
      * returns the exercise
      * @return the exercise
@@ -129,19 +137,14 @@ public class SetGroup {
     }
 
     //create JSON parameters to pass to the post method
-    public JSONObject  jsonSetGroup(){
-        String result = "";
-        //todo temporary for testing
-        exerciseId = 1;
-        routineId = 1;
+    public JSONObject createJSON(){
         try{
             JSONObject setGroup = new JSONObject();
-            JSONObject params = new JSONObject();
-            params.put("number_of_sets", numOfSets);
-            params.put("reps_per_set", repsPerSet);
-            params.put("exercise_id", exerciseId);
-            params.put("routine_id", routineId);
-            setGroup.put("set_group", params);
+            setGroup.put("number_of_sets", numOfSets);
+            setGroup.put("reps_per_set", repsPerSet);
+            setGroup.put("exercise_id", exerciseId);
+            if (routineId != 0) setGroup.put("routine_id", routineId);
+            if (id != 0) setGroup.put("id", id);
             return setGroup;
         }catch(JSONException je){
             je.printStackTrace();
@@ -157,13 +160,11 @@ public class SetGroup {
         String result = "";
         try{
             String temp = "set_groups";
-            JSONObject temp1 = jsonSetGroup();
+            JSONObject temp1 = createJSON();
             AsyncTask test = new RESTCall().execute(temp, "POST", temp1.toString(), accessToken);
             result = test.get().toString();
             return result;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return result;
@@ -178,6 +179,4 @@ public class SetGroup {
 
     }
     public void restGetExercise(){}
-
-
 }

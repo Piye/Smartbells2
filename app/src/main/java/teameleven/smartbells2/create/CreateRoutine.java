@@ -18,13 +18,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
+import teameleven.smartbells2.businesslayer.tableclasses.Routine;
+import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
 import teameleven.smartbells2.Dashboard;
 import teameleven.smartbells2.R;
 
@@ -35,8 +43,8 @@ import teameleven.smartbells2.R;
 
 public class CreateRoutine extends Fragment implements View.OnClickListener {
 
-    //private DatabaseAdapter database;
-    //private Routine routine;
+    private DatabaseAdapter database;
+    private Routine routine;
     private Spinner exerciseSpinner;
     private Boolean isPublic = false;
     private String exerciseName;// exerciseId is used as the key of calling JSon
@@ -44,13 +52,13 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
     private int setsNum;
     private int repsNum;
     private String exercise;
-    // private ArrayList<Exercise> exercises = new ArrayList<>();
+    private ArrayList<Exercise> exercises = new ArrayList<>();
     private ArrayList<String> exerciseList = new ArrayList<>();
     private RadioGroup radioGroup;
     private RadioButton publicButton;
     int numberOfGroups = 1;
 
-
+    private Button save;
     private Button cancel;
     private FloatingActionButton fab;
     /**
@@ -64,34 +72,40 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         //Main view
         View view = inflater.inflate(R.layout.create_routine, container, false);
 
+        //Save Button
+        save = (Button) view.findViewById(R.id.saveExercise);
+        save.setOnClickListener(this);
         //CancelButton
         cancel = (Button) view.findViewById(R.id.cancelCreateRoutine);
         cancel.setOnClickListener(this);
 
-        return view;
-       // addListenerOnSpinnerExerciseSelection();
+        addListenerOnSpinnerExerciseSelection();
 
         //Set up the exercise Spinner
-        //   database = new DatabaseAdapter(this);
+        database = new DatabaseAdapter(getActivity());
 
-      /*  try {
+        try {
             database.openLocalDatabase();
-        } catch (SQLException e) {
+        } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
+
         //Get list of Exercises from the database
         ArrayList<String> exerciseList = database.getExercisesAsStrings();
-*/
 
-/*        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseList);
+
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, exerciseList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        exerciseSpinner.setAdapter(adapter);*/
+        exerciseSpinner.setAdapter(adapter);
+
+
+        return view;
     }
-/*
+
 
     //Add Routine Name
     public String addRoutineName() {
-        TextView name = (TextView) findViewById(R.id.editNameText);
+        TextView name = (TextView) getActivity().findViewById(R.id.editNameText);
         //Call setName() in Routine class
         //routine.setName(name.getText().toString());
         return name.getText().toString();
@@ -107,15 +121,15 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
                 // get selected radio button from radioGroup
                 int selectedId = radioGroup.getCheckedRadioButtonId();
                 // declaring "public" radio button value
-                RadioButton publicRoutine = (RadioButton) findViewById(R.id.publicTextView);
+                RadioButton publicRoutine = (RadioButton) getActivity().findViewById(R.id.publicTextView);
                 // Comparison selectedId and buttonId
                 if (selectedId == publicRoutine.getId()) {
                     isPublic = true;
                 } else {
                     isPublic = false;
                 }
-                Toast.makeText(CreateRoutine.this,
-                        publicButton.getText(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CreateRoutine.this,
+                        //publicButton.getText(), Toast.LENGTH_SHORT).show();
             }
         });
         return isPublic;
@@ -128,20 +142,19 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         numberOfGroups++;//When clicked the plus button, it should be added 1.
         for (int i = 1; i <= numberOfGroups; i++) {
 
-            TextView setsNum = (TextView) findViewById(R.id.editSetsText);
-            TextView repsNum = (TextView) findViewById(R.id.editRepsText);
+            TextView setsNum = (TextView) getActivity().findViewById(R.id.editSetsText);
+            TextView repsNum = (TextView) getActivity().findViewById(R.id.editRepsText);
             //Add ArrayList exercises
-            *//*
-            exercises.add("1");//test : need to restCall get exercise ID.
-            exercises.add(setsNum.getText().toString());
-            exercises.add(repsNum.getText().toString());
-            *//*
+            //exercises.add("1");//test : need to restCall get exercise ID.
+            //exercises.add(setsNum.getText().toString());
+            //exercises.add(repsNum.getText().toString());
+
         }
     }
 
     //Add Exercise
     public String addListenerOnSpinnerExerciseSelection() {
-        exerciseSpinner = (Spinner) findViewById(R.id.exerciseSpinner);
+        exerciseSpinner = (Spinner) getActivity().findViewById(R.id.exerciseSpinner);
         exerciseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -161,7 +174,7 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
 
     //Add Number of Sets
     public int addNumberOfSets() {
-        TextView setsText = (TextView) findViewById(R.id.editSetsText);
+        TextView setsText = (TextView) getActivity().findViewById(R.id.editSetsText);
         //call set method in routine class
         //exercise.setSets(Integer.getInteger(setsText.toString()));
         return Integer.parseInt(setsText.getText().toString());
@@ -170,57 +183,15 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
 
     //Add Reps Per Set
     public int addRepsPerSet() {
-        TextView repsText = (TextView) findViewById(R.id.editRepsText);
+        TextView repsText = (TextView) getActivity().findViewById(R.id.editRepsText);
         //call set method in routine class
         //exercise.setReps(Integer.getInteger(repsText.toString()));
         return Integer.parseInt(repsText.getText().toString());
     }
 
-
-    //SAVE new Routine to database
-    public void saveRoutine(View view) {
-        // todo ADD Everything - need some way to ensure that number of sets and reps per set are both filled in.
-        //todo i think its better practice to build the entire exercise object here. we can also do verification and such here?
-        //todo long story short, need input verification here
-
-*//*
-
-        if (validate()) {
-
-            SetGroup setGroup = new SetGroup(
-                    database.getExerciseIdByName(exerciseName),
-                    addNumberOfSets(),
-                    addRepsPerSet());
-            Routine routine = new Routine();
-            routine.getSetGroups().add(setGroup);
-            routine.setName(addRoutineName());
-            routine.setIs_Public(true);
-            //Log.d("CreateRoutine.saveRoutine - ", routine.toString());
-
-            //database is called in restputroutine. both calls not necessary
-            //database.insertRoutine(routine);
-            routine.RestPutRoutine(database);
-
-
-        //todo routine.save()
-        //todo or some variation - would save the current routine to the database
-
-
-        //Close the database
-        database.closeLocalDatabase();
-
-        //Back to menu
-        Toast.makeText(this, "routine " + routine.getName() + " created!!.", Toast.LENGTH_LONG).show();
-
-            CreateRoutine.this.finish();
-        }
-    }
-
     private boolean validate() {
         return true;
     }
-
-*/
 
     @Override
     public void onClick(View v) {
@@ -238,9 +209,36 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
                 transaction.commit();
                 */
                 break;
-            case R.id.design_routine:
-                //Add new Routine
+            case R.id.createNewRoutine:
+                //SAVE new Routine to databasepiyep
+                if (validate()) {
+                    SetGroup setGroup = new SetGroup(
+                            database.getExerciseIdByName(exerciseName),
+                            addNumberOfSets(),
+                            addRepsPerSet());
+                    Routine routine = new Routine();
+                    routine.getSetGroups().add(setGroup);
+                    routine.setName(addRoutineName());
+                    routine.setIs_Public(true);
+                    //Log.d("CreateRoutine.saveRoutine - ", routine.toString());
+                    //database is called in restputroutine. both calls not necessary
+                    //database.insertRoutine(routine);
+                    routine.RestPutRoutine(database);
+                    //Close the database
+                    database.closeLocalDatabase();
+
+                    //Back to menu
+                    Toast.makeText(getActivity(), "routine " + routine.getName() + " created!!.", Toast.LENGTH_LONG).show();
+                    fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+                    fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                    fragment = new Dashboard();
+                    transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.content_main, fragment);
+                    transaction.commit();
+
+                }
                 break;
+
             case R.id.cancelCreateRoutine:
 
                 fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);

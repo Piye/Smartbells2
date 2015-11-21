@@ -1,4 +1,4 @@
-package teameleven.smartbells2.ViewLayer.login;
+package teameleven.smartbells2;
 
 import android.os.Bundle;
 
@@ -10,9 +10,6 @@ import android.os.Bundle;
 
 import android.app.Activity;
 import android.content.Intent;
-
-import teameleven.smartbells2.R;
-import teameleven.smartbells2.SmartBellsMainActivity;
 
 public class LoadingSplashScreen extends Activity {
 

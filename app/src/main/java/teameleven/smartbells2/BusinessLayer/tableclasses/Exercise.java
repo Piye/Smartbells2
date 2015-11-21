@@ -1,4 +1,4 @@
-package teameleven.smartbells2.BusinessLayer.tableclasses;
+package teameleven.smartbells2.businesslayer.tableclasses;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -10,8 +10,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import teameleven.smartbells2.BusinessLayer.RESTCall;
-import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.businesslayer.RESTCall;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
  * Base Exercise Class. Describes a Single Exercise, including the number of reps and sets in a basic performance of the exercise.
@@ -25,7 +25,7 @@ import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
  */
 public class Exercise {
     /************************************** Attributes*********************************************/
-    static final private String RestID = "exercises";
+    static final private String RESTID = "exercises";
     /**
      * specific ID of the Exercise.
      */
@@ -70,19 +70,26 @@ public class Exercise {
 
     public Exercise(JSONObject exercise) {
         try {
+            Log.d("Constructor exercise - ",exercise.toString());
             if (exercise.has("exercise")) exercise = exercise.getJSONObject("exercise");
 
-            Log.d("Exercise.JSONConstructor - ", exercise.toString(4));
-            if (exercise.has("id")) id = exercise.getInt("id");
+            //Log.d("Exercise.JSONConstructor - ", exercise.toString(4));
+            id = exercise.getInt("id");
             name = (String) exercise.getString("name");
             increase_Per_Session = exercise.getInt("increase_per_session");
             created_At = exercise.getString("created_at");
             updated_At = exercise.getString("updated_at");
-            is_Public = exercise.getBoolean("is_public");
+            if (!exercise.isNull("is_public")) {
+                is_Public = exercise.getBoolean("is_public");
+            }else{
+                is_Public = false;
+            }
             if (!exercise.isNull("user_id")) {
                 user_Id = exercise.getInt("user_id");
+            }else{
                 user_Id = 0;
             }
+            Log.d("Constructor, Exercise - ",toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -101,13 +108,11 @@ public class Exercise {
      */
     private static ArrayList<Exercise> getAllExercise(JSONObject json) {
         ArrayList<Exercise> exercises = new ArrayList<>();
-        Exercise exercise;
         try {
             JSONArray jsonArray = json.getJSONArray("exercises");
-            Log.d("Exercise.getAllExercise - ", jsonArray.toString(4));
+            //Log.d("Exercise.getAllExercise - ", jsonArray.toString(4));
             for (int index = 0; index < jsonArray.length(); index++) {
-                exercise = new Exercise((JSONObject) jsonArray.get(index));
-                exercises.add(exercise);
+                exercises.add(new Exercise(jsonArray.getJSONObject(index)));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -121,13 +126,11 @@ public class Exercise {
      */
     public static String restGetExercise(int id) {
         try {
-            String temp = RestID + "/" + String.valueOf(id);
+            String temp = RESTID + "/" + String.valueOf(id);
             System.out.println(temp);
             AsyncTask test = new RESTCall().execute(temp, "GET");
             return (String) test.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return "Rest Call Failed";
@@ -139,17 +142,13 @@ public class Exercise {
      */
     public static ArrayList<Exercise> restGetAll() {
         try {
-            String temp = RestID;
-            System.out.println(temp);
-            AsyncTask result = new RESTCall().execute(temp, "GET");
+            //Log.d("Exercise.restGetAll - ", RESTID);
+            AsyncTask result = new RESTCall().execute(RESTID, "GET");
             JSONObject json = (JSONObject) result.get();
 
-            Log.d("Exercise.RestGetAll - ", String.valueOf(json.optInt("id")));
-            ArrayList<Exercise> exercises = getAllExercise(json);
-            return exercises;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+            //Log.d("Exercise.RestGetAll - ", String.valueOf(json.optInt("id")));
+            return getAllExercise(json);
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return null;
@@ -241,9 +240,7 @@ public class Exercise {
     }
 
     /**
-     * sets the last update to the current system clock
-     * todo see setCreated_At
-     * System Defined
+     *
      */
     public void setUpdated_At(String updated_at) {
         updated_At = updated_at;
@@ -259,8 +256,7 @@ public class Exercise {
     }
 
     /**
-     * sets the creation date to the current system clock
-     * System Defined
+     *
      */
     public void setCreated_At(String created_at) {
         this.created_At = created_at;
@@ -279,9 +275,6 @@ public class Exercise {
     public void setIs_Public(boolean is_Public) {
         this.is_Public = is_Public;
     }
-
-    /************************************** REST Methods*******************************************/
-
     /* (non-Javadoc)
      * returns the Name of the Exercise
      * @see java.lang.Object#toString()
@@ -294,6 +287,9 @@ public class Exercise {
         }
         return this.name;
     }
+
+    /************************************** REST Methods*******************************************/
+
 
     /**
      * Creates a JSON object from the parameters required to create a new object in API
@@ -321,18 +317,21 @@ public class Exercise {
     }
 
     /**
-     * Accesses the Database and the RESTCall class to obtain an object from the Server, and save it into the database
+     * Accesses the Database and the RESTCall class create a new object from the Server,
+     * and save it into the database. This creates a new Object on the server
      *
      * @param database
      */
-    public void restPutExercise(DatabaseAdapter database) {
-        Log.d("Exercise.restPutExercise", this.createJSON().toString());
-        AsyncTask test = new RESTCall().execute(RestID, "POST", createJSON().toString(), database.getTokenAsString());
+    public void restPOST(DatabaseAdapter database) {
+        Log.d("Exercise.restPOST", this.createJSON().toString());
+        AsyncTask test = new RESTCall()
+                .execute(RESTID, "POST", createJSON().toString(), database.getTokenAsString());
         //send to database here also
         Exercise exercise = null;
 
         try {
             exercise = new Exercise(new JSONObject(test.get().toString()));
+            database.insertExercise(exercise);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -341,15 +340,15 @@ public class Exercise {
             e.printStackTrace();
         }
         Log.d("database load - ", exercise.toString());
-        database.insertExercise(exercise);
     }
 
     /**
      * @param database
      */
-    public void restPOSTExercise(DatabaseAdapter database) {
-        Log.d("Exercise.restPutExercise", this.createJSON().toString());
-        AsyncTask test = new RESTCall().execute(RestID, "POST", createJSON().toString(), database.getTokenAsString());
+    public void restPUT(DatabaseAdapter database) {
+        Log.d("Exercise.restPOST", this.createJSON().toString());
+        AsyncTask test = new RESTCall()
+                .execute(RESTID, "GET", createJSON().toString(), database.getTokenAsString());
         //send to database here also
         Exercise exercise = null;
         try {

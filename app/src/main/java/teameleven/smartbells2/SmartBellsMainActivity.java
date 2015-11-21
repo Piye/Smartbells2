@@ -25,7 +25,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
     public static Dashboard dashboardTab = new Dashboard();
     public static BeginWorkout2 bw2 = new BeginWorkout2();
-
     private Fragment fragment = null;
     private FragmentTransaction transaction;
     private FloatingActionButton fab;
@@ -34,6 +33,8 @@ public class SmartBellsMainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_bells_main);
+
+
 
         //Go to the Dashboard
         fragment = new Dashboard();
@@ -93,9 +94,9 @@ public class SmartBellsMainActivity extends AppCompatActivity
                 }
 
                 /* BEGIN WORKOUT FRAGMENT TAB SELECTED */
-                /* NOT WORKING */
+
                 //This might go all together? Will keep if we decide to add a new tab type.
-                if( bw2.getCheckBWTabPage() == 1000) {
+                if( bw2.getCheckBWTabPage() == 10) {
                     fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
                             new AccelerateInterpolator(2)).start();
                     fragment = new CreateCustomSession();
@@ -105,7 +106,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
                 }
 
                 //This might go all together? Will keep if we decide to add a new tab type.
-                if (bw2.getCheckBWTabPage() == 10000) {
+                if (bw2.getCheckBWTabPage() == 10) {
 
                 }
 

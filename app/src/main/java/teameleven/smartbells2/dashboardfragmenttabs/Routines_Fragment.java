@@ -6,6 +6,7 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -36,9 +37,7 @@ public class Routines_Fragment extends ListFragment {
         //Tells main activity ADD button what type of item to add (RECORD)
         SmartBellsMainActivity.dashboardTab.setCheckTabPage(1);
 
-        //Change adapter type to handle objects instead of strings later
         //List of routines
-        /*
         DatabaseAdapter db = new DatabaseAdapter(getActivity());
         try {
             db.openLocalDatabase();
@@ -55,7 +54,7 @@ public class Routines_Fragment extends ListFragment {
 
         //close the database
         db.closeLocalDatabase();
-        */
+
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }

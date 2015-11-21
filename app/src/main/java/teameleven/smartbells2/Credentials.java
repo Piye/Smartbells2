@@ -1,4 +1,4 @@
-package teameleven.smartbells2.ViewLayer.login;
+package teameleven.smartbells2;
 
 /**
  * Base credentials class to describe a users credentials.

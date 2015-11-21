@@ -1,4 +1,4 @@
-package teameleven.smartbells2.BusinessLayer.tableclasses;
+package teameleven.smartbells2.businesslayer.tableclasses;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -10,8 +10,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import teameleven.smartbells2.BusinessLayer.RESTCall;
-import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.businesslayer.RESTCall;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 
 /**
@@ -24,8 +24,10 @@ import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
  **/
 public class Routine {
 
-    /******************************** Attributes***************************************************/
-    static final private String RestID = "routines";
+    /********************************
+     * Attributes
+     ***************************************************/
+    static final private String RESTID = "routines";
     /**
      * specific ID of the Exercise.
      */
@@ -60,7 +62,8 @@ public class Routine {
     /**
      * Default Constructor
      */
-    public Routine() {}
+    public Routine() {
+    }
 
 
     /**
@@ -68,23 +71,23 @@ public class Routine {
      */
     public Routine(JSONObject routine) {
         try {
-            if (routine.has("routine")) {
-                routine = routine.getJSONObject("routine");
-                //discarding outer JSON shell
+            if (routine.has("routine")) routine = routine.getJSONObject("routine");
+            //discarding outer JSON shell
 
-                id = (int) routine.get("id");
-                name = (String) routine.get("name");
-                created_At = (String) routine.get("created_at");
-                updated_At = (String) routine.get("updated_at");
-                is_Public = (boolean) routine.get("is_public");
+            id = routine.getInt("id");
+            user_id = routine.getInt("user_id");
+            name = routine.getString("name");
+            created_At = routine.getString("created_at");
+            updated_At = routine.getString("updated_at");
+            is_Public = routine.getBoolean("is_public");
 
-                JSONArray setGroupArray = routine.getJSONArray("set_groups");
-                for (int x = 0; x < setGroupArray.length(); x++) {
-                    SetGroup setGroup = new SetGroup(setGroupArray.getJSONObject(x));
-                    setGroups.add(setGroup);
-                }
-                Log.d("Routine Constructor - ", routine.toString(4));
+            JSONArray setGroupArray = routine.getJSONArray("set_groups");
+            for (int x = 0; x < setGroupArray.length(); x++) {
+                SetGroup setGroup = new SetGroup(setGroupArray.getJSONObject(x));
+                setGroups.add(setGroup);
             }
+            //Log.d("Routine Constructor - ", routine.toString(4));
+
             //setGroup = (SetGroup) routine.get("set_groups");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -93,29 +96,44 @@ public class Routine {
 /************************************ Static Methods   ********************************************/
     /**
      * @return
+     * @param userIDForSession
      */
-    public static String restGetAll() {
-        try {
-            String temp = RestID;
-            System.out.println(temp);
-            AsyncTask result = new RESTCall().execute(temp, "GET");
-            result.get();
-            return (String) result.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+    public static ArrayList<Routine> restGetAll(int userIDForSession) {
+        try {;
+            //Log.d("Exercise.restGetAll - ", RESTID);
+            AsyncTask result = new RESTCall().execute(RESTID, "GET");
+            JSONObject json = (JSONObject) result.get();
+
+            return restGetRoutines(json, userIDForSession);
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        return "Rest Call Failed";
+        return null;
     }
 
+    private static ArrayList<Routine> restGetRoutines(JSONObject json, int userIDForSession){
+        ArrayList<Routine> routines = new ArrayList<>();
+        try{
+            JSONArray jsonArray = json.getJSONArray("routines");
+            for (int index = 0 ; index < jsonArray.length(); index ++){
+                JSONObject json2 = (jsonArray.getJSONObject(index));
+                if (json2.getInt("user_id") == userIDForSession ||json2.getBoolean("is_public")){
+                    routines.add(new Routine(json2));
+                }
+            }
+            return routines;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     /**
      * @param id
      * @return
      */
     public static String restGetRoutine(int id) {
         try {
-            String temp = RestID + "/" + String.valueOf(id);
+            String temp = RESTID + "/" + String.valueOf(id);
             System.out.println(temp);
             AsyncTask test = new RESTCall().execute(temp, "GET");
             return (String) test.get();
@@ -200,7 +218,6 @@ public class Routine {
     }
 
     /**
-     *
      * @param is_Public
      */
     public void setIsPublic(Boolean is_Public) {
@@ -208,13 +225,16 @@ public class Routine {
     }
 
     /**
-     *
      * @return
      */
     public String getCreated_At() {
         return created_At;
     }
 
+    /**
+     *
+     * @return
+     */
     public String toString() {
         try {
             return (this.createJSON().toString(4));
@@ -239,6 +259,17 @@ public class Routine {
     public void setSetGroups(ArrayList<SetGroup> setgroups) {
         this.setGroups = setgroups;
     }
+
+    /**
+     *
+     * @param user_id
+     */
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+    public int getUser_id(){
+        return user_id;
+    }
     /**************************************JSON****************************************************/
 
     /**
@@ -250,15 +281,16 @@ public class Routine {
 
         JSONObject json = new JSONObject();
         try {
+            if (id != 0) json.put("id", id);
+            if (user_id != 0) json.put("user_id", user_id);
             json.put("name", name);
             json.put("created At", created_At);
             json.put("updated At", updated_At);
             json.put("is public", is_Public);
 
-
             JSONArray setGroups = new JSONArray();
             for (int index = 0; index < this.setGroups.size(); index++) {
-                setGroups.put(this.setGroups.get(index).jsonSetGroup());
+                setGroups.put(this.setGroups.get(index).createJSON());
             }
             json.put("set_groups", setGroups);
 
@@ -271,8 +303,6 @@ public class Routine {
 
     /******************************** ReST Methods    *********************************************/
     /**
-     *
-     *
      * @param database
      * @return
      */
@@ -281,7 +311,7 @@ public class Routine {
         try {
             Log.d("Routine.restPutRoutine - ", this.createJSON().toString(4));
             AsyncTask test = new RESTCall()
-                    .execute(RestID, "POST", createJSON().toString(), database.getTokenAsString());
+                    .execute(RESTID, "POST", createJSON().toString(), database.getTokenAsString());
             //send to database here also
 
 
@@ -297,9 +327,29 @@ public class Routine {
         database.insertRoutine(routine);
         return null;
     }
+
+
 }
 
-/*********************************************Unused Methods***************************************/
+/**
+ * Unused Methods
+ * Accesses the Database and the RESTCall class to obtain an object from the Server,
+ * and save it into the database
+ *
+ * @param database
+ * <p/>
+ * Static creation of an Exercise. Allows creation of a simple JSONObject
+ * through the fields in Routine.
+ * @param name
+ * @param is_public
+ * @param setGroups
+ * @return Static creation of an Exercise. Allows creation of a simple JSONObject
+ * through the fields in Exercise.
+ * @param name
+ * @param is_public
+ * @param set_groups
+ * @return
+ */
 
 /*    *//**
  * Accesses the Database and the RESTCall class to obtain an object from the Server,
@@ -311,7 +361,7 @@ public class Routine {
                                 String routineName, Boolean is_Public,
                                 ArrayList<String> set_Groups) {
         Log.d("Routine DB creation", this.createJSON().toString());
-        AsyncTask test = new RESTCall().execute(RestID, "POST", createJSON().toString(),
+        AsyncTask test = new RESTCall().execute(RESTID, "POST", createJSON().toString(),
                 database.getTokenAsString());
 
         //send to database here also

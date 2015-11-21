@@ -1,4 +1,4 @@
-package teameleven.smartbells2.BusinessLayer.tableclasses;
+package teameleven.smartbells2.businesslayer.tableclasses;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
-import teameleven.smartbells2.BusinessLayer.RESTCall;
+import teameleven.smartbells2.businesslayer.RESTCall;
 
 /**
  * Created by Brian McMahon on 16/10/2015.

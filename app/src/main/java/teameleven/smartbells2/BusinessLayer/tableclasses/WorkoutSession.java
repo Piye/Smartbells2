@@ -1,4 +1,4 @@
-package teameleven.smartbells2.BusinessLayer.tableclasses;
+package teameleven.smartbells2.businesslayer.tableclasses;
 //// TODO: 08/11/2015 Find way to retrieve Exercise ID. Add error handling for inputs to avoid stateExceptions
 
 import android.os.AsyncTask;
@@ -11,7 +11,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import teameleven.smartbells2.BusinessLayer.RESTCall;
+import teameleven.smartbells2.businesslayer.RESTCall;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
  * Created by Andrew Rabb on 2015-10-23.
@@ -19,7 +20,7 @@ import teameleven.smartbells2.BusinessLayer.RESTCall;
 public class WorkoutSession {
 
     /****************************************Attributes********************************************/
-    static final private String RestID = "workout_sessions";
+    static final private String RESTID = "workout_sessions";
     /**
      *
      */
@@ -57,18 +58,22 @@ public class WorkoutSession {
      */
     public WorkoutSession(JSONObject workoutSession) {
         try {
-            workoutSession = workoutSession.getJSONObject("workout_session");
+            if (workoutSession.has("workout_session")){
+                workoutSession = workoutSession.getJSONObject("workout_session");
+            }
+            id = workoutSession.getInt("id");
+            user_Id = (int) workoutSession.get("user_id");
             name = (String) workoutSession.get("name");
             created_At = workoutSession.getString("created_at");
             updated_At = workoutSession.getString("updated_at");
 
-            JSONObject workoutSetGroups =
-                    workoutSession.getJSONArray("workout_set_groups").getJSONObject(0);
-
-            //for (int index = 0; index < workoutsetgroups.length(); index++){}//todo will be necessary sprint 3
-
-            id = (int) workoutSession.get("id");
-            user_Id = (int) workoutSession.get("user_id");
+            JSONArray workoutSetGroups =
+                    workoutSession.getJSONArray("workout_set_groups");
+            WorkoutSetGroup sessionSetGroup;
+            for (int index = 0; index < workoutSetGroups.length(); index++){
+                sessionSetGroup= new WorkoutSetGroup(workoutSetGroups.getJSONObject(index));
+                setGroups.add(sessionSetGroup);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -83,7 +88,7 @@ public class WorkoutSession {
     public WorkoutSession(String name, int sets, int reps, int exercise_id) {
         this.name = name;
         WorkoutSetGroup workoutSetGroup = new WorkoutSetGroup();
-        workoutSetGroup.setExerciseId(exercise_id);
+        workoutSetGroup.getSet_group().setExerciseId(exercise_id);
         workoutSetGroup.getSet_group().setNumberOfSets(sets);
         workoutSetGroup.getSet_group().setRepsPerSet(reps);
         this.getSetGroups().add(workoutSetGroup);
@@ -176,6 +181,14 @@ public class WorkoutSession {
         this.setGroups = setGroups;
     }
 
+    public String toString(){
+        try {
+            return this.createJSON().toString(4);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return this.name;
+    }
     /****************************************** JSON Methods **************************************/
 
     /**
@@ -198,7 +211,7 @@ public class WorkoutSession {
             setGroupsAttr.put("reps_per_set", repsPerSet);
 
             /*for (int index = 0; index < this.setGroups.size(); index++) {
-                sessionArray.put(this.setGroups.get(index).jsonWorkoutSetGroup());
+                sessionArray.put(this.setGroups.get(index).createJSON());
             }*/
 
             return sessionArray.put(setGroupsAttr);
@@ -234,34 +247,50 @@ public class WorkoutSession {
     }
 
     /**
-     *
-     * @param name
-     * @param exerciseId
-     * @param sets
-     * @param reps
-     * @param token
+     * Creates a JSON Object from the current Workout session Object
+     * capable JSON'ing all available data (skips null values if present)
      */
-    public void restCreateCustomSession(String name, int exerciseId, int sets, int reps, String token) {
+    public JSONObject createJSON() {
+        JSONArray workoutSetGroup = new JSONArray();
+        JSONObject workoutSession = new JSONObject();
+        JSONObject json = new JSONObject();
+        try {
+            if (getId() != 0) workoutSession.put("id", id);
+            if (user_Id != 0) workoutSession.put("user_id", user_Id);
+            workoutSession.put("name", this.name);
+            if (created_At != null) workoutSession.put("created_at", created_At);
+            if (updated_At != null) workoutSession.put("updated_at", updated_At);
 
-        String result = "";
-        String temp = RestID;
-        String temp1 = jsonWorkoutSession(name, exerciseId, sets, reps);
-        AsyncTask test = new RESTCall().execute(temp, "POST", temp1, token);
-        //todo connect with SQLite
+            for (WorkoutSetGroup setGroup : setGroups){
+                workoutSetGroup.put(setGroup.createJSON());
+            }
+
+            workoutSession.put("workout_set_groups_attributes", workoutSetGroup);
+            json.put("workout_session", workoutSession);
+            return json;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+   }
+
+    /**
+     *
+     * @param database
+     */
+    public void restPost(DatabaseAdapter database){
+
+        AsyncTask test = new RESTCall()
+                .execute(RESTID, "POST", createJSON().toString(), database.getTokenAsString());
         WorkoutSession session = null;
         try {
-
-            session = new WorkoutSession(new JSONObject(test.get().toString()));
-
+            session = new WorkoutSession((JSONObject)test.get());
+            database.insertWorkoutSession(session);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
-
     }
 
     /**
@@ -271,7 +300,7 @@ public class WorkoutSession {
     public String restGetAllWorkoutSession() {
 
         try {
-            String temp = RestID;
+            String temp = RESTID;
             //System.out.println(temp);
             AsyncTask test = new RESTCall().execute(temp, "GET");
             return (String) test.get();
@@ -285,19 +314,21 @@ public class WorkoutSession {
     }
 
     /**
-     *
+     *todo this should probably actually return a workoutsession
      * @param id
      * @return
      */
-    public String restGetSpecificWorkoutSession(int id) {
+    public static String restGetSpecificWorkoutSession(int id) {
         try {
-            String temp = RestID + "/" + String.valueOf(id);
+            String temp = RESTID + "/" + String.valueOf(id);
             System.out.println(temp);
             AsyncTask test = new RESTCall().execute(temp, "GET");
-            return (String) test.get();
+            return ((JSONObject) test.get()).toString(4);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return "Rest Call Failed";
@@ -309,5 +340,36 @@ public class WorkoutSession {
 
     public void restDeleteWorkoutSession() {
 
+    }
+
+    public static ArrayList<WorkoutSession> restGetAll(int userIDForSession) {
+        try {;
+            //Log.d("Exercise.restGetAll - ", RESTID);
+            AsyncTask result = new RESTCall().execute(RESTID, "GET");
+            JSONObject json = (JSONObject) result.get();
+
+            return restGetWorkoutSessions(json, userIDForSession);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+   }
+
+    private static ArrayList<WorkoutSession> restGetWorkoutSessions(JSONObject json, int userIDForSession) {
+        ArrayList<WorkoutSession> workoutSessions = new ArrayList<>();
+        try{
+            JSONArray jsonArray = json.getJSONArray("workout_sessions");
+            for (int index = 0 ; index < jsonArray.length(); index ++){
+                JSONObject json2 = (jsonArray.getJSONObject(index));
+                if (json2.getInt("user_id") == userIDForSession){
+                    workoutSessions.add(new WorkoutSession(json2));
+                }
+            }
+            return workoutSessions;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

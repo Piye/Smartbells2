@@ -1,5 +1,5 @@
 
-package teameleven.smartbells2.BusinessLayer.tableclasses;
+package teameleven.smartbells2.businesslayer.tableclasses;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,16 +16,38 @@ public class WorkoutSetGroup {
 
     private SetGroup set_group = new SetGroup();
 
-    private int exerciseId;
-
     private int workoutSessionId;
+    private int resistance;
 
-    public WorkoutSetGroup(JSONObject jsonObject) {
-        //todo
+    /**
+     *
+     * @param json
+     */
+    public WorkoutSetGroup(JSONObject json) {
+        try {
+            set_group.setId(json.getInt("id"));
+            set_group.setNumberOfSets(json.getInt("number_of_sets"));
+            set_group.setRepsPerSet(json.getInt("reps_per_set"));
+            set_group.setCreationDate(json.getString("created_at"));
+            set_group.setLastUpdated(json.getString("updated_at"));
+            set_group.setExerciseId(json.getInt("exercise_id"));
+            this.setWorkoutSessionId(json.getInt("workout_session_id"));
+            this.setResistance(json.getInt("resistance"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public WorkoutSetGroup() {
 
+    }
+
+    public int getResistance() {
+        return resistance;
+    }
+
+    public void setResistance(int resistance) {
+        this.resistance = resistance;
     }
 
 
@@ -39,17 +61,7 @@ public class WorkoutSetGroup {
         return set_group;
     }
 
-    public void setSet_group(SetGroup set_group) {
-        this.set_group = set_group;
-    }
-
-    public int getExerciseId() {
-        return exerciseId;
-    }
-
-    public void setExerciseId(int exerciseId) {
-        this.exerciseId = exerciseId;
-    }
+    public void setSet_group(SetGroup set_group) {        this.set_group = set_group;    }
 
     public int getWorkoutSessionId() {
         return workoutSessionId;
@@ -75,16 +87,21 @@ public class WorkoutSetGroup {
      //todo pass in the exerciseId, sets and reps in the Constructor of the WorkoutSetGroup, Instantiate when new SetGroup is created on button click
      * @return the JSONObject for the WorkoutSetGroup
      */
-
-    public JSONObject jsonWorkoutSetGroup() {
-        //String result = "";
+    public JSONObject createJSON() {
         try {
-            //JSONObject setGroup = new JSONObject();
-            JSONObject params = new JSONObject();
-            params.put("exerciseId", exerciseId);
-            //params.put("workout_session_id", workoutSessionId);
-            //setGroup.put("set_group", params);
-            return params;
+            JSONObject workoutSetGroup = new JSONObject();
+            workoutSetGroup.put("workout_session_id", getWorkoutSessionId());
+            workoutSetGroup.put("id", this.set_group.getId());
+            workoutSetGroup.put("resistance", resistance);
+            workoutSetGroup.put("number_of_sets", this.set_group.getNumberOfSets());
+            workoutSetGroup.put("reps_per_set", this.set_group.getRepsPerSet());
+            workoutSetGroup.put("created_at", this.set_group.getCreationDate());
+            workoutSetGroup.put("updated_at", this.set_group.getLastUpdated());
+            workoutSetGroup.put("exercise_id", this.set_group.getExerciseId());
+
+
+
+            return workoutSetGroup;
         } catch (JSONException je) {
             je.printStackTrace();
         }

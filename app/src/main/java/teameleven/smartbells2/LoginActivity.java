@@ -1,4 +1,4 @@
-package teameleven.smartbells2.ViewLayer.login;
+package teameleven.smartbells2;
 //TODO implement progress dialogs
 //TODO implement new validation in signup for using existing user details.
 
@@ -19,10 +19,9 @@ import org.json.JSONObject;
 
 import java.sql.SQLException;
 
-import teameleven.smartbells2.BusinessLayer.SessionManager;
-import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
-import teameleven.smartbells2.BusinessLayer.tableclasses.Routine;
-import teameleven.smartbells2.R;
+import teameleven.smartbells2.businesslayer.SessionManager;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 
 
 /**

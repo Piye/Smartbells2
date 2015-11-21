@@ -31,7 +31,7 @@ public class MyRoutines_Fragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         //Tells main activity ADD button what type of item to add (ACHIEVEMENTS)
-        SmartBellsMainActivity.dashboardTab.setCheckTabPage(2);
+        SmartBellsMainActivity.bw2.setCheckTabPage(0);
 
         //Change adapter type to handle objects instead of strings later
         //Set the adapter to show in application

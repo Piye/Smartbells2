@@ -1,4 +1,4 @@
-package teameleven.smartbells2.BusinessLayer;
+package teameleven.smartbells2.businesslayer;
 
 import android.content.Context;
 import android.os.AsyncTask;

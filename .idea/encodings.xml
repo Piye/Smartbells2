@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/teameleven/smartbells2/businesslayer/localdatabase" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/teameleven/smartbells2/businesslayer/synchronization" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/teameleven/smartbells2/businesslayer/tableclasses/Exercise.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/teameleven/smartbells2/businesslayer/tableclasses/Routine.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/teameleven/smartbells2/businesslayer/tableclasses/SetGroup.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/teameleven/smartbells2/businesslayer/tableclasses/User.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/teameleven/smartbells2/businesslayer/tableclasses/WorkoutSession.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/teameleven/smartbells2/businesslayer/tableclasses/WorkoutSetGroup.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/xml" charset="windows-1252" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

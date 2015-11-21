@@ -1,11 +1,11 @@
-package teameleven.smartbells2.ViewLayer.login;
+package teameleven.smartbells2;
 
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import teameleven.smartbells2.BusinessLayer.tableclasses.User;
+import teameleven.smartbells2.businesslayer.tableclasses.User;
 
 /**
  * Base Authentication class to authenticate the credentials of the user and return the access_token

@@ -206,8 +206,8 @@
                     android:text="Save"
                     android:layout_weight="1"
                     android:layout_margin="2dp"
-                    android:id="@+id/saveButton"
-                    android:onClick="saveRoutine"/>
+                    android:id="@+id/createNewRoutine"
+                    />
 
 
                 <Button

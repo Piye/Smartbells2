@@ -1,11 +1,11 @@
-package teameleven.smartbells2.BusinessLayer;
+package teameleven.smartbells2.businesslayer;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import teameleven.smartbells2.ViewLayer.login.LoginActivity;
+import teameleven.smartbells2.LoginActivity;
 
 /**
  * Created by Brian McMahon on 28/10/2015.

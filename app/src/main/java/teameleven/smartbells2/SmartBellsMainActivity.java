@@ -79,7 +79,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();
-
                 }
 
                 //Probably going to remove this in favour for a new Exercise Class
@@ -91,14 +90,12 @@ public class SmartBellsMainActivity extends AppCompatActivity
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();
-
-
                 }
 
                 /* BEGIN WORKOUT FRAGMENT TAB SELECTED */
-
+                /* NOT WORKING */
                 //This might go all together? Will keep if we decide to add a new tab type.
-                if( bw2.getCheckBWTabPage() == 100000) {
+                if( bw2.getCheckBWTabPage() == 1000) {
                     fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
                             new AccelerateInterpolator(2)).start();
                     fragment = new CreateCustomSession();
@@ -106,8 +103,9 @@ public class SmartBellsMainActivity extends AppCompatActivity
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();
                 }
+
                 //This might go all together? Will keep if we decide to add a new tab type.
-                if (bw2.getCheckBWTabPage() == 1) {
+                if (bw2.getCheckBWTabPage() == 10000) {
 
                 }
 
@@ -115,6 +113,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
         });
 
         //*******************************DRAWER****************************************************
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

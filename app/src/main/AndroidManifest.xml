@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".OpeningSplashScreen"
+            android:name=".ViewLayer.login.OpeningSplashScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -28,17 +28,14 @@
         </intent-filter>
         </activity>
 
-        <!-- ACTIVITIES
+        <!-- ACTIVITIES -->
         <activity android:name=".ViewLayer.login.SignupActivity"/>
         <activity android:name=".ViewLayer.login.LoginActivity" android:launchMode="singleTop"/>
-        <activity android:name=".ViewLayer.create.CreateExercise"/>
-        <activity android:name=".ViewLayer.record.RecordWorkoutRoutine"/>
-        <activity android:name=".ViewLayer.edit.EditRoutine"/>
-        <activity android:name=".ViewLayer.mainarea.About"/>
-        <activity android:name=".ViewLayer.login.SplashScreen"/>
-        ACTIVITIES -->
-
+        <activity android:name=".ViewLayer.login.LoadingSplashScreen"/>
 
     </application>
+
+    <!-- USE the INTERNET -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

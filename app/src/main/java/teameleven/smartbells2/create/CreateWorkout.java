@@ -24,7 +24,7 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //Main view
-        View view = inflater.inflate(R.layout.create_workout, container, false);
+        View view = inflater.inflate(R.layout.edit_workout, container, false);
         //Button
         cancel = (Button) view.findViewById(R.id.cancelCreateWorkout);
         cancel.setOnClickListener(this);

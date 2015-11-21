@@ -114,7 +114,7 @@ public class BeginWorkout2 extends Fragment {
     }
 
 
-    public int getCheckTabPage() {
+    public int getCheckBWTabPage() {
         return checkTabPage;
     }
 

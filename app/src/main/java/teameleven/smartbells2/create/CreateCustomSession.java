@@ -8,13 +8,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import teameleven.smartbells2.BeginWorkout2;
 import teameleven.smartbells2.R;
 
 /**
@@ -40,10 +38,10 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //Main view
-        View view = inflater.inflate(R.layout.create_routine, container, false);
+        View view = inflater.inflate(R.layout.create_custom_session, container, false);
         //CancelButton
-        cancel = (Button) view.findViewById(R.id.cancelCreateRoutine);
-        cancel.setOnClickListener(this);
+        //cancel = (Button) view.findViewById(R.id.cancelCreateRoutine);
+        //cancel.setOnClickListener(this);
 
         return view;
 /*
@@ -175,7 +173,7 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
             case R.id.design_routine:
                 //Add new workout
                 break;
-            case R.id.cancelCreateRoutine:
+            /*case R.id.cancelCreateCustomSession:
 
                 fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
                 fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
@@ -186,6 +184,7 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
                 //Kill the fragment
                 //getFragmentManager().beginTransaction().remove(this).commit();
                 break;
+                */
         }
     }
 

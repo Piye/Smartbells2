@@ -25,6 +25,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
     public static Dashboard dashboardTab = new Dashboard();
     public static BeginWorkout2 bw2 = new BeginWorkout2();
+
     private Fragment fragment = null;
     private FragmentTransaction transaction;
     private FloatingActionButton fab;
@@ -46,6 +47,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
         //*************************************FAB**************************************************
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +98,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
                 /* BEGIN WORKOUT FRAGMENT TAB SELECTED */
 
                 //This might go all together? Will keep if we decide to add a new tab type.
-                if(bw2.getCheckTabPage() == 0) {
+                if( bw2.getCheckBWTabPage() == 100000) {
                     fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
                             new AccelerateInterpolator(2)).start();
                     fragment = new CreateCustomSession();
@@ -105,7 +107,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
                     transaction.commit();
                 }
                 //This might go all together? Will keep if we decide to add a new tab type.
-                if(bw2.getCheckTabPage() == 1) {
+                if (bw2.getCheckBWTabPage() == 1) {
 
                 }
 
@@ -129,7 +131,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         //show the fab
-        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     @Override

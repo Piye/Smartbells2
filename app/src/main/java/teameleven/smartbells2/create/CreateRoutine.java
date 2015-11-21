@@ -228,7 +228,7 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         FragmentTransaction transaction;
 
         switch (v.getId()) {
-            //START NEW INTENT for each button
+            //Move to a new FRAGMENT for each button
             case R.id.add_setgroup:
                 //Pop set group dialog window
                 /*
@@ -255,9 +255,4 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         }
     }
 
-    //Cancel - back to menu
-    public void cancelCreateRoutine(View view) {
-        getFragmentManager().beginTransaction().remove(this).commit();
-        //CreateRoutine.this.finish();
-    }
 }

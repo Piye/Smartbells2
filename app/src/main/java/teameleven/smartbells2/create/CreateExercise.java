@@ -31,8 +31,6 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
     private Button cancel;
     private Button save;
     private FloatingActionButton fab;
-    private TextView name;
-    private TextView increasePS;
 
     /**
      * onCreate
@@ -65,9 +63,9 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
      * @return name
      */
     public String addExerciseName() {
-        name = (TextView) getActivity().findViewById(R.id.editExNameText);
+        TextView name = (TextView) getActivity().findViewById(R.id.editExNameText);
         //Call setName() in Routine class
-        return (name.getText().toString());
+        return null; //(name.getText().toString());
     }
 
     /**
@@ -75,9 +73,9 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
      * @return increasePS.getText().toString()
      */
     public String addIncreasePerSession() {
-        increasePS = (TextView) getActivity().findViewById(R.id.editIncreasePerSessionText);
+        TextView increasePS = (TextView) getActivity().findViewById(R.id.editIncreasePerSessionText);
         //call set method in exercise class
-        return (increasePS.getText().toString());
+        return null; //(increasePS.getText().toString());
 
     }
 

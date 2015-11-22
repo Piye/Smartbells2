@@ -81,7 +81,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
             //convert json response to string
             result = new JSONObject(json);
 
-            Log.d(TAG + " POST Result", result.toString(4));//todo remove
+            Log.d(TAG, json);
             //close reader
             br.close();
 
@@ -104,13 +104,14 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
 
     /**
      * Gets a specific object or a collection of objects from the Server.
+     * todo adjust so that the output is in a JSONObject type object, instead of a
+     * todo string. However, for functional reasons, atm it will work.
      *
      * @param modifier - URL to the specific object or objects in question
      * @return - the string, or all of the strings if multiple strings are found.
      */
     private JSONObject getObject(String modifier) {
         HttpURLConnection connection = openConnection(modifier);
-
         if (connection == null) {
             return null;
         }
@@ -129,10 +130,11 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
             String output;
             Log.d(TAG, "Output From Server ... \n");
             while ((output = br.readLine()) != null) {
+                Log.d(TAG, output);//todo remove later, currently for debugging
                 json += output;
             }
             result = new JSONObject(json);
-            Log.d("RESTCALL Response!!!", result.toString(4));
+            //Log.d("RESPONSE!!!!", result.toString(4));
         } catch (ProtocolException e) {
             Log.d(TAG, "Protocol Exception, GET method");
             e.printStackTrace();
@@ -194,12 +196,11 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
             String output;
             while ((output = br.readLine()) != null) {
                 json += output;
+                Log.d(TAG, json);
             }
-
             //convert json response to string
             result = new JSONObject(json);
             //close reader
-            Log.d(TAG, result.toString(4));
             br.close();
 
         } catch (ProtocolException e) {
@@ -223,6 +224,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
      */
     private void deleteObject(String modifier, String accessToken) {
         HttpURLConnection connection = openConnection(modifier);
+        String json = "";
         try {
             connection.setRequestMethod("DELETE");
             connection.setRequestProperty("Content-type", "application/json");
@@ -275,7 +277,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
      * param[0] should be the modifier to the URL for the specific object in question
      * param[1] should be the REST method parameter ("GET", "POST", "PUT", "DELETE")
      * param[2] should be the JSON Object that is expected by the API
-     * param[3] should be the Access Token, if required by the API (PUT, POST, DELETE)
+     * param[3] should be the Access Token, if required by the API
      */
     protected JSONObject doInBackground(String... params) {
         JSONObject result;

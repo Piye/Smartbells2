@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:ems="9"
+                android:ems="10"
                 android:id="@+id/editResistanceText"
                 android:layout_weight="1" />
 
@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:ems="9"
+                android:ems="10"
                 android:id="@+id/editRepsText"
                 android:layout_weight="1"
                 />
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:ems="9"
+                android:ems="10"
                 android:id="@+id/editSetsText"
                 android:layout_weight="1"
                 />

@@ -49,8 +49,7 @@ public class Routines_Fragment extends ListFragment {
         list = db.getRoutinesAsStrings();
 
         //Set the adapter to show in application
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getActivity().getBaseContext(), android.R.layout.simple_list_item_1, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, list);
         setListAdapter(adapter);
 
 

@@ -30,7 +30,7 @@ public class AchievementDashboard extends Fragment {
 
         //Hide the FAB
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
+        fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
                 new AccelerateInterpolator(2)).start();
 
         dashboardTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);

@@ -62,7 +62,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
                             //.setAction("Action", null).show();
 
                     //hide the fab
-                    fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
+                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
                                                             new AccelerateInterpolator(2)).start();
                     fragment = new CreateWorkout();
                     transaction = getSupportFragmentManager().beginTransaction();
@@ -74,7 +74,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
                 //Load Create a Routine on FAB click while on Routine Tab
                 if(dashboardTab.getCheckTabPage() == 1) {
                     //hide the fab
-                    fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
+                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
                                                             new AccelerateInterpolator(2)).start();
                     fragment = new CreateRoutine();
                     transaction = getSupportFragmentManager().beginTransaction();
@@ -85,7 +85,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
                 //Probably going to remove this in favour for a new Exercise Class
                 if(dashboardTab.getCheckTabPage() == 2) {
                     //hide the fab
-                    fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
+                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
                             new AccelerateInterpolator(2)).start();
                     fragment = new CreateExercise();
                     transaction = getSupportFragmentManager().beginTransaction();
@@ -97,7 +97,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
                 //This might go all together? Will keep if we decide to add a new tab type.
                 if( bw2.getCheckBWTabPage() == 10) {
-                    fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
+                    fab.animate().translationY(fab.getHeight() + 16).setInterpolator(
                             new AccelerateInterpolator(2)).start();
                     fragment = new CreateCustomSession();
                     transaction = getSupportFragmentManager().beginTransaction();
@@ -176,7 +176,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
             fragment = new About();
         } else if (id == R.id.nav_profile) {
             //View and edit profile
-            fragment = new ViewProfile();
         } else if (id == R.id.nav_logout) {
             //logout
         }

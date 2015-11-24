@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<sync-adaptor
+<sync-adapter
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:contentAuthority="businessLayer.synchronization.provider"
     android:accountType="https://smart-bells-staging.herokuapp.com"
@@ -9,7 +9,7 @@
     android:isAlwaysSyncable="true"
 
 />
-    <!-- todo its possible this applciation should only upload through this service, and push on
+    <!-- todo its possible this application should only upload through this service, and push on
     todo request something to think about, anyway
      -->
 

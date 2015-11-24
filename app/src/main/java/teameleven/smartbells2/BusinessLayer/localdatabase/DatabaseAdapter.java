@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -26,39 +29,38 @@ public class DatabaseAdapter{
     public static final String ACCESS_TOKEN = "token";
     public static final String SESSION_USER_ID = "user_id";
     //Routine Table Columns
-    public static final String PK_ROUTINE_ID = "routine_id";
+    public static final String PK_ROUTINE_ID = "id";
     public static final String ROUTINE_USER_ID = "user_id";
-    public static final String ROUTINE_NAME= "routineName";
-    public static final String ROUTINE_IS_PUBLIC = "routineIsPublic";
-    public static final String ROUTINE_CREATED_AT = "createdAt";
-    public static final String ROUTINE_UPDATED_AT = "updatedAt";
+    public static final String ROUTINE_NAME= "name";
+    public static final String ROUTINE_IS_PUBLIC = "is_public";
+    public static final String ROUTINE_CREATED_AT = "created_at";
+    public static final String ROUTINE_UPDATED_AT = "updated_at";
     //Workout Session Table Columns
-    public static final String PK_WORKOUTSESSION_ID = "workoutsession_id";
+    public static final String PK_WORKOUTSESSION_ID = "id";
     public static final String FK_USER_ID = "user_id";
-    public static final String SESSION_NAME = "sessionName";
-    public static final String SESSION_CREATED_AT = "createdAt";
-    public static final String SESSION_UPDATED_AT = "updatedAt";
+    public static final String SESSION_NAME = "name";
+    public static final String SESSION_CREATED_AT = "created_at";
+    public static final String SESSION_UPDATED_AT = "updated_at";
     //Workout Set Group Table Columns
-    public static final String PK_WORKOUTSETGROUP_ID = "workoutsetgroup_id";
+    public static final String PK_WORKOUTSETGROUP_ID = "id";
     public static final String FK_WSG_EXERCISE_ID = "exercise_id";
-    public static final String FK_WORKOUTSESSION_ID = "workoutSession_id";
+    public static final String FK_WORKOUTSESSION_ID = "workout_session_id";
     //Set Group Table Columns
-    public static final String PK_SETGROUP_ID = "setgroup_id";
+    public static final String PK_SETGROUP_ID = "id";
     public static final String FK_EXERCISE_ID = "exercise_id";
-    public static final String SETGROUP_REPS = "reps";
-    public static final String SETGROUP_SETS = "sets";
-    public static final String SETGROUP_CREATED_AT = "createdAt";
-    public static final String SETGROUP_UPDATED_AT  = "updatedAt";
+    public static final String SETGROUP_REPS = "reps_per_set";
+    public static final String SETGROUP_SETS = "number_of_sets";
+    public static final String SETGROUP_CREATED_AT = "created_at";
+    public static final String SETGROUP_UPDATED_AT  = "updated_at";
     public static final String SETGROUP_ROUTINE_ID = "routine_id";
     //Exercise Table Columns
-    public static final String PK_EXERCISE_ID = "exercise_id";
-    public static final String EXERCISE_NAME = "exerciseName";
-    public static final String INCREASE_PER_SESSION = "increasePerSession";
-    public static final String EXERCISE_CREATED_AT = "createdAt";
-    public static final String EXERCISE_UPDATED_AT = "updatedAt";
-    public static final String EXERCISE_IS_PUBLIC = "isPublic";
-    public static final String EXERCISE_USER_ID = "userID";
-    private static final String  EXERCISE_IS_SYNCED = "exercise_sync";
+    public static final String PK_EXERCISE_ID = "id";
+    public static final String EXERCISE_NAME = "name";
+    public static final String INCREASE_PER_SESSION = "increase_per_session";
+    public static final String EXERCISE_CREATED_AT = "created_at";
+    public static final String EXERCISE_UPDATED_AT = "updated_at";
+    public static final String EXERCISE_IS_PUBLIC = "is_public";
+    public static final String EXERCISE_USER_ID = "user_id";
     //updateTable
     private static final String UPDATE_ID = "update_id";
     private static final String UPDATE_TABLE_IDENTIFIER = "Table_name";
@@ -72,7 +74,7 @@ public class DatabaseAdapter{
     protected static final String EXERCISE_TABLE = "Exercise";
     protected static final String UPDATE_TABLE = "UpdateTable";
     private static final String DATABASE_NAME = "smartbellsdata";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
     /*
      * Create Tables
      */
@@ -781,15 +783,6 @@ public class DatabaseAdapter{
         return v;
     }
 
-    public Cursor selectAllExercisesUnsynced(){
-
-        Cursor mycursor = database.query(SETGROUP_TABLE, null,
-                EXERCISE_IS_SYNCED + " is null",
-                null, null, null, null);
-
-
-        return null;
-    }
     //Select All Exercises
     public Cursor selectAllExercises() {
         Cursor myCursor = database.query(SETGROUP_TABLE, null,
@@ -861,24 +854,51 @@ public class DatabaseAdapter{
         helper.onCreate(database);
     }
 
-    public String getExercise(int id) {
-        return null;
+    private String getObject(String table, String primary_key, int id) throws SQLException {
+        Cursor query = database.query(table, null, primary_key + " =? ", new String[]{String.valueOf(id)}, null, null, null);
+        Log.d("number of records returned =================", String.valueOf(query.getCount()));
+        if (query.getCount() != 1) throw new SQLException("Improper Key");
+        query.moveToFirst();
+        JSONObject json = new JSONObject();
+        for (int x = 0; x < query.getColumnCount(); x++){
+            try {
+                Log.d(query.getColumnName(x), query.getString(x));
+                if (query.getColumnName(x).equals(EXERCISE_IS_PUBLIC)) {
+                    if (query.getInt(x) == 0){
+                        json.put(query.getColumnName(x), false);
+                    }else {
+                        json.put(query.getColumnName(x), true);
+                    }
+                }
+                else json.put(query.getColumnName(x), query.getString(x));
+            } catch (JSONException e) {
+                Log.d("Throwing error on json creation", " might not work actually");
+                e.printStackTrace();
+            }
+        }
+        Log.d("returning following Json Object", json.toString());
+        return json.toString();
     }
 
-    public String getSet_Group(int id) {
-        return null;
+    public String getExercise(int id) throws SQLException {
+        //should return a json representation of the object in question
+        return getObject(EXERCISE_TABLE, PK_EXERCISE_ID, id);
     }
 
-    public String getRoutine(int id) {
-        return null;
+    public String getSet_Group(int id) throws SQLException {
+        return getObject(SETGROUP_TABLE, PK_SETGROUP_ID, id);
     }
 
-    public String getWorkoutSession(int id) {
-        return null;
+    public String getRoutine(int id) throws SQLException {
+        return getObject(ROUTINE_TABLE, PK_ROUTINE_ID, id);
     }
 
-    public String getWorkoutSetGroup(int id) {
-        return null;
+    public String getWorkoutSession(int id) throws SQLException {
+        return getObject(WORKOUTSESSION_TABLE, PK_WORKOUTSESSION_ID, id);
+    }
+
+    public String getWorkoutSetGroup(int id) throws SQLException {
+        return getObject(WORKOUTSETGROUP_TABLE, PK_WORKOUTSETGROUP_ID, id);
     }
 
     public void insertWorkoutSetGroup(WorkoutSetGroup workoutSetGroup) {

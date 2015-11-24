@@ -187,18 +187,23 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
      * @return
      */
     private String getChangedObject(int id, int table) {
-        switch (table) {
-            case (0)://exercises
-                return database.getExercise(id);
-            case (1)://set groups
-                return database.getSet_Group(id);
-            case (2)://routines
-                return database.getRoutine(id);
-            case (3)://workout session
-                return database.getWorkoutSession(id);
-            case (4)://workout set group
-                return database.getWorkoutSetGroup(id);
+        try {
+            switch (table) {
+                case (0)://exercises
+                    return database.getExercise(id);
+                case (1)://set groups
+                    return database.getSet_Group(id);
+                case (2)://routines
+                    return database.getRoutine(id);
+                case (3)://workout session
+                    return database.getWorkoutSession(id);
+                case (4)://workout set group
+                    return database.getWorkoutSetGroup(id);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
         return null;
     }
     /**

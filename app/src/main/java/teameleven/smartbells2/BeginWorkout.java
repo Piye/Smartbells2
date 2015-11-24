@@ -7,12 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.create.CreateCustomSession;
+import teameleven.smartbells2.dashboardfragmenttabs.RecordWorkoutRoutine;
 
 /**
  * Created by Jare on 2015-10-06.
@@ -20,9 +24,10 @@ import teameleven.smartbells2.create.CreateCustomSession;
 public class BeginWorkout extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     Button createCustomSession;
-    //private DatabaseAdapter db;
+    private int checkTabPage;
+    private DatabaseAdapter db;
     //value to be passed to RecordWorkout Activity
-    //public static final String ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
+    public static final String ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
 
     private ArrayList<String> list;
     private ArrayList<String> plist;
@@ -43,7 +48,7 @@ public class BeginWorkout extends Fragment implements View.OnClickListener, Adap
         routinelist.setOnItemClickListener(this);
         publiclist.setOnItemClickListener(this);
 
-        /*/Open Database
+        //Open Database
         db = new DatabaseAdapter(getActivity());
         try {
             db.openLocalDatabase();
@@ -53,7 +58,7 @@ public class BeginWorkout extends Fragment implements View.OnClickListener, Adap
             e.printStackTrace();
         }
         //Two ArrayLists for each ListView
-        list = db.getRoutinesAsStrings();
+        list = db.getMyRoutinesAsStrings(db.getUserIDForSession());
         plist = db.getRoutinesAsStrings();
 
         //close the database
@@ -61,7 +66,7 @@ public class BeginWorkout extends Fragment implements View.OnClickListener, Adap
                                                                       //The custom layout,     the textview id,    the list
         routinelist.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_item_routine, R.id.routineNameValueDetail, list));
         publiclist.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_item_routine,R.id.routineNameValueDetail, plist));
-        */
+
         return view;
     }
 
@@ -79,9 +84,19 @@ public class BeginWorkout extends Fragment implements View.OnClickListener, Adap
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Start an intent when a list item is clicked
 
-        //Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
+        Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
         //When we start the new intent we want to pass the name of the Routine from the list
-        //intent.putExtra(ITEM_NAME, list.get(position));
-        //startActivity(intent);
+        intent.putExtra(ITEM_NAME, list.get(position));
+        startActivity(intent);
+    }
+
+    public int getCheckBWTabPage() {
+        return checkTabPage;
+    }
+
+    public void setCheckTabPage(int checkTabPage) {
+        this.checkTabPage = checkTabPage;
+        //Use for debugging - Want to make sure variable is changing with tab clicks.
+        System.err.print(checkTabPage);
     }
 }

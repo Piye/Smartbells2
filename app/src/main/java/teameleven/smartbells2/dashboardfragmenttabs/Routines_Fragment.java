@@ -1,6 +1,7 @@
 package teameleven.smartbells2.dashboardfragmenttabs;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -23,8 +24,8 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 public class Routines_Fragment extends ListFragment {
 
-    //public static final String ROUTINE_ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
-    //public static final String ROUTINE_ISPUBLIC = DatabaseAdapter.ROUTINE_IS_PUBLIC;
+    public static final String ROUTINE_ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
+    public static final String ROUTINE_ISPUBLIC = DatabaseAdapter.ROUTINE_IS_PUBLIC;
 
     //Need to pull reps and sets from Database, added variables for Sprint 3 to Database
 //    public static final String ROUTINE_REPS = DatabaseAdapter.ROUTINE_REPS;
@@ -46,7 +47,10 @@ public class Routines_Fragment extends ListFragment {
             e.printStackTrace();
         }
 
-        list = db.getRoutinesAsStrings();
+        /**
+         * Specific routines of User
+         */
+        list = db.getMyRoutinesAsStrings(db.getUserIDForSession());
 
         //Set the adapter to show in application
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
@@ -65,9 +69,9 @@ public class Routines_Fragment extends ListFragment {
     public void onListItemClick(ListView lv, View view, int position, long id) {
         //Start an intent when a list item is clicked
 
-        //Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
+        Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
         //When we start the new intent we want to pass the name of the Routine from the list
-        //intent.putExtra(ROUTINE_ITEM_NAME, list.get(position));
+        intent.putExtra(ROUTINE_ITEM_NAME, list.get(position));
 
 //        Pull Ispublic, reps, sets from DB, pass to proper view area, below is not how to implement. Just a reference for myself - Jordan
 //        intent.putExtra(ROUTINE_ISPUBLIC, list.get(position));
@@ -75,7 +79,7 @@ public class Routines_Fragment extends ListFragment {
 //        intent.putExtra(ROUTINE_SETS, list.get(position));
 
 
-        //startActivity(intent);
+        startActivity(intent);
     }
 
     //run list code on tab select

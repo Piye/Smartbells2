@@ -397,7 +397,23 @@ public class DatabaseAdapter{
         }
         return mCursor;
     }
-
+    //Select private routine by User's ID
+    public Cursor selectMyRoutineById(int userId) throws android.database.SQLException {
+        Cursor mCursor = null;
+        Log.d(TAG, "userId is " + userId);
+        mCursor = database.query(ROUTINE_TABLE, new String[] {PK_ROUTINE_ID,
+                        ROUTINE_USER_ID, ROUTINE_IS_PUBLIC,
+                        ROUTINE_CREATED_AT, ROUTINE_UPDATED_AT},
+                ROUTINE_USER_ID + " = ?", new String[] {String.valueOf(userId)},
+                ROUTINE_IS_PUBLIC + " = false", null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+    }
+    /**
+     *Select All Public Routines
+     */
     //Select All Routines
     public Cursor selectAllRoutines() {
         Cursor myCursor = database.query(ROUTINE_TABLE, new String[]{PK_ROUTINE_ID,
@@ -428,7 +444,24 @@ public class DatabaseAdapter{
 
         return result;
     }
+    //Reference: http://stackoverflow.com/questions/9466380/
+    //           how-to-get-data-from-my-database-and-put-it-on-a-listview-that-is-clickable
+    // Get private Routines of specific user and return a string
+    public ArrayList<String> getMyRoutinesAsStrings(int userId) {
+        String[]columns = new String[]{ROUTINE_NAME};
+        Cursor cursor = database.query(ROUTINE_TABLE, null, ROUTINE_USER_ID + "=" + userId,
+                null, null, null, null);
+        //Results String Array
+        ArrayList<String> result = new ArrayList<String>();
+        //int id = cursor.getColumnIndex(PK_ROUTINE_ID);
+        int name = cursor.getColumnIndex(ROUTINE_NAME);
 
+        for(cursor.moveToFirst(); !cursor.isAfterLast();cursor.moveToNext()){
+            result.add(cursor.getString(name));
+        }
+
+        return result;
+    }
     /******************************WORKOUTSESSION TABLE********************************************/
 
 
@@ -481,7 +514,41 @@ public class DatabaseAdapter{
         return result;
     }
 
+    // Get private WorkoutSessions of specific user and return a string
+    public ArrayList<String> getMyWorkoutsAsStrings(int userId) {
+        String[]columns = new String[]{SESSION_NAME};
+        Cursor cursor = database.query(WORKOUTSESSION_TABLE, null, FK_USER_ID + "=" + userId,
+                null, null, null, null);
+        //Results String Array
+        ArrayList<String> result = new ArrayList<String>();
+        /**
+         * Index of the Session name
+         */
+        int nameIndex = cursor.getColumnIndex(SESSION_NAME);
 
+        for(cursor.moveToFirst(); !cursor.isAfterLast();cursor.moveToNext()){
+            result.add(cursor.getString(nameIndex));
+        }
+        return result;
+    }
+
+    // Get private WorkoutSessions of specific user and return a string
+    public ArrayList<String> getMyWorkoutIds(int userId) {
+        String[]columns = new String[]{PK_WORKOUTSESSION_ID};
+        Cursor cursor = database.query(WORKOUTSESSION_TABLE, null, FK_USER_ID + "=" + userId,
+                null, null, null, null);
+        //Results String Array
+        ArrayList<String> result = new ArrayList<String>();
+        /**
+         * Index of the WorkoutSessionId
+         */
+        int workoutIdIndex = cursor.getColumnIndex(PK_WORKOUTSESSION_ID);
+
+        for(cursor.moveToFirst(); !cursor.isAfterLast();cursor.moveToNext()){
+            result.add(cursor.getString(workoutIdIndex));
+        }
+        return result;
+    }
     /**********************************************************************************************/
 
     public void insertWorkoutSession(WorkoutSession session) {
@@ -593,6 +660,35 @@ public class DatabaseAdapter{
         return myCursor;
     }
 
+
+    //Select All Set Groups By WorkoutSessioID - Cursor
+    public Cursor selectMyAllWorkoutSetGroups(int workoutSessionId) {
+        Cursor myCursor = database.query(WORKOUTSETGROUP_TABLE, null,
+                FK_WORKOUTSESSION_ID + "=" + workoutSessionId, null, null, null, null, null);
+
+        if (myCursor != null) {
+            myCursor.moveToFirst();
+        }
+        return myCursor;
+    }
+
+    // Get private WorkoutSessions of specific user and return a string - ArrayList
+    public ArrayList<String> getMyWorkoutSetGroupIds(String workoutSessionId) {
+        String[]columns = new String[]{PK_WORKOUTSETGROUP_ID};
+        Cursor cursor = database.query(WORKOUTSETGROUP_TABLE,null,
+                FK_WORKOUTSESSION_ID + "=" + workoutSessionId,null, null, null, null, null);
+        //Results String Array
+        ArrayList<String> result = new ArrayList<String>();
+        /**
+         * Index of the WorkoutSessionId
+         */
+        int setGroupId = cursor.getColumnIndex(PK_WORKOUTSETGROUP_ID);
+
+        for(cursor.moveToFirst(); !cursor.isAfterLast();cursor.moveToNext()){
+            result.add(cursor.getString(setGroupId));
+        }
+        return result;
+    }
     /**********************************SETGROUP TABLE**********************************************/
 
     public void insertSetGroup(SetGroup set_group) {
@@ -670,7 +766,22 @@ public class DatabaseAdapter{
         }
         return myCursor;
     }
+    //Select UserId's Set Groups.
+    // Get private Routines of specific user and return a ArrayList<string>
+    public ArrayList<String> getMySetGroupIdsByWSG(String workoutSetGroupId) {
+        SetGroup[]setGroups = new SetGroup[]{};
+        Cursor cursor = database.query(SETGROUP_TABLE, new String[]{PK_SETGROUP_ID + "=" +workoutSetGroupId,
+                FK_EXERCISE_ID, SETGROUP_SETS, SETGROUP_REPS, SETGROUP_CREATED_AT,
+                SETGROUP_UPDATED_AT},null, null, null, null, null, null);
+        //Results String Array
+        ArrayList<String> result = new ArrayList<String>();
+        int id = cursor.getColumnIndex(FK_EXERCISE_ID);
 
+        for(cursor.moveToFirst(); !cursor.isAfterLast();cursor.moveToNext()){
+            result.add(cursor.getString(id));
+        }
+        return result;
+    }
     /**
      * Efficiently Loads all Exercises from the remote Database
      * @param exercise

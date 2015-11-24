@@ -24,7 +24,8 @@ public class SmartBellsMainActivity extends AppCompatActivity
                                     implements NavigationView.OnNavigationItemSelectedListener {
 
     public static Dashboard dashboardTab = new Dashboard();
-    public static BeginWorkout2 bw2 = new BeginWorkout2();
+    //public static BeginWorkout2 bw2 = new BeginWorkout2();
+    public static BeginWorkout bw2 = new BeginWorkout();
     private Fragment fragment = null;
     private FragmentTransaction transaction;
     private FloatingActionButton fab;
@@ -169,7 +170,8 @@ public class SmartBellsMainActivity extends AppCompatActivity
         if (id == R.id.nav_dashboard) {
             fragment = new Dashboard();
         } else if (id == R.id.nav_beginworkout) {
-            fragment = new BeginWorkout2();
+            //fragment = new BeginWorkout2();
+            fragment = new BeginWorkout();
         } else if (id == R.id.nav_achievements) {
             fragment = new AchievementDashboard();
         } else if (id == R.id.nav_about) {

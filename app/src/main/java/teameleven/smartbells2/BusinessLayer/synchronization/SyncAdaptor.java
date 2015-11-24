@@ -268,7 +268,7 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
 
         ArrayList<WorkoutSession> workoutSessions = WorkoutSession.
                 restGetAll(database.getUserIDForSession());
-        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
+        Log.d("LoginActivity.initialDatabaseSync - WorkoutSession row count = ", String.valueOf(workoutSessions.size()));
         y = (System.currentTimeMillis() - x);
         Log.d("time taken = ", String.format("%s milliseconds", y));
         database.loadAllWorkoutSessions(workoutSessions);

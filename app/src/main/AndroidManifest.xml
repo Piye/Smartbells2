@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="teameleven.smartbells2" >
 
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
 
     <application
         android:allowBackup="true"
@@ -36,9 +34,45 @@
         <activity android:name=".LoginActivity" android:launchMode="singleTop"/>
         <activity android:name=".LoadingSplashScreen"/>
 
+
+        <!-- SERVICES   -->
+        <!-- Authenticator Service -->
+        <service
+            android:name="teameleven.smartbells2.businesslayer.synchronization.AuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator"/>
+        </service>
+
+        <!-- Sync Service - Synchronizes the program with the database -->
+        <service android:name="teameleven.smartbells2.businesslayer.synchronization.SyncService"
+                 android:exported="true"
+                 android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                       android:resource="@xml/sync_adapter"/>
+        </service>
+        <!-- SERVICES   -->
+        <!-- Content Provider -->
+        <provider
+            android:name="teameleven.smartbells2.businesslayer.synchronization.StubProvider"
+            android:authorities="teameleven.smartbells2.businesslayer.synchronization.provider"
+            android:label=""
+            android:exported="false"
+            android:syncable="true"/>
+        <!-- Content Provider -->
+
+
     </application>
 
     <!-- USE the INTERNET -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
 
 </manifest>

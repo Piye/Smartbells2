@@ -908,7 +908,6 @@ public class DatabaseAdapter{
     public ArrayList<Exercise> getExercises(){
         String[] columns = new String[]{EXERCISE_NAME, PK_EXERCISE_ID};
         Cursor cursor = database.query(EXERCISE_TABLE, columns, null, null, null, null, null);
-        //todo should be "where user_id = user_id" - only pull the users object
         ArrayList<Exercise> exercises = new ArrayList<>();
         Exercise exercise;
 
@@ -1019,7 +1018,16 @@ public class DatabaseAdapter{
                 workoutSetGroup.getWorkoutSessionId());
     }
 
-
+    public boolean getDatabaseLoaded(){
+        Cursor query = database.rawQuery("select count(*) from " + EXERCISE_TABLE, null);
+        query.moveToFirst();
+        int result = query.getInt(0);
+        Log.d("number of exercises", String.valueOf(result));
+        if (result > 0){
+            return true;
+        }
+            return false;
+    }
     //********************************************************************************************//
     private static class DatabaseHelper extends SQLiteOpenHelper {
 

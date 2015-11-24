@@ -116,7 +116,7 @@ public class LoginActivity extends Activity {
              * As it runs this on a background thread, in theory
              * this should occur as the loading screen is showing
              */
-            account = CreateSyncAccount(this);
+            //account = CreateSyncAccount(this);
             Bundle sync = new Bundle();
             sync.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
             sync.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);

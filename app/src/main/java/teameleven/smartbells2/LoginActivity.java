@@ -1,5 +1,4 @@
 package teameleven.smartbells2;
-//TODO implement new validation in signup for using existing user details.
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -29,31 +28,63 @@ import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
 import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSession;
 
-
 /**
+ * This class manages the Login Activities
  * Created by Brian McMahon on 14/10/2015.
  */
 public class LoginActivity extends Activity {
 
+//TODO implement progress dialogs
+//TODO implement new validation in signup for using existing user details.
+    /**
+     * Edit Test Field of User name
+     */
     private EditText mUserName;
+    /**
+     * Edit Test Field of Password
+     */
     private EditText mPassword;
+    /**
+     * Login Button
+     */
     private Button mLogInButton;
+    /**
+     * Text view field of Description of Signup
+     */
     private TextView mSignUp;
+    /**
+     * Tag for debugging
+     */
     String TAG = "DEBUGGING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 
-    /*
-    This is to set up a dummy account. if we had more time, we could easily change to
-    an authenticator pattern for the Account. However, for the sake of this project,
-     we'll keep it like this
+    /**
+     *     This is to set up a dummy account. if we had more time, we could easily change to
+     * an authenticator pattern for the Account. However, for the sake of this project,
+     * we'll keep it like this
      */
     private static final String AUTHORITY =
-            "teameleven.smartbells2.businesslayer.synchronization.provider";
-    private static final String ACCOUNT_TYPE = "https://smart-bells-staging.herokuapp.com";
+            "teameleven.smartbells_prototype0001.businesslayer.synchronization.provider";
+    /**
+     * Accoutn type of the smartbells
+     */
+    private static final String ACCOUNT_TYPE = "smart-bells-staging.herokuapp.com";
+    /**
+     * Default account
+     */
     private static final String ACCOUNT = "DefaultAccount";
+    /**
+     * Declaration of Account attribute
+     */
     Account account;
-
+    /**
+     * Declaration of SessionManager attribute
+     */
     SessionManager session;
 
+    /**
+     * Display the page of login and set the onclick listeners of the loginbutton or signup button
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,20 +117,30 @@ public class LoginActivity extends Activity {
 
     }
 
-    //attempts to login to the account
+    /**
+     * attempts to login to the account
+     */
     public void login() {
         if (!validate()) {
             mUserName.setText("");
             mPassword.setText("");
         } else {
 
-            //todo temporary
-            //Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+            //temporary  //TODO ADD PROGRESS DIALOG
+            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
 
             //instantiate the storage session
             session = new SessionManager(getApplicationContext());
 
             session.createLoginSession(getUsername(), getPassword());
+
+            //Toast.makeText(getApplicationContext(), "User Login Status: " +
+            // session.isLoggedIn(), Toast.LENGTH_LONG).show();
+
+
+
+            //move to main activity
+            //Intent intent = new Intent(this, SmartBellsMainActivity.class);
 
             /*
              * this block of code runs the Synchronization setup.
@@ -107,7 +148,11 @@ public class LoginActivity extends Activity {
              * As it runs this on a background thread, in theory
              * this should occur as the loading screen is showing
              */
-            account = CreateSyncAccount(this);
+            //account = CreateSyncAccount(this);
+            Bundle sync = new Bundle();
+            sync.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            sync.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+            ContentResolver.requestSync(account, AUTHORITY, sync);
 
             //move to the splashScreen instead
             Intent intent = new Intent(this, LoadingSplashScreen.class);
@@ -118,6 +163,11 @@ public class LoginActivity extends Activity {
 
     }
 
+    //todo review below
+
+    /**
+     * When the app is closed, ask to the user to exit or not.
+     */
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed Called");
@@ -141,15 +191,27 @@ public class LoginActivity extends Activity {
                 }).create().show();
     }
 
+    /**
+     * Get User name from the user's entry field
+     * @return user name
+     */
     public String getUsername() {
         return mUserName.getText().toString();
     }
 
+    /**
+     * Get the passoword from the user's entry field
+     * @return
+     */
     public String getPassword() {
         return mPassword.getText().toString();
     }
 
-    //validates user entries
+
+    /**
+     * validates user entries
+     * @return valid - boolean after validating
+     */
     public boolean validate() {
         boolean valid;
 
@@ -163,7 +225,6 @@ public class LoginActivity extends Activity {
             Authentication auth = new Authentication(getUsername(), getPassword());
 
             String authorized = auth.restAuthentication();
-            Log.d("THIS IS THE TOKEN", authorized);
 
             if (authorized.equals("")) {
                 Toast.makeText(this, "Invalid Username or Password", Toast.LENGTH_SHORT).show();
@@ -178,8 +239,9 @@ public class LoginActivity extends Activity {
 
                     String accessToken = json.getString("authentication_token");
                     int user_id = json.getInt("id");
-                    Log.d("LoginActivity.validate - token checking - ", user_id + "<-id token ->" + accessToken);
+                    Log.d("LoginActivity.validate - token checking - ", user_id + "<-id token ->" +  accessToken);
                     db.insertToken(accessToken, user_id);
+                    initialDatabaseSync(db);
                 } catch (SQLException | JSONException e) {
                     e.printStackTrace();
                 }
@@ -192,7 +254,43 @@ public class LoginActivity extends Activity {
         return valid;
     }
 
+    /**
+     * Initialization of the database befor the sync- Load all tables to SQLite Database of the app
+     * @param db
+     */
+    private void initialDatabaseSync(DatabaseAdapter db) {
+        db.updateDB();
+        long x = System.currentTimeMillis();
+        long y;
 
+
+        ArrayList<Exercise> exercise = Exercise.restGetAll();
+        Log.d("LoginActivity.initialDatabaseSync - Exercise row count = ", String.valueOf(exercise.size()));
+        y = (System.currentTimeMillis() - x);
+        Log.d("time taken = ", String.format("%s milliseconds", y));
+        db.loadAllExercises(exercise);
+
+
+        ArrayList<Routine> routines = Routine.restGetAll(db.getUserIDForSession());
+        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
+        y = (System.currentTimeMillis() - x);
+        Log.d("time taken = ", String.format("%s milliseconds", y));
+        db.loadAllRoutines(routines);
+
+
+        ArrayList<WorkoutSession> workoutSessions = WorkoutSession.
+                restGetAll(db.getUserIDForSession());
+        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
+        y = (System.currentTimeMillis() - x);
+        Log.d("time taken = ", String.format("%s milliseconds", y));
+        db.loadAllWorkoutSessions(workoutSessions);
+    }
+
+    /**
+     * Create an account for sync
+     * @param context
+     * @return
+     */
     public static Account CreateSyncAccount(Context context){
         Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
 
@@ -203,15 +301,10 @@ public class LoginActivity extends Activity {
             ContentResolver.setIsSyncable(newAccount, AUTHORITY, 1);
             ContentResolver.setSyncAutomatically(newAccount, AUTHORITY, true);
 
-            Bundle sync = new Bundle();
-            sync.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-            sync.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-            ContentResolver.requestSync(newAccount, AUTHORITY, sync);
             return newAccount;
         }
 
         Log.d("No ACCOUNT CREATED -- ", " - Returning old account");
         return newAccount;
     }
-
 }

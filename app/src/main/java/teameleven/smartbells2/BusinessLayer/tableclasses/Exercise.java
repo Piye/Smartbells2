@@ -68,6 +68,10 @@ public class Exercise {
     public Exercise() {
     }
 
+    /**
+     * Constructor with exercise value
+     * @param exercise : Exercise values from JSONObject
+     */
     public Exercise(JSONObject exercise) {
         try {
             //Log.d("Constructor exercise - ",exercise.toString());
@@ -95,6 +99,11 @@ public class Exercise {
         }
     }
 
+    /**
+     * Set the Exercise name and Exercise id
+     * @param name : Exercise name
+     * @param id   : Exercise id
+     */
     public Exercise(String name, int id) {
         this.name = name;
         this.id = id;
@@ -102,9 +111,9 @@ public class Exercise {
 
     /******************************** Base Methods     ********************************************/
     /**
-     *
-     * @param json
-     * @return
+     * Get an arraylist of all exercises from the Exercise table
+     * @param json : JSONObject for query
+     * @return : Arraylist of all execises
      */
     private static ArrayList<Exercise> getAllExercise(JSONObject json) {
         ArrayList<Exercise> exercises = new ArrayList<>();
@@ -121,8 +130,9 @@ public class Exercise {
     }
 
     /**
-     * @param id
-     * @return
+     * Get an exercise record by exercise id
+     * @param id : Excercise id
+     * @return : a result of rest call to get an record of exercise
      */
     public static String restGetExercise(int id) {
         try {
@@ -137,8 +147,8 @@ public class Exercise {
     }
 
     /**
-     *
-     * @return
+     * Get all Exercise records
+     * @return : ArrayList of Exercises
      */
     public static ArrayList<Exercise> restGetAll() {
         try {
@@ -256,13 +266,14 @@ public class Exercise {
     }
 
     /**
-     *
+     * Set the created date of a record
      */
     public void setCreated_At(String created_at) {
         this.created_At = created_at;
     }
 
     /**
+     * Get a Boolean where it is public or not
      * @return
      */
     public boolean getIsPublic() {
@@ -270,6 +281,7 @@ public class Exercise {
     }
 
     /**
+     * Set a Boolean where it is public or not
      * @param is_Public
      */
     public void setIs_Public(boolean is_Public) {
@@ -343,7 +355,8 @@ public class Exercise {
     }
 
     /**
-     * @param database
+     * Insert an exercise record
+     * @param database : Database Adapter
      */
     public void restPUT(DatabaseAdapter database) {
         Log.d("Exercise.restPOST", this.createJSON().toString());

@@ -24,9 +24,26 @@ public class Records_Fragment extends ListFragment {
 
     //Temporary string array to populate list
     //String[] listOfRecords = new String[] {"10 Reps, 3 sets", "1000 Miles, 10 seconds", "Crazy Marathon"};
+    /**
+     * List of workout ids
+     */
     public ArrayList<String> listOfWorkoutIds;
+    /**
+     * List of WorkoutSetGroup ids
+     */
     public ArrayList<String> listOfWorkoutSetGroupIds;
+    /**
+     * List of SetGroups ids
+     */
     public ArrayList<String> listOfSetGroups;
+
+    /**
+     * Display the list of workoutroutine
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return super.onCreateView(inflater, container, savedInstanceState);
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -80,14 +97,15 @@ public class Records_Fragment extends ListFragment {
             //while()
         }
 
-
+        /**
+         * List of set groups
+         */
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
                 android.R.layout.simple_list_item_1, listOfSetGroups);
         setListAdapter(adapter);
 
         //close the database
         db.closeLocalDatabase();
-
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }

@@ -5,8 +5,17 @@ package teameleven.smartbells2;
  * Created by Brian McMahon on 22/10/2015.
  */
 public class Credentials {
+    /**
+     * user name
+     */
     private String userName;
+    /**
+     * Email of user
+     */
     private String email;
+    /**
+     * Password of user
+     */
     private String password;
 
     /**

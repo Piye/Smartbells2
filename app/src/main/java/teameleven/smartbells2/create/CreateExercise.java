@@ -26,20 +26,40 @@ import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
  * presented in create_exercise.xml
  */
 public class CreateExercise extends Fragment implements View.OnClickListener {
-
+    /**
+     * DatabaseAdapter
+     */
     private DatabaseAdapter database;
+    /**
+     * Exercise
+     */
     private Exercise exercise;
+    /**
+     * Cancel Button
+     */
     private Button cancel;
+    /**
+     * Save Button
+     */
     private Button save;
+    /**
+     * FloatingActionButton
+     */
     private FloatingActionButton fab;
+    /**
+     * Text View fields of the name
+     */
     private TextView name;
+    /**
+     * TextView fields of the inscreas per session
+     */
     private TextView increasePS;
 
     /**
-     * onCreate
+     * onCreate Create the view of the input page of exercise
      * @param savedInstanceState
      */
-    //@Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //Main view

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 
 /**
+ * This class treats the ContentProvider
  * Created by Andrew Rabb on 2015-11-13.
  */
 public class StubProvider extends ContentProvider {

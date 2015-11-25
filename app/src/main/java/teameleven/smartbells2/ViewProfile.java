@@ -12,17 +12,32 @@ import android.widget.Button;
 import android.widget.Toast;
 
 /**
+ * This class show the user's profile
  * Created by Jare on 2015-11-21.
  */
 public class ViewProfile extends Fragment implements View.OnClickListener {
-
+    /**
+     * FloatingActionButton
+     */
     private FloatingActionButton fab;
+    /**
+     * Edit button
+     */
     private Button edit;
 
+    /**
+     * Create a screen profile_page
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return view for profile_page
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        /**
+         * view for profile_page
+         */
         View view = inflater.inflate(R.layout.profile_page, container, false);
 
         //Save Button
@@ -38,8 +53,15 @@ public class ViewProfile extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * Shows the edit profile screen when the fragment item is clicked
+     * @param view editProfile view
+     */
     @Override
     public void onClick(View view) {
+        /**
+         * Fragment of the veiw
+         */
         Fragment fragment;
         FragmentTransaction transaction;
         switch (view.getId()) {

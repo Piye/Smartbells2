@@ -16,26 +16,53 @@ import teameleven.smartbells2.dashboardfragmenttabs.Exercises_Fragment;
 import teameleven.smartbells2.dashboardfragmenttabs.Routines_Fragment;
 import teameleven.smartbells2.dashboardfragmenttabs.Workouts_Fragment;
 
-
+/**
+ * This class treats the dashboard page that is the fisr page of the smartbells after login.
+ */
 public class Dashboard extends Fragment {
-
+    /**
+     * FragmentTabHost of the dashboard tab host
+     */
     private FragmentTabHost dashboardTabHost;
+    /**
+     * A number of tab page
+     */
     private int checkTabPage;
+    /**
+     * FloatingActionButton
+     */
     private FloatingActionButton fab;
-    //Create the view and setup the tab host to view
+
+    /**
+     * Create the view and setup the tab host to view
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return view for dashborad of smartbells main
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        /**
+         * View for the first main page of dashboard
+         */
         View rootView = inflater.inflate(R.layout.tab_fragment_dashboard, container, false);
-
+        /**
+         * Set the tabhost(title) at the dashboard tab host
+         */
         dashboardTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);
+        /**
+         * Set the contents at the dashboard tab host
+         */
         dashboardTabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);
 
-        //Show the FAB
+        /**
+         * Show the FloatingActionButton
+         */
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 
-
-        //Creates a listener, and handles fragment manager to swap between list fragments
+        /**
+         * Creates a listener, and handles fragment manager to swap between list fragments
+         */
         TabHost.OnTabChangeListener tabChangeListener = new TabHost.OnTabChangeListener() {
             //Inner method to control tab functions
             @Override
@@ -95,30 +122,31 @@ public class Dashboard extends Fragment {
                         fragTransaction.attach(exercises_Fragment);
                     }
                 }
-
                 fragTransaction.commit();
-
             }
         };
 
-
-        //Setting up the tab change listener
-
+        /**
+         * Setting up the tab change listener
+         */
         dashboardTabHost.setOnTabChangedListener(tabChangeListener);
-
-        //Setting up builders for each tabs
-
-        //Workout Tab creation
+        /**
+         * Setting up builders for each tabs
+         * Workout Tab creation
+         */
         dashboardTabHost.addTab(dashboardTabHost.newTabSpec("workouts").setIndicator("Workouts"), Workouts_Fragment.class, null);
-
-        //Routine Tab creation
+        /**
+         * Routine Tab creation
+         */
         dashboardTabHost.addTab(dashboardTabHost.newTabSpec("routines").setIndicator("Routines"), Routines_Fragment.class, null);
-
-        //Achievements Tab creation
+        /**
+         * Achievements Tab creation
+         */
         dashboardTabHost.addTab(dashboardTabHost.newTabSpec("exercises").setIndicator("Exercises"), Exercises_Fragment.class, null);
 
-
-        //Adjusting the text within the tabs to properly show titles
+        /**
+         * Adjusting the text within the tabs to properly show titles
+         */
         for (int i = 0; i < 3; i++)
         {
             TextView x = (TextView) dashboardTabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
@@ -126,19 +154,23 @@ public class Dashboard extends Fragment {
             {
                 x.setTextSize(14);
             } else {x.setTextSize(14);}
-
-
         }
-
         //Return the view
         return rootView;
     }
 
-
+    /**
+     * Get the tab page number
+     * @return a number of tab page
+     */
     public int getCheckTabPage() {
         return checkTabPage;
     }
 
+    /**
+     * Set the page number of the tab
+     * @param checkTabPage a number of the tab page
+     */
     public void setCheckTabPage(int checkTabPage) {
         this.checkTabPage = checkTabPage;
         //Use for debugging - Want to make sure variable is changing with tab clicks.

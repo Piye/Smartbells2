@@ -12,16 +12,35 @@ import android.widget.Toast;
 import teameleven.smartbells2.businesslayer.tableclasses.User;
 
 /**
+ * Sign up Activites
  * Created by Brian McMahon on 14/10/2015.
  */
 public class SignupActivity extends Activity{
-
+    /**
+     * Edit Text field of User name
+     */
     private EditText mUserName;
+    /**
+     * Edit Text field of User email
+     */
     private EditText mEmail;
+    /**
+     * Edit Text field of User password
+     */
     private EditText mPassword;
+    /**
+     * Edit Text field of configuration password
+     */
     private EditText mConfPassword;
+    /**
+     * Create Account button
+     */
     private Button mCreateAccount;
 
+    /**
+     * Create the page of sign up
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -42,23 +61,42 @@ public class SignupActivity extends Activity{
         });
 
     }
+
+    /**
+     * Get the user name
+     * @return User name
+     */
     public String getUsername(){
         return mUserName.getText().toString();
     }
 
+    /**
+     * Get the email
+     * @return email of user
+     */
     public String getEmail(){
         return mEmail.getText().toString();
     }
 
+    /**
+     * Get the password of user
+     * @return Passowrd
+     */
     public String getPassword(){
         return mPassword.getText().toString();
     }
 
+    /**
+     * Get the configuration password
+     * @return configuration passowrd
+     */
     public String getConfPassword(){
         return mConfPassword.getText().toString();
     }
 
-
+    /**
+     * Create a user account
+     */
     public void signup(){
         if(!validate()){
             Toast.makeText(this, "Signup Failed", Toast.LENGTH_LONG).show();
@@ -92,6 +130,10 @@ public class SignupActivity extends Activity{
         finish();
     }
 
+    /**
+     * Validate the user input datas
+     * @return boolean after validating
+     */
     public boolean validate(){
         //TODO implement additional validation logic
         boolean valid = true;

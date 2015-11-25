@@ -9,11 +9,17 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 
 /**
+ * Explanation about the team eleven
  * Created by Jarret on 2015-11-10.
  */
 public class About extends Fragment {
-
+    /**
+     * View for inflater of the about_page
+     */
     private View rootView;
+    /**
+     * FloatingActionButton
+     */
     private FloatingActionButton fab;
 
     @Override

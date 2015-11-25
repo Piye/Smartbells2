@@ -14,13 +14,26 @@ import teameleven.smartbells2.Dashboard;
 import teameleven.smartbells2.R;
 
 /**
+ * This class creates a workout
  * Created by Jordan on 11/16/2015.
  */
 public class CreateWorkout extends Fragment implements View.OnClickListener {
-
+    /**
+     * Cancel button
+     */
     private Button cancel;
+    /**
+     * FloatingActionButton
+     */
     private FloatingActionButton fab;
 
+    /**
+     * The create set group page
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState  Bundle
+     * @return view
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //Main view
@@ -32,6 +45,10 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * The screen of add_setgoup,design_routine and cancel create workout
+     * @param v View
+     */
     @Override
     public void onClick(View v) {
         Fragment fragment;

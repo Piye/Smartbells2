@@ -12,14 +12,28 @@ import teameleven.smartbells2.businesslayer.tableclasses.User;
  * Created by Brian McMahon on 22/10/2015.
  */
 public class Authentication extends User {
+    /**
+     * AccessToken for API of server(SingularityXL)
+     */
     private static String accessToken;
+    /**
+     * Tag for debugging of errors
+     */
     private String TAG = "DEBUGGING!!!!!!!!!!!!!!!!!";
 
+    /**
+     * Authentication with user anme and password
+     * @param userName user name
+     * @param password Passowrd of user's
+     */
     public Authentication(String userName, String password) {
         super(userName, password);
     }
 
-    //searches the response of the post request and returns sets the access token
+    /**
+     * searches the response of the post request and returns sets the access token
+     * @param json It is a string for query with JSONObject
+     */
     public void setAccessToken(String json){
         String accessToken = "";
         try {

@@ -23,9 +23,17 @@ import java.net.URL;
  * Created by Andrew Rabb on 2015-10-21.
  */
 public class RESTCall extends AsyncTask<String, Void, JSONObject> {
-
+    /**
+     * baseURL : An address of the Smartbells API of the SingularityXL
+     */
     private final String baseURL = "https://smart-bells-staging.herokuapp.com/api/v1/";
+    /**
+     * Tag is a text to system print for tracing to debug RESTCALL error
+     */
     private final String TAG = "RESTCALL - Debug --";
+    /**
+     * Context
+     */
     private Context context;
     /**
      * Creates a new Object on the server with the supplied data. Accepts the modifier defining

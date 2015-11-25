@@ -16,24 +16,34 @@ import android.widget.Spinner;
 import teameleven.smartbells2.R;
 
 /**
+ * This class is the screen of creating custom session
  * Created by Jare on 2015-10-06.
- *
  */
 public class CreateCustomSession extends Fragment implements View.OnClickListener {
-
-    //private String exerciseName = "curls";
+    //A number of Groups
     private int numberOfGroups = 1;
-    //private DatabaseAdapter database;
+    // Exercise Spinner
     private Spinner exerciseSpinner;
+    //Exercise Name
     private String exerciseName;
+    // Edit text field of the custom session name
     private EditText mName;
+    // Edit text field of the custom session a number of sets
     private EditText mNumOfSets;
+    // Edit text field of the custom session a number of reps per set
     private EditText mRepsPerSet;
-    //WorkoutSession session = new WorkoutSession();
-
+    // Cancel Button
     private Button cancel;
+    // Floating Action Button
     private FloatingActionButton fab;
 
+    /**
+     * Display the input screen of the create_custom_session
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View of create_custom_session
+     */
     //@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -61,6 +71,11 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
     }
 
     //Add Name
+
+    /**
+     * Get a name of the custom session
+     * @return
+     */
     public String addName() {
        // mName = (EditText) findViewById(R.id.editCustomRoutineName);
         //Call setName() in Routine class
@@ -68,7 +83,10 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
     }
 
     //Set Groups
-
+    /**
+     * View of the setGroups
+     * @param view
+     */
     public void setGroups(View view) {
         //Set the Number of Exercise Groups you want to create in this routine
 
@@ -77,10 +95,14 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
         for (int i = 1; i <= numberOfGroups; i++) {
 
         }
-
     }
 
     //Add Exercise
+
+    /**
+     * Add a listener on spinner of exercise selection
+     * @return Exercise Name
+     */
     public String addListenerOnSpinnerExerciseSelection() {
         //exerciseSpinner = (Spinner) findViewById(R.id.exerciseSpinner);
         exerciseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -97,20 +119,31 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
         return exerciseName;
     }
 
-    //Add Reps Per Set
+    /**
+     * Add Reps per set
+     * @return A number of reps per set
+     * @throws NumberFormatException
+     */
     public String addRepsPerSet() throws NumberFormatException {
         //mRepsPerSet = (EditText) findViewById(R.id.editRepsText);
         //call set method in routine class
         return mRepsPerSet.getText().toString();
     }
-
-    //Add Number of Sets
+    /**
+     * Add Number of sets
+     * @return
+     * @throws NumberFormatException
+     */
     public String addNumberOfSets() throws NumberFormatException {
         //mNumOfSets = (EditText) findViewById(R.id.editSetsText);
         //call set method in routine class
         return mNumOfSets.getText().toString();
     }
 
+    /**
+     * Validate the input data
+     * @return boolean after validating
+     */
     public boolean validate(){
         boolean valid = true;
         if(addNumberOfSets().isEmpty()){
@@ -129,6 +162,11 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
     }
 
     //SAVE new Routine to database
+
+    /**
+     * Save the session of the current view
+     * @param view
+     */
     public void saveSession(View view) {
 /*
         if (!validate()) {
@@ -154,6 +192,10 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
 */
     }
 
+    /**
+     * Display the list of routines
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         Fragment fragment;

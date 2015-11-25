@@ -20,26 +20,42 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
  * This class will handle an array of routine objects to show them to the user
  * This class will be edited to accept JSON objects retrieved from a server- *Sprint 2
  */
-
-
 public class Routines_Fragment extends ListFragment {
-
+    /**
+     * Routine name
+     */
     public static final String ROUTINE_ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
+    /**
+     * Boolean of the routins is public or not
+     */
     public static final String ROUTINE_ISPUBLIC = DatabaseAdapter.ROUTINE_IS_PUBLIC;
 
     //Need to pull reps and sets from Database, added variables for Sprint 3 to Database
 //    public static final String ROUTINE_REPS = DatabaseAdapter.ROUTINE_REPS;
 //    public static final String ROUTINE_SETS = DatabaseAdapter.ROUTINE_SETS;
-
+    /**
+     * List for display
+     */
     public ArrayList<String> list;
 
+    /**
+     *
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return return super.onCreateView(inflater, container, savedInstanceState);
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //Tells main activity ADD button what type of item to add (RECORD)
+         /**
+         * Set The tab page(1) of the main activity page for Workout
+         */
         SmartBellsMainActivity.dashboardTab.setCheckTabPage(1);
 
-        //List of routines
+        /**
+         * List of routines
+         */
         DatabaseAdapter db = new DatabaseAdapter(getActivity());
         try {
             db.openLocalDatabase();
@@ -52,7 +68,9 @@ public class Routines_Fragment extends ListFragment {
          */
         list = db.getMyRoutinesAsStrings(db.getUserIDForSession());
 
-        //Set the adapter to show in application
+        /**
+         * Set the adapter to show in application
+         */
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 getActivity().getBaseContext(), android.R.layout.simple_list_item_1, list);
         setListAdapter(adapter);
@@ -61,10 +79,16 @@ public class Routines_Fragment extends ListFragment {
         //close the database
         db.closeLocalDatabase();
 
-
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    /**
+     * Override the view when the list item clicked
+     * @param lv ListView of Routine name
+     * @param view View
+     * @param position postion of the item
+     * @param id Id of the clicked item
+     */
     @Override
     public void onListItemClick(ListView lv, View view, int position, long id) {
         //Start an intent when a list item is clicked

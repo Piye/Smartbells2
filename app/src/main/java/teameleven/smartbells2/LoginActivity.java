@@ -1,5 +1,4 @@
 package teameleven.smartbells2;
-//TODO implement progress dialogs
 //TODO implement new validation in signup for using existing user details.
 
 import android.accounts.Account;
@@ -94,21 +93,13 @@ public class LoginActivity extends Activity {
             mPassword.setText("");
         } else {
 
-            //temporary  //TODO ADD PROGRESS DIALOG
-            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+            //todo temporary
+            //Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
 
             //instantiate the storage session
             session = new SessionManager(getApplicationContext());
 
             session.createLoginSession(getUsername(), getPassword());
-
-            //Toast.makeText(getApplicationContext(), "User Login Status: " +
-            // session.isLoggedIn(), Toast.LENGTH_LONG).show();
-
-
-
-            //move to main activity
-            //Intent intent = new Intent(this, SmartBellsMainActivity.class);
 
             /*
              * this block of code runs the Synchronization setup.
@@ -131,7 +122,6 @@ public class LoginActivity extends Activity {
 
     }
 
-    //todo review below
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed Called");
@@ -177,6 +167,7 @@ public class LoginActivity extends Activity {
             Authentication auth = new Authentication(getUsername(), getPassword());
 
             String authorized = auth.restAuthentication();
+            Log.d("THIS IS THE TOKEN", authorized);
 
             if (authorized.equals("")) {
                 Toast.makeText(this, "Invalid Username or Password", Toast.LENGTH_SHORT).show();
@@ -251,10 +242,5 @@ public class LoginActivity extends Activity {
         Log.d("No ACCOUNT CREATED -- ", " - Returning old account");
         return newAccount;
     }
-
-
-
-
-
 
 }

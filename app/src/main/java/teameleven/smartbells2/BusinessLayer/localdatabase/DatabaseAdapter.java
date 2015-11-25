@@ -337,12 +337,12 @@ public class DatabaseAdapter{
         database.endTransaction();
     }
 
-    public void insertRoutine(Routine routine) {
+    public void insertRoutine(Routine routine, boolean sync) {
 
         Log.d("DatabaseAdaptor.insertRoutine", routine.toString());
         String setgroupid = "";
-        for (SetGroup x: routine.getSetGroups()){
-            setgroupid += String.valueOf( x.getId());
+        for (SetGroup setGroup: routine.getSetGroups()){
+            insertSetGroup(setGroup, sync);
         }
         Log.d("DatabaseAdaptor.insertRoutine", setgroupid);
         Log.d("DatabaseAdaptor.insertRoutine", String.valueOf
@@ -583,9 +583,9 @@ public class DatabaseAdapter{
     }
     /**********************************************************************************************/
 
-    public void insertWorkoutSession(WorkoutSession session) {
+    public void insertWorkoutSession(WorkoutSession session, boolean sync) {
         for (WorkoutSetGroup setgroup: session.getSetGroups())
-            insertSetGroup(setgroup.getSet_group());//todo check whether this works
+            insertSetGroup(setgroup.getSet_group(), sync);//todo check whether this works
         insertWorkoutSession(session.getUser_Id(), session.getName(), null, null, null);
     }
 
@@ -643,14 +643,19 @@ public class DatabaseAdapter{
         return myCursor;
     }
 
-    /**********************************WORKOUT SETGROUP TABLE
+    /**********************************WORKOUT SETGROUP TABLE **************************************/
+    /**
+     *
+     * @param workoutSetGroupid
      * @param exerciseid
-     * @param workoutsessionid**************************************/
-
-    //insert workoutsetgroup
-    public long insertWorkoutSetGroup(  int workoutSetGroupid,
-                                        int exerciseid,
-                                        int workoutsessionid) {
+     * @param workoutsessionid
+     * @param sync
+     * @return
+     */
+    public long insertWorkoutSetGroup(int workoutSetGroupid,
+                                      int exerciseid,
+                                      int workoutsessionid,
+                                      boolean sync) {
 
         ContentValues initialValues = new ContentValues();
         initialValues.put(PK_WORKOUTSETGROUP_ID, workoutSetGroupid);
@@ -660,10 +665,12 @@ public class DatabaseAdapter{
 
         //insert
         long result = database.insert(WORKOUTSETGROUP_TABLE, null, initialValues);
-        try {
-            insertUpdateRecord(result, WORKOUTSETGROUP_TABLE, 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                insertUpdateRecord(result, WORKOUTSETGROUP_TABLE, 0);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
@@ -727,12 +734,14 @@ public class DatabaseAdapter{
     }
     /**********************************SETGROUP TABLE**********************************************/
 
-    public void insertSetGroup(SetGroup set_group) {
+    public void insertSetGroup(SetGroup set_group, boolean sync) {
         insertSetGroup(
                 set_group.getExercise().getId(),
                 set_group.getNumberOfSets(),
                 set_group.getRepsPerSet(),
-                null, null);
+                set_group.getCreationDate(),
+                set_group.getLastUpdated(),
+                sync);
     }
 
     private ContentValues setGroupAttributes(SetGroup setgroup){
@@ -746,16 +755,13 @@ public class DatabaseAdapter{
         initialValuesSetGroup.put(SETGROUP_UPDATED_AT, setgroup.getLastUpdated());
         return initialValuesSetGroup;
     }
-
-
-    /**********************************************************************************************/
-
     //Insert Set Group
     public long insertSetGroup(int exerciseId,
                                int sets,
                                int reps,
                                String createdAt,
-                               String updatedAt) {
+                               String updatedAt,
+                               boolean sync) {
 
         ContentValues initialValues = new ContentValues();
 
@@ -768,10 +774,12 @@ public class DatabaseAdapter{
         //insert
         long result;
         result = database.insert(SETGROUP_TABLE, null, initialValues);
-        try {
-            insertUpdateRecord(result, SETGROUP_TABLE, 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                insertUpdateRecord(result, SETGROUP_TABLE, 0);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
@@ -841,18 +849,20 @@ public class DatabaseAdapter{
     /**
      *
      * @param exercise
+     * @param sync
      */
-    public void insertExercise(ArrayList<Exercise> exercise) {
+    public void insertExercise(ArrayList<Exercise> exercise, boolean sync) {
         for (Exercise x : exercise){
-            insertExercise(x);
+            insertExercise(x, sync);
         }
     }
 
     /**
      *
      * @param exercise
+     * @param sync
      */
-    public void insertExercise(Exercise exercise){
+    public void insertExercise(Exercise exercise, boolean sync){
         insertExercise(
                 exercise.getId(),
                 exercise.getName(),
@@ -860,7 +870,7 @@ public class DatabaseAdapter{
                 exercise.getCreated_At(),
                 exercise.getUpdated_At(),
                 exercise.getIsPublic(),
-                exercise.getUser_Id());
+                exercise.getUser_Id(), sync);
     }
 
     /**
@@ -871,6 +881,7 @@ public class DatabaseAdapter{
      * @param updatedAt
      * @param is_Public
      * @param user_ID
+     * @param sync
      * @return
      */
     public long insertExercise(int exerciseID,
@@ -879,7 +890,8 @@ public class DatabaseAdapter{
                                String createdAt,
                                String updatedAt,
                                boolean is_Public,
-                               int user_ID) {
+                               int user_ID,
+                               boolean sync) {
         //Log.d("DatabaseAdaptor.insertExercise(name) - ", exerciseName);
         //Log.d("DatabaseAdaptor.insertExercise(increase) - ", increasePerSession);
         ContentValues initialValues = new ContentValues();
@@ -894,10 +906,12 @@ public class DatabaseAdapter{
         //insert
         long result;
         result =  database.insert(EXERCISE_TABLE, null, initialValues);
-        try {
-            insertUpdateRecord(result, EXERCISE_TABLE, 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                insertUpdateRecord(result, EXERCISE_TABLE, 0);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
@@ -1051,11 +1065,11 @@ public class DatabaseAdapter{
         return getObject(WORKOUTSETGROUP_TABLE, PK_WORKOUTSETGROUP_ID, id);
     }
 
-    public void insertWorkoutSetGroup(WorkoutSetGroup workoutSetGroup) {
+    public void insertWorkoutSetGroup(WorkoutSetGroup workoutSetGroup, boolean sync) {
         insertWorkoutSetGroup(
                 workoutSetGroup.getSet_group().getId(),
                 workoutSetGroup.getSet_group().getExerciseId(),
-                workoutSetGroup.getWorkoutSessionId());
+                workoutSetGroup.getWorkoutSessionId(), sync);
     }
 
     public boolean getDatabaseLoaded(){

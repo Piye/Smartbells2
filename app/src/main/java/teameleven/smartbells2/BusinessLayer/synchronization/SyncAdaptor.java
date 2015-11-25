@@ -8,15 +8,10 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -140,19 +135,19 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
     private void saveToDatabase(JSONObject json, int table) {
         switch (table){
             case(0)://exercises
-                database.insertExercise(new Exercise(json));
+                database.insertExercise(new Exercise(json), false);
             break;
             case(1)://set groups
-                database.insertSetGroup(new SetGroup(json));
+                database.insertSetGroup(new SetGroup(json), false);
             break;
             case(2)://routine
-                database.insertRoutine(new Routine(json));
+                database.insertRoutine(new Routine(json), false);
             break;
             case(3)://workout session
-                database.insertWorkoutSession(new WorkoutSession(json));
+                database.insertWorkoutSession(new WorkoutSession(json), false);
             break;
             case(4)://workout set group
-                database.insertWorkoutSetGroup(new WorkoutSetGroup(json));
+                database.insertWorkoutSetGroup(new WorkoutSetGroup(json), false);
             break;
         }
     }

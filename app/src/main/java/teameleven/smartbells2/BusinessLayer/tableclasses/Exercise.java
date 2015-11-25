@@ -331,7 +331,7 @@ public class Exercise {
 
         try {
             exercise = new Exercise(new JSONObject(test.get().toString()));
-            database.insertExercise(exercise);
+            database.insertExercise(exercise, false);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -361,8 +361,6 @@ public class Exercise {
             e.printStackTrace();
         }
         Log.d("database load - ", this.toString());
-        database.insertExercise(exercise);
+        database.insertExercise(exercise, false);
     }
-
-
 }

@@ -24,8 +24,8 @@ public class LoadingSplashScreen extends Activity {
         Thread timedThread = new Thread(){
             public void run(){
                 try{
-                    //Allow this to run for 3 seconds
-                    sleep(7000);
+                    //Allow this to run for 4 seconds
+                    sleep(4000);
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{

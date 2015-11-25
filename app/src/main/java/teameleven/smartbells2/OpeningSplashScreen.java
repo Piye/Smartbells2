@@ -19,14 +19,14 @@ public class OpeningSplashScreen extends Activity {
         Thread timedThread = new Thread(){
             public void run(){
                 try{
-                    //Allow this to run for 4 seconds
-                    sleep(4000);
+                    //Allow this to run for 2 seconds
+                    sleep(2000);
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
 
                     //Start the next Activity
-                    Intent intent = new Intent(OpeningSplashScreen.this, LoginActivity.class);
+                    Intent intent = new Intent(OpeningSplashScreen.this, SmartBellsMainActivity.class);
                     startActivity(intent);
                 }
             }

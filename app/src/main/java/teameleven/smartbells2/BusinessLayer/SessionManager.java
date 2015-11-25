@@ -4,63 +4,42 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+
 import teameleven.smartbells2.LoginActivity;
 
 /**
- * This class manages the session of Login.
  * Created by Brian McMahon on 28/10/2015.
  * Code adapted from http://www.androidhive.info/2012/08/android-session-management-using-shared-preferences/
  */
 public class SessionManager {
 
-    /**
-     * Shared Preferences
-     */
+    // Shared Preferences
     SharedPreferences pref;
 
-    /**
-     * Editor for Shared preferences
-     */
+    // Editor for Shared preferences
     Editor editor;
 
-    /**
-     * Context
-     */
+    // Context
     Context _context;
 
-    /**
-     * Shared pref mode
-     */
+    // Shared pref mode
     int PRIVATE_MODE = 0;
 
-    /**
-     * Sharedpref file name
-     */
+    // Sharedpref file name
     public static final String PREF_NAME = "Login";
 
-    /**
-     * All Shared Preferences Keys
-     */
+    // All Shared Preferences Keys
     public static final String IS_LOGIN = "IsLoggedIn";
 
-    /**
-     * UserName/Email
-     */
+    // UserName/Email
     public static final String KEY_NAME = "username";
-    /**
-     * Password
-     */
+
     public static final String KEY_PASSWORD = "password";
 
-    /**
-     * Email
-     */
+    // Email
     public static final String KEY_EMAIL = "email";
 
-    /**
-     * Default Constructor
-     * @param context Context
-     */
+    // Constructor
     public SessionManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
@@ -69,8 +48,6 @@ public class SessionManager {
 
     /**
      * Create login session
-     * @param userName : User name
-     * @param password : passowrd
      */
     public void createLoginSession(String userName, String password) {
         // Storing login value as TRUE
@@ -97,7 +74,6 @@ public class SessionManager {
         if (!this.isLoggedIn()) {
             // user is not logged in redirect him to Login Activity
             Intent intent = new Intent(_context, LoginActivity.class);
-            //TODO review use of flags
             // Closing all the Activities
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
@@ -111,21 +87,6 @@ public class SessionManager {
     }
 
     /**
-     * Get stored session data
-     */
-    /*public HashMap<String, String> getUserDetails() {
-        HashMap<String, String> user = new HashMap<String, String>();
-        // user name
-        user.put(KEY_NAME, pref.getString(KEY_NAME, null));
-
-        // user email id
-        //user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
-
-        // return user
-        return user;
-    }*/
-
-    /**
      * Clear session details
      */
     public void logoutUser() {
@@ -133,7 +94,7 @@ public class SessionManager {
         editor.clear();
         editor.commit();
 
-        // After logout redirect user to Loing Activity
+        // After logout redirect user to Login Activity
         Intent intent = new Intent(_context, LoginActivity.class);
         // Closing all the Activities
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -145,10 +106,7 @@ public class SessionManager {
         _context.startActivity(intent);
     }
 
-    /**
-     * Get login state
-     * @return boolean of login
-     */
+    // Get Login State
     public boolean isLoggedIn() {
         return pref.getBoolean(IS_LOGIN, false);
     }

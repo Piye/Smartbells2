@@ -3,19 +3,15 @@ package teameleven.smartbells2.businesslayer.synchronization;
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -29,7 +25,6 @@ import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSession;
 import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSetGroup;
 
 /**
- * This class treats to sync database of Smartbells with AbstractThreadedSyncAdapter
  * Created by Andrew Rabb on 2015-11-12.
  */
 public class SyncAdaptor extends AbstractThreadedSyncAdapter {
@@ -37,9 +32,9 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
     DatabaseAdapter database;
     static int syncCount;
     /**
-     * Open the database
-     * @param context : Context
-     * @param autoInitialize : Boolean of initialization where Auto or not
+     *
+     * @param context
+     * @param autoInitialize
      */
     public SyncAdaptor(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -50,10 +45,10 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         }
     }
     /**
-     * Synck with context,autoInitialize and allowParalellSyncs
-     * @param context : Context
-     * @param autoInitialize : Boolean of automaical initialization
-     * @param allowParalellSyncs : Boolean of Allow the paralellSyncs
+     *
+     * @param context
+     * @param autoInitialize
+     * @param allowParalellSyncs
      */
     public SyncAdaptor(Context context, boolean autoInitialize, boolean allowParalellSyncs){
         super(context, autoInitialize, allowParalellSyncs);
@@ -64,12 +59,12 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         }
     }
     /**
-     * Perform the sysnc
-     * @param account : Account
-     * @param extras : Bundle of extras
-     * @param authority : Authority
-     * @param provider : ContentProviderClient
-     * @param syncResult : SyncResult
+     *
+     * @param account
+     * @param extras
+     * @param authority
+     * @param provider
+     * @param syncResult
      */
     @Override
     public void onPerformSync(
@@ -78,114 +73,89 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                 String authority,
                 ContentProviderClient provider,
                 SyncResult syncResult) {
-        Log.d("SmartBells.OnPerformSync -", " checking for updates");
-        if (database.hasUpdates()){
-            Log.d("SmartBells has Updates", "");
-            //table name
-            String tableID;
-            //type of call (GET, UPDATE, DELETE)
-            String httpType;
-            //Object, if required
-            String object = null;
-            String modifier = "";
-            //id of object to be changed
-            //update table records
-            ArrayList<int[]> updates = database.readUpdateRecord();
+        Log.d("Syncing", "- SmartBells.OnPerformSync - checking for updates");
+        if (extras.getBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED)) {
+            Log.d("Syncing", " - New User            - Recreating Database");
+            initialDatabaseSync();
+            syncCount = 0;
+        }else{
+            Log.d("Syncing", " - Old user, checking for updates! testing");
+            if (database.hasUpdates()) {
+                Log.d("Syncing", " - SmartBells has Updates");
+                //table name
+                String tableID;
+                //type of call (GET, UPDATE, DELETE)
+                String httpType;
+                //Object, if required
+                String object = null;
+                String modifier = "";
+                //id of object to be changed
+                //update table records
+                ArrayList<int[]> updates = database.readUpdateRecord();
 
-            for (int[] x : updates){
-                modifier = "/" + String.valueOf(x[0]);
-                tableID = setRestID(x[1]);
-                httpType = setHTTPType(x[2]);
-                if (x[2] == 0){
-                    modifier = "";
-                }else if(x[2] != 2){
-                    object = getChangedObject(x[0], x[1]);
+                for (int[] x : updates) {
+                    modifier = "/" + String.valueOf(x[0]);//sets the id of the object to be altered
+                    tableID = setRestID(x[1]);//sets the table id
+                    httpType = setHTTPType(x[2]);//sets the http call type
+                    if (x[2] == 0) {//if GET calltype, nullify modifier
+                        modifier = "";
+                        database.deleteObject(x[0], x[1]);//delete old record -ensures no duplicates
+                    } else if (x[2] == 1) {//if call type update, table class to be changed to
+                        object = getChangedObject(x[0], x[1]);
+                        database.deleteObject(x[0], x[1]);//delete old record -ensures no duplicates
+                    }//if call type is delete, object remains null
+
+                    //perform the RESTCall, based upon parameters from update table
+                    AsyncTask result = new RESTCall()
+                            .execute(tableID + modifier, httpType, object, database.getTokenAsString());
+                    try {
+                        JSONObject json = (JSONObject) result.get();
+                        saveToDatabase(json, x[1]);
+
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 }
-                AsyncTask result = new RESTCall()
-                        .execute(tableID + modifier, httpType, object, database.getTokenAsString());
-                try {
-                    JSONObject json = (JSONObject) result.get();
-                    saveToDatabase(json, x[1]);
-
-                    writeRecordLog(json.toString(4));
-
-
-                } catch (InterruptedException | ExecutionException | JSONException e) {
-                    e.printStackTrace();
+                if (syncCount == 15) {
+                    //recreates database every 15 synchronization cycles
+                    Log.d("Syncing", " - SmartBells recreating Database");
+                    initialDatabaseSync();
+                    syncCount = 0;
                 }
-            }
-            syncCount++;
-            if (syncCount == 15){
-                Log.d("SmartBells recreating Database", "");
-                initialDatabaseSync();
-                syncCount = 0;
+                syncCount++;
             }
         }
     }
 
     /**
-     * Write logs of records
-     * @param record : A record for writing a log
-     */
-    private void writeRecordLog(String record) {
-        try{
-            OutputStreamWriter outputStreamWriter =
-                    new OutputStreamWriter(getContext().openFileOutput
-                            ("SyncTracker.txt", getContext().MODE_PRIVATE));
-            outputStreamWriter.write(record + "\n\n\n");
-            outputStreamWriter.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Boolean whether it is exernal strorage writable status of environment
-     * @return boolean true or false
-     */
-    private boolean isExternalStorageWritable(){
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)){
-            return true;
-        }
-        return false;
-    }
-    /**
-     * Save a record into a table as the parameter
-     * @param json : JSONObject
-     * @param table : Table Number
+     *
+     * @param json
+     * @param table
      */
     private void saveToDatabase(JSONObject json, int table) {
         switch (table){
             case(0)://exercises
-                Exercise exercise = new Exercise(json);
-                database.insertExercise(exercise);
+                database.insertExercise(new Exercise(json), false);
             break;
             case(1)://set groups
-                SetGroup setGroup = new SetGroup(json);
-                database.insertSetGroup(setGroup);
+                database.insertSetGroup(new SetGroup(json), false);
             break;
             case(2)://routine
-                Routine routine = new Routine(json);
-                database.insertRoutine(routine);
+                database.insertRoutine(new Routine(json), false);
             break;
             case(3)://workout session
-                WorkoutSession session = new WorkoutSession(json);
-                database.insertWorkoutSession(session);
+                database.insertWorkoutSession(new WorkoutSession(json), false);
             break;
             case(4)://workout set group
-                WorkoutSetGroup workoutSetGroup = new WorkoutSetGroup(json);
-                database.insertWorkoutSetGroup(workoutSetGroup);
+                database.insertWorkoutSetGroup(new WorkoutSetGroup(json), false);
             break;
         }
     }
     /**
-     * Select table records by table id and table number
-     * @param id : table's id - Primary key
-     * @param table : Table name
-     * @return Records of the table
+     *
+     * @param id
+     * @param table
+     * @return
      */
     private String getChangedObject(int id, int table) {
         try {
@@ -208,9 +178,9 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         return null;
     }
     /**
-     * Sett the HTTP type
-     * @param type : Http type number
-     * @return : Http type name
+     *
+     * @param type
+     * @return
      */
     private String setHTTPType(int type) {
         switch (type){
@@ -224,9 +194,9 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         return null;
     }
     /**
-     * Set the Rest Id
-     * @param table : table number
-     * @return table name
+     *
+     * @param table
+     * @return
      */
     private String setRestID(int table) {
 
@@ -245,7 +215,7 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         return null;
     }
     /**
-     * Initialization of database Sysn
+     *
      */
     private void initialDatabaseSync() {
         database.updateDB();

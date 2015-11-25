@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 /**
+ * This class Overrides the Sync Adaptor Binder
  * Created by Andrew Rabb on 2015-11-12.
  */
 public class SyncService extends Service {
@@ -21,6 +22,11 @@ public class SyncService extends Service {
         }
     }
 
+    /**
+     * Override the syncAdaptor with syncAdapter Binder.
+     * @param intent : Intent for binding
+     * @return
+     */
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {

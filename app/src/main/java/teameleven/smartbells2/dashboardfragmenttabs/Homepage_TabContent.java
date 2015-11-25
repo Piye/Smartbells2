@@ -9,14 +9,24 @@ import android.widget.TabHost.TabContentFactory;
  * This class will render individual tabs
  */
 public class Homepage_TabContent implements TabContentFactory {
+    /**
+     * Variable Context
+     */
+    private Context thisContext;
 
-private Context thisContext;
-
+    /**
+     * Homepage Tab content
+     * @param context context
+     */
     public Homepage_TabContent(Context context){
         thisContext = context;
     }
 
-    //
+    /**
+     * Create a tab content
+     * @param tabtag Tab tag
+     * @return view for context
+     */
     @Override
     public View createTabContent(String tabtag){
         View view = new View(thisContext);

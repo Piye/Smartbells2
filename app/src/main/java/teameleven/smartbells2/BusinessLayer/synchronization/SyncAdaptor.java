@@ -29,6 +29,7 @@ import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSession;
 import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSetGroup;
 
 /**
+ * This class treats to sync database of Smartbells with AbstractThreadedSyncAdapter
  * Created by Andrew Rabb on 2015-11-12.
  */
 public class SyncAdaptor extends AbstractThreadedSyncAdapter {
@@ -36,9 +37,9 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
     DatabaseAdapter database;
     static int syncCount;
     /**
-     *
-     * @param context
-     * @param autoInitialize
+     * Open the database
+     * @param context : Context
+     * @param autoInitialize : Boolean of initialization where Auto or not
      */
     public SyncAdaptor(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -49,10 +50,10 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         }
     }
     /**
-     *
-     * @param context
-     * @param autoInitialize
-     * @param allowParalellSyncs
+     * Synck with context,autoInitialize and allowParalellSyncs
+     * @param context : Context
+     * @param autoInitialize : Boolean of automaical initialization
+     * @param allowParalellSyncs : Boolean of Allow the paralellSyncs
      */
     public SyncAdaptor(Context context, boolean autoInitialize, boolean allowParalellSyncs){
         super(context, autoInitialize, allowParalellSyncs);
@@ -63,12 +64,12 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         }
     }
     /**
-     *
-     * @param account
-     * @param extras
-     * @param authority
-     * @param provider
-     * @param syncResult
+     * Perform the sysnc
+     * @param account : Account
+     * @param extras : Bundle of extras
+     * @param authority : Authority
+     * @param provider : ContentProviderClient
+     * @param syncResult : SyncResult
      */
     @Override
     public void onPerformSync(
@@ -123,8 +124,8 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
     }
 
     /**
-     *
-     * @param record
+     * Write logs of records
+     * @param record : A record for writing a log
      */
     private void writeRecordLog(String record) {
         try{
@@ -141,8 +142,8 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
     }
 
     /**
-     *
-     * @return
+     * Boolean whether it is exernal strorage writable status of environment
+     * @return boolean true or false
      */
     private boolean isExternalStorageWritable(){
         String state = Environment.getExternalStorageState();
@@ -152,9 +153,9 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         return false;
     }
     /**
-     *
-     * @param json
-     * @param table
+     * Save a record into a table as the parameter
+     * @param json : JSONObject
+     * @param table : Table Number
      */
     private void saveToDatabase(JSONObject json, int table) {
         switch (table){
@@ -181,10 +182,10 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         }
     }
     /**
-     *
-     * @param id
-     * @param table
-     * @return
+     * Select table records by table id and table number
+     * @param id : table's id - Primary key
+     * @param table : Table name
+     * @return Records of the table
      */
     private String getChangedObject(int id, int table) {
         try {
@@ -207,9 +208,9 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         return null;
     }
     /**
-     *
-     * @param type
-     * @return
+     * Sett the HTTP type
+     * @param type : Http type number
+     * @return : Http type name
      */
     private String setHTTPType(int type) {
         switch (type){
@@ -223,9 +224,9 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         return null;
     }
     /**
-     *
-     * @param table
-     * @return
+     * Set the Rest Id
+     * @param table : table number
+     * @return table name
      */
     private String setRestID(int table) {
 
@@ -244,7 +245,7 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         return null;
     }
     /**
-     *
+     * Initialization of database Sysn
      */
     private void initialDatabaseSync() {
         database.updateDB();

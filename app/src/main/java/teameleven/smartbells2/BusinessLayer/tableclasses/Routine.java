@@ -27,13 +27,16 @@ public class Routine {
     /********************************
      * Attributes
      ***************************************************/
+    /**
+     * Final private variable RESTID sets a name of table as "routines"
+     */
     static final private String RESTID = "routines";
     /**
      * specific ID of the Exercise.
      */
     private int id;
     /**
-     *
+     * User id
      */
     private int user_id;
     /**
@@ -49,11 +52,11 @@ public class Routine {
      */
     private String updated_At;
     /**
-     *
+     * Boolean where the recors is public or not
      */
     private boolean is_Public;
     /**
-     *
+     * Arraylist of Setgoups
      */
     private ArrayList<SetGroup> setGroups = new ArrayList<>();
 
@@ -67,7 +70,8 @@ public class Routine {
 
 
     /**
-     * @param routine
+     * Constructor with JSONObject - sets the values from JSONObject
+     * @param routine JSONObject to query
      */
     public Routine(JSONObject routine) {
         try {
@@ -95,6 +99,7 @@ public class Routine {
     }
 /************************************ Static Methods   ********************************************/
     /**
+     * Get a arraylist of all routines with user id
      * @return
      * @param userIDForSession
      */
@@ -111,6 +116,12 @@ public class Routine {
         return null;
     }
 
+    /**
+     * Get routines by user id
+     * @param json JSONObject
+     * @param userIDForSession : user id for now session
+     * @return A arraylis of routines by user id
+     */
     private static ArrayList<Routine> restGetRoutines(JSONObject json, int userIDForSession){
         ArrayList<Routine> routines = new ArrayList<>();
         try{
@@ -128,8 +139,9 @@ public class Routine {
         return null;
     }
     /**
-     * @param id
-     * @return
+     * Get a routine record by a routine id
+     * @param id : Routine id
+     * @return Records of routine
      */
     public static String restGetRoutine(int id) {
         try {
@@ -146,8 +158,9 @@ public class Routine {
     }
 
     /**
-     * @param routineAll
-     * @return
+     * Get all Routines of its table
+     * @param routineAll : JSONObject to get all routines
+     * @return Arraylist of routines
      */
     public static ArrayList<Routine> getAllRoutine(JSONObject routineAll) {
         JSONArray routineArray = null;
@@ -187,53 +200,74 @@ public class Routine {
         return routines;
     }
     /**************************			Base Methods  *********************************************/
-
     /**
      * retrieves the name of the Routine.
-     *
      * @return : Routine Name
      */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set the name of the Routine.
+     * @param name : Routine name
+     */
+
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Get the routine
+     * @return : Routine id
+     */
     public int getRoutineId() {
         return id;
     }
 
+    /**
+     * Set the Routine Id
+     * @param id : Routine Id
+     */
     public void setRoutineID(int id) {
         this.id = id;
     }
 
+    /**
+     * Set the boolean "is Public"
+     * @param is_Public : Whether The record is public or not
+     */
     public void setIs_Public(boolean is_Public) {
         this.is_Public = is_Public;
     }
 
+    /**
+     * Get the boolean " is Public"
+     * @return is_Public : Whether The record is public or not
+     */
     public boolean getIsPublic() {
         return is_Public;
     }
 
     /**
-     * @param is_Public
+     * Set the boolean "is Public"
+     * @param is_Public : Whether The record is public or not
      */
     public void setIsPublic(Boolean is_Public) {
         this.is_Public = is_Public;
     }
 
     /**
-     * @return
+     * Get a date of created the record.
+     * @return : a date of creating the record
      */
     public String getCreated_At() {
         return created_At;
     }
 
     /**
-     *
-     * @return
+     * Get a string 4 bytes of createJson's name
+     * @return : Name of CreateJSON
      */
     public String toString() {
         try {
@@ -244,25 +278,41 @@ public class Routine {
         return this.name;
     }
 
+    /**
+     * Get a date of updating the Routine
+     * @return : A date of updated routine
+     */
     public String getUpdated_At() {
         return updated_At;
     }
 
+    /**
+     * Set a date of updating the routine record
+     * @param updated_At : Date of updated a record
+     */
     public void setUpdated_At(String updated_At) {
         this.updated_At = updated_At;
     }
 
+    /**
+     * Get SetGroups' list
+     * @return : Arraylist of SetGroups
+     */
     public ArrayList<SetGroup> getSetGroups() {
         return setGroups;
     }
 
+    /**
+     * Set the setGroups as a Arraylist<SetGoup></SetGoup>
+     * @param setgroups: A list of setgroups
+     */
     public void setSetGroups(ArrayList<SetGroup> setgroups) {
         this.setGroups = setgroups;
     }
 
     /**
-     *
-     * @param user_id
+     * Set User id
+     * @param user_id : User id
      */
     public void setUser_id(int user_id) {
         this.user_id = user_id;
@@ -303,8 +353,9 @@ public class Routine {
 
     /******************************** ReST Methods    *********************************************/
     /**
-     * @param database
-     * @return
+     * Insert a routine record
+     * @param database : DatabaseAdapter
+     * @return null
      */
     public String RestPutRoutine(DatabaseAdapter database) {
         Routine routine = null;

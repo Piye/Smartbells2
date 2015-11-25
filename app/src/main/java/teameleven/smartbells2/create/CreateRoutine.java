@@ -1,15 +1,5 @@
 package teameleven.smartbells2.create;
 
-/**
- * CreateRoutine class makes a Routine of Exercises(Set Group)
- * Created  by Jarret on 2015-10-05.
- * Update   by WonKyoung on 2015-10-10
- * Update   by WonKyoung on 2015-10-25
- * Update   by WonKyoung On 2015-11-05
- * updated: Oct 8th, 2015 : added methods to interact with Exercise and Routine for Routine saving and creation.
- */
-
-
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -35,35 +25,85 @@ import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
 import teameleven.smartbells2.Dashboard;
 import teameleven.smartbells2.R;
-
-//import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
-//import teameleven.smartbells2.BusinessLayer.tableclasses.Exercise;
-//import teameleven.smartbells2.BusinessLayer.tableclasses.Routine;
-//import teameleven.smartbells2.BusinessLayer.tableclasses.SetGroup;
-
+/**
+ * CreateRoutine class makes a Routine of Exercises(Set Group)
+ * Created  by Jarret on 2015-10-05.
+ * Update   by WonKyoung on 2015-10-10
+ * Update   by WonKyoung on 2015-10-25
+ * Update   by WonKyoung On 2015-11-05
+ * updated: Oct 8th, 2015 : added methods to interact with Exercise and Routine for Routine saving and creation.
+ */
 public class CreateRoutine extends Fragment implements View.OnClickListener {
-
+    /**
+     * DatabaseAdapter for query
+     */
     private DatabaseAdapter database;
+    /**
+     * Routine
+     */
     private Routine routine;
+    /**
+     * Exercise Spinner
+     */
     private Spinner exerciseSpinner;
+    /**
+     * Boolean where it is public or not
+     */
     private Boolean isPublic = false;
+    /**
+     * Exercise name
+     */
     private String exerciseName;// exerciseId is used as the key of calling JSon
+    /**
+     * Exercise id
+     */
     private int exerciseId;
+    /**
+     * A number of sets of exercise
+     */
     private int setsNum;
+    /**
+     * A number of reps per a set
+     */
     private int repsNum;
+    /**
+     * exercise
+     */
     private String exercise;
+    /**
+     * List of excercises(Exercise attribute)
+     */
     private ArrayList<Exercise> exercises = new ArrayList<>();
+    /**
+     * List of string exercise
+     */
     private ArrayList<String> exerciseList = new ArrayList<>();
+    /**
+     * Radio Group for choosing a radio button of Public or Private
+     */
     private RadioGroup radioGroup;
+    /**
+     * Bublic radio button
+     */
     private RadioButton publicButton;
+    /**
+     * A number of groups
+     */
     int numberOfGroups = 1;
-
+    /**
+     * Save Button
+     */
     private Button save;
+    /**
+     * Cancel Button
+     */
     private Button cancel;
+    /**
+     * FloatingActionButton
+     */
     private FloatingActionButton fab;
     /**
-     * onCreate
-     *
+     * onCreate - Create view of input screen for creating  set group
      * @param savedInstanceState
      */
     //@Override
@@ -99,8 +139,10 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         return view;
     }
 
-
-    //Add Routine Name
+    /**
+     * Add Routine Name
+     * @return Routine name
+     */
     public String addRoutineName() {
         TextView name = (TextView) getActivity().findViewById(R.id.editNameText);
         //Call setName() in Routine class
@@ -108,8 +150,10 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         return name.getText().toString();
     }
 
-
-    //Is public
+    /**
+     * Returen the boolean when a radio button cliked(Public or not(Private))
+     * @return isPublic
+     */
     public Boolean addListenerOnRadioButton() {
 
         publicButton.setOnClickListener(new View.OnClickListener() {
@@ -132,8 +176,10 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         return isPublic;
     }
 
-
-    //Set Groups
+    /**
+     * Text view fields of sets and reps
+     * @param view of set groups
+     */
     public void setGroups(View view) {
         //Set the Number of Exercise Groups you want to create in this routine
         numberOfGroups++;//When clicked the plus button, it should be added 1.
@@ -145,11 +191,13 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
             //exercises.add("1");//test : need to restCall get exercise ID.
             //exercises.add(setsNum.getText().toString());
             //exercises.add(repsNum.getText().toString());
-
         }
     }
 
-    //Add Exercise
+    /**
+     * Return ther exercise name from the input page
+     * @return Exercise Name
+     */
     public String addListenerOnSpinnerExerciseSelection() {
         exerciseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -168,7 +216,10 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         return exerciseName;
     }
 
-    //Add Number of Sets
+    /**
+     * Return a number of sets of exercise
+     * @return a number of sets
+     */
     public int addNumberOfSets() {
         TextView setsText = (TextView) getActivity().findViewById(R.id.editSetsText);
         //call set method in routine class
@@ -178,6 +229,11 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
 
 
     //Add Reps Per Set
+
+    /**
+     * Get a number of reps per set
+     * @return A number of reps
+     */
     public int addRepsPerSet() {
         TextView repsText = (TextView) getActivity().findViewById(R.id.editRepsText);
         //call set method in routine class
@@ -189,6 +245,10 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         return true;
     }
 
+    /**
+     * Create a routine with set group and cancel
+     * @param v View
+     */
     @Override
     public void onClick(View v) {
         Fragment fragment;

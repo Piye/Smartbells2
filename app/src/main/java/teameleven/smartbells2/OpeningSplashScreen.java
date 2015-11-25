@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 
 /**
+ * This class is a screen for opeing splash
  * Created by Jare on 2015-11-20.
  */
 public class OpeningSplashScreen extends Activity {
-
+    /**
+     * Create the view for splash_opening_screen
+     * @param savedInstanceState Instance of the opening splash
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -33,8 +37,9 @@ public class OpeningSplashScreen extends Activity {
         };
         timedThread.start();
     }
-
-    //Destroy the thread when it's finished running
+    /**
+     * Destroy the thread when it's finished running
+     */
     @Override
     protected void onPause() {
         super.onPause();

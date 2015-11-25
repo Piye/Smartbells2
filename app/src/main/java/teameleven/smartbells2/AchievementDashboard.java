@@ -15,17 +15,35 @@ import teameleven.smartbells2.dashboardfragmenttabs.Achievement_Fragment;
 import teameleven.smartbells2.dashboardfragmenttabs.Records_Fragment;
 
 /**
+ * This class is the screen of AchievementDashboard
+ *
  * Created by Jare on 2015-11-17.
  */
 public class AchievementDashboard extends Fragment {
-
+    /**
+     * FragmentTabHost
+     */
     private FragmentTabHost dashboardTabHost;
+    /**
+     * Tabl page number
+     */
     private int checkTabPage;
+    /**
+     * FloatingActionButton
+     */
     private FloatingActionButton fab;
 
-    //Create the view and setup the tab host to view
+    /**
+     * Create the view and setup the tab host to view
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return  view for display the page tab_achievement_dashboard
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        /**
+         * tab_achievement_dashboard page
+         */
         View rootView = inflater.inflate(R.layout.tab_achievement_dashboard, container, false);
 
         //Hide the FAB
@@ -38,7 +56,10 @@ public class AchievementDashboard extends Fragment {
 
         //Creates a listener, and handles fragment manager to swap between list fragments
         TabHost.OnTabChangeListener tabChangeListener = new TabHost.OnTabChangeListener() {
-            //Inner method to control tab functions
+            /**
+             * Inner method to control tab functions
+             * @param tabId Tab id
+             */
             @Override
             public void onTabChanged(String tabId) {
 
@@ -84,21 +105,25 @@ public class AchievementDashboard extends Fragment {
             }
         };
 
-
-        //Setting up the tab change listener
-
+        /**
+         * Setting up the tab change listener
+         */
         dashboardTabHost.setOnTabChangedListener(tabChangeListener);
 
         //Setting up builders for each tabs
-
-        //Achievements Tab creation
+        /**
+         * Achievements Tab creation
+         */
         dashboardTabHost.addTab(dashboardTabHost.newTabSpec("achievements").setIndicator("Achievements"), Achievement_Fragment.class, null);
 
-        //Records Tab creation
+        /**
+         * Records Tab creation
+         */
         dashboardTabHost.addTab(dashboardTabHost.newTabSpec("records").setIndicator("Records"), Records_Fragment.class, null);
 
-
-        //Adjusting the text within the tabs to properly show titles
+        /**
+         * Adjusting the text within the tabs to properly show titles
+         */
         for (int i = 0; i < 2; i++)
         {
             TextView x = (TextView) dashboardTabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
@@ -106,19 +131,24 @@ public class AchievementDashboard extends Fragment {
             {
                 x.setTextSize(15);
             } else {x.setTextSize(15);}
-
-
         }
 
         //Return the view
         return rootView;
     }
 
-
+    /**
+     * Get the tab page
+     * @return the tab page number
+     */
     public int getCheckTabPage() {
         return checkTabPage;
     }
 
+    /**
+     * Set the tab page number
+     * @param checkTabPage the tab page number
+     */
     public void setCheckTabPage(int checkTabPage) {
         this.checkTabPage = checkTabPage;
         //Use for debugging - Want to make sure variable is changing with tab clicks.

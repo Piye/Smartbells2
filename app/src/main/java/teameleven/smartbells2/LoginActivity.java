@@ -1,6 +1,4 @@
 package teameleven.smartbells2;
-//TODO implement progress dialogs
-//TODO implement new validation in signup for using existing user details.
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -30,31 +28,63 @@ import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
 import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSession;
 
-
 /**
+ * This class manages the Login Activities
  * Created by Brian McMahon on 14/10/2015.
  */
 public class LoginActivity extends Activity {
 
+//TODO implement progress dialogs
+//TODO implement new validation in signup for using existing user details.
+    /**
+     * Edit Test Field of User name
+     */
     private EditText mUserName;
+    /**
+     * Edit Test Field of Password
+     */
     private EditText mPassword;
+    /**
+     * Login Button
+     */
     private Button mLogInButton;
+    /**
+     * Text view field of Description of Signup
+     */
     private TextView mSignUp;
+    /**
+     * Tag for debugging
+     */
     String TAG = "DEBUGGING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 
-    /*
-    This is to set up a dummy account. if we had more time, we could easily change to
-    an authenticator pattern for the Account. However, for the sake of this project,
-     we'll keep it like this
+    /**
+     *     This is to set up a dummy account. if we had more time, we could easily change to
+     * an authenticator pattern for the Account. However, for the sake of this project,
+     * we'll keep it like this
      */
     private static final String AUTHORITY =
             "teameleven.smartbells_prototype0001.businesslayer.synchronization.provider";
+    /**
+     * Accoutn type of the smartbells
+     */
     private static final String ACCOUNT_TYPE = "smart-bells-staging.herokuapp.com";
+    /**
+     * Default account
+     */
     private static final String ACCOUNT = "DefaultAccount";
+    /**
+     * Declaration of Account attribute
+     */
     Account account;
-
+    /**
+     * Declaration of SessionManager attribute
+     */
     SessionManager session;
 
+    /**
+     * Display the page of login and set the onclick listeners of the loginbutton or signup button
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +117,9 @@ public class LoginActivity extends Activity {
 
     }
 
-    //attempts to login to the account
+    /**
+     * attempts to login to the account
+     */
     public void login() {
         if (!validate()) {
             mUserName.setText("");
@@ -132,6 +164,10 @@ public class LoginActivity extends Activity {
     }
 
     //todo review below
+
+    /**
+     * When the app is closed, ask to the user to exit or not.
+     */
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed Called");
@@ -155,15 +191,27 @@ public class LoginActivity extends Activity {
                 }).create().show();
     }
 
+    /**
+     * Get User name from the user's entry field
+     * @return user name
+     */
     public String getUsername() {
         return mUserName.getText().toString();
     }
 
+    /**
+     * Get the passoword from the user's entry field
+     * @return
+     */
     public String getPassword() {
         return mPassword.getText().toString();
     }
 
-    //validates user entries
+
+    /**
+     * validates user entries
+     * @return valid - boolean after validating
+     */
     public boolean validate() {
         boolean valid;
 
@@ -206,6 +254,10 @@ public class LoginActivity extends Activity {
         return valid;
     }
 
+    /**
+     * Initialization of the database befor the sync- Load all tables to SQLite Database of the app
+     * @param db
+     */
     private void initialDatabaseSync(DatabaseAdapter db) {
         db.updateDB();
         long x = System.currentTimeMillis();
@@ -234,7 +286,11 @@ public class LoginActivity extends Activity {
         db.loadAllWorkoutSessions(workoutSessions);
     }
 
-
+    /**
+     * Create an account for sync
+     * @param context
+     * @return
+     */
     public static Account CreateSyncAccount(Context context){
         Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
 
@@ -251,10 +307,4 @@ public class LoginActivity extends Activity {
         Log.d("No ACCOUNT CREATED -- ", " - Returning old account");
         return newAccount;
     }
-
-
-
-
-
-
 }

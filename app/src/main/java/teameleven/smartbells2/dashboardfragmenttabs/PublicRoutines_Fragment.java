@@ -11,14 +11,27 @@ import teameleven.smartbells2.BeginWorkout2;
 import teameleven.smartbells2.SmartBellsMainActivity;
 
 /**
+ * This class shows the list of public routines
  * Created by Jare on 2015-11-19.
  */
 public class PublicRoutines_Fragment extends ListFragment {
-
+    /**
+     * BeginWorkout2 : The Selected begin wourkout page
+     */
     BeginWorkout2 dashboard;
-    //Temporary string array to populate list
+
+    /**
+     * Temporary string array to populate list
+     */
     String[] listOfAchievements = new String[] {"not your routines", "---", "-----"};
 
+    /**
+     * Display the public routines
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return  super.onCreateView(inflater, container, savedInstanceState);
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {

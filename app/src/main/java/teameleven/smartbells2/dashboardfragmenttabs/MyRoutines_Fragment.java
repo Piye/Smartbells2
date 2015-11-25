@@ -11,6 +11,7 @@ import teameleven.smartbells2.BeginWorkout2;
 import teameleven.smartbells2.SmartBellsMainActivity;
 
 /**
+ * This class shows the list of user's routines
  * Created by Jare on 2015-11-19.
  */
 public class MyRoutines_Fragment extends ListFragment {
@@ -27,6 +28,13 @@ public class MyRoutines_Fragment extends ListFragment {
                                         "Kicking", "Punching", "Jumping",
                                         "Kicking", "Punching", "Jumping"};
 
+    /**
+     * Display the page of user's routines
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return super.onCreateView(inflater, container, savedInstanceState);
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {

@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutionException;
 import teameleven.smartbells2.businesslayer.RESTCall;
 
 /**
+ * This class treats User's information(name, email, passwork)
  * Created by Brian McMahon on 16/10/2015.
  */
 public class User {
@@ -34,8 +35,8 @@ public class User {
     public User(){ }
 
     /**
-     *
-     * @param user
+     * Constructor with JSONObject parameter to get column values
+     * @param user : Type of JSONObject - User values
      */
     public User (JSONObject user){
         try {
@@ -125,8 +126,8 @@ public class User {
     }
 
     /**
-     *
-     * @return
+     * Create an user
+     * @return A result of "post" USER TABLE
      */
     public String createUser(){
         String result = "";

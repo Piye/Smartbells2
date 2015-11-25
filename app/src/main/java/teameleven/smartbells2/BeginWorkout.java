@@ -19,19 +19,44 @@ import teameleven.smartbells2.create.CreateCustomSession;
 import teameleven.smartbells2.dashboardfragmenttabs.RecordWorkoutRoutine;
 
 /**
+ * This class displays the page of "BeginWorkout" of
+ *                         the dashboard and connect to create a custom session
  * Created by Jare on 2015-10-06.
  */
 public class BeginWorkout extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
-
+    /**
+     * A butto for creating a custom session
+     */
     Button createCustomSession;
+    /**
+     * Counter of Tab page
+     */
     private int checkTabPage;
+    /**
+     * DatabaseAdapter
+     */
     private DatabaseAdapter db;
-    //value to be passed to RecordWorkout Activity
-    public static final String ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
 
+    /**
+     * Routine name of the table=value to be passed to RecordWorkout Activity
+     */
+    public static final String ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
+    /**
+     * Private Routine list
+     */
     private ArrayList<String> list;
+    /**
+     * Public Routine list
+     */
     private ArrayList<String> plist;
 
+    /**
+     * Display the "BeginWourout" page
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return view of the page
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -70,6 +95,9 @@ public class BeginWorkout extends Fragment implements View.OnClickListener, Adap
         return view;
     }
 
+    /**
+     * Call the CreateCustomSession when the custom_session is clicked
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -79,7 +107,13 @@ public class BeginWorkout extends Fragment implements View.OnClickListener, Adap
         }
     }
 
-
+    /**
+     * Override when an item is clicked
+     * @param parent AdapterView<?>
+     * @param view View to get the position of clicked item
+     * @param position Postion of the item
+     * @param id id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Start an intent when a list item is clicked
@@ -90,10 +124,18 @@ public class BeginWorkout extends Fragment implements View.OnClickListener, Adap
         startActivity(intent);
     }
 
+    /**
+     * Get the value of CheckBWTabPage
+     * @return TabPage number
+     */
     public int getCheckBWTabPage() {
         return checkTabPage;
     }
 
+    /**
+     * Set the value of CheckTabPage
+     * @param checkTabPage Tabpage number
+     */
     public void setCheckTabPage(int checkTabPage) {
         this.checkTabPage = checkTabPage;
         //Use for debugging - Want to make sure variable is changing with tab clicks.

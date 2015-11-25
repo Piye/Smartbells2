@@ -4,44 +4,63 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-
 import teameleven.smartbells2.LoginActivity;
 
 /**
+ * This class manages the session of Login.
  * Created by Brian McMahon on 28/10/2015.
  * Code adapted from http://www.androidhive.info/2012/08/android-session-management-using-shared-preferences/
  */
 public class SessionManager {
 
-    //todo change to singleton????
-
-    // Shared Preferences
+    /**
+     * Shared Preferences
+     */
     SharedPreferences pref;
 
-    // Editor for Shared preferences
+    /**
+     * Editor for Shared preferences
+     */
     Editor editor;
 
-    // Context
+    /**
+     * Context
+     */
     Context _context;
 
-    // Shared pref mode
+    /**
+     * Shared pref mode
+     */
     int PRIVATE_MODE = 0;
 
-    // Sharedpref file name
+    /**
+     * Sharedpref file name
+     */
     public static final String PREF_NAME = "Login";
 
-    // All Shared Preferences Keys
+    /**
+     * All Shared Preferences Keys
+     */
     public static final String IS_LOGIN = "IsLoggedIn";
 
-    // UserName/Email
+    /**
+     * UserName/Email
+     */
     public static final String KEY_NAME = "username";
-
+    /**
+     * Password
+     */
     public static final String KEY_PASSWORD = "password";
 
-    // Email
+    /**
+     * Email
+     */
     public static final String KEY_EMAIL = "email";
 
-    // Constructor
+    /**
+     * Default Constructor
+     * @param context Context
+     */
     public SessionManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
@@ -50,6 +69,8 @@ public class SessionManager {
 
     /**
      * Create login session
+     * @param userName : User name
+     * @param password : passowrd
      */
     public void createLoginSession(String userName, String password) {
         // Storing login value as TRUE
@@ -124,7 +145,10 @@ public class SessionManager {
         _context.startActivity(intent);
     }
 
-    // Get Login State
+    /**
+     * Get login state
+     * @return boolean of login
+     */
     public boolean isLoggedIn() {
         return pref.getBoolean(IS_LOGIN, false);
     }

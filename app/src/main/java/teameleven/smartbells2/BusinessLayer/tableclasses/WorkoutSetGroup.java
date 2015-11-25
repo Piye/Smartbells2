@@ -5,23 +5,30 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
+ * This class treats the WorkoutSetGroup Table.
  * created : October 4th, 2015
- *
  * @author Andrew Rabb
  */
 public class WorkoutSetGroup {
     /**************************
      * Attributes
      ********************************************/
-
+    /**
+     * Declaration of set_group as the SetGroup object
+     */
     private SetGroup set_group = new SetGroup();
-
+    /**
+     * WorkoutSession Id
+     */
     private int workoutSessionId;
+    /**
+     * Resistance of the WorkoutSession
+     */
     private int resistance;
 
     /**
-     *
-     * @param json
+     * Constructor with JSONObject parameter : Set the values of set_group
+     * @param json JSONObject
      */
     public WorkoutSetGroup(JSONObject json) {
         try {
@@ -38,35 +45,53 @@ public class WorkoutSetGroup {
         }
     }
 
-    public WorkoutSetGroup() {
+    /**
+     * Default Constructor
+     */
+    public WorkoutSetGroup() {}
 
-    }
-
+    /**
+     * Get the Resistance of WorkoutSetGroup
+     * @return resistance
+     */
     public int getResistance() {
         return resistance;
     }
 
+    /**
+     * Set the Resistance with parameter resistance
+     * @param resistance : Resistance of execercise set groups
+     */
     public void setResistance(int resistance) {
         this.resistance = resistance;
     }
 
-
-    /**************************					Constructors               ********************************************/
-
-    /**************************
-     * Base Methods
-     ********************************************/
-
+    /**
+     * Get the Set_group
+     * @return : the SetGroup
+     */
     public SetGroup getSet_group() {
         return set_group;
     }
 
+    /**
+     * Set the Set_group
+     * @param set_group : SetGroup
+     */
     public void setSet_group(SetGroup set_group) {        this.set_group = set_group;    }
 
+    /**
+     * Get the WorkoutSessionID
+     * @return WorkoutSessionID
+     */
     public int getWorkoutSessionId() {
         return workoutSessionId;
     }
 
+    /**
+     * Set the WorkoutSession id
+     * @param workoutSessionId
+     */
     public void setWorkoutSessionId(int workoutSessionId){this.workoutSessionId = workoutSessionId;}
 
    /* public WorkoutSetGroup (JSONObject workoutSetGroup){

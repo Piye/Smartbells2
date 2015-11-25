@@ -137,6 +137,11 @@ public class SetGroup {
     }
 
     //create JSON parameters to pass to the post method
+
+    /**
+     * Create JSON parameters to pass to the post method
+     * @return : setGroup
+     */
     public JSONObject createJSON(){
         try{
             JSONObject setGroup = new JSONObject();
@@ -153,7 +158,11 @@ public class SetGroup {
     }
 
     /**************************************REST Methods********************************************/
-
+    /**
+     * Rest to create Set Group
+     * @param adapter : DatabaseAdapter to connect to Database
+     * @return
+     */
     public String restCreateSetGroup(DatabaseAdapter adapter){
 
         String accessToken = Authentication.getAccessToken();

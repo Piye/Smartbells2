@@ -334,14 +334,14 @@ public class WorkoutSession {
         return "Rest Call Failed";
     }
 
-    public void restUpdateWorkoutSession() {
+//    public void restUpdateWorkoutSession() {}
+//    public void restDeleteWorkoutSession() {}
 
-    }
-
-    public void restDeleteWorkoutSession() {
-
-    }
-
+    /**
+     * Get all records of the WorkoutSession by User id
+     * @param userIDForSession : User id
+     * @return : List of Workoutsession of a user
+     */
     public static ArrayList<WorkoutSession> restGetAll(int userIDForSession) {
         try {;
             //Log.d("Exercise.restGetAll - ", RESTID);
@@ -353,9 +353,14 @@ public class WorkoutSession {
             e.printStackTrace();
         }
         return null;
-
    }
 
+    /**
+     * Get WorkoutSession by user id
+     * @param json : JSONObject
+     * @param userIDForSession : User id
+     * @return List of WorkoutSession
+     */
     private static ArrayList<WorkoutSession> restGetWorkoutSessions(JSONObject json, int userIDForSession) {
         ArrayList<WorkoutSession> workoutSessions = new ArrayList<>();
         try{

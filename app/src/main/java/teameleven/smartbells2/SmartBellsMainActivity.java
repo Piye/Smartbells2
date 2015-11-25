@@ -20,22 +20,44 @@ import teameleven.smartbells2.create.CreateExercise;
 import teameleven.smartbells2.create.CreateRoutine;
 import teameleven.smartbells2.create.CreateWorkout;
 
+/**
+ * This class is the Main Actibities of the SmartBells
+ */
 public class SmartBellsMainActivity extends AppCompatActivity
                                     implements NavigationView.OnNavigationItemSelectedListener {
-
+    /**
+     * Dashboard of the tab menu
+     */
     public static Dashboard dashboardTab = new Dashboard();
+    /**
+     * Display the beginworkout seperated pages to Private and public routine page
+     */
     //public static BeginWorkout2 bw2 = new BeginWorkout2();
+    /**
+     * Dispaly the beginworkout page at once
+     */
     public static BeginWorkout bw2 = new BeginWorkout();
+    /**
+     * Fragment
+     */
     private Fragment fragment = null;
+    /**
+     * FragmentTransaction
+     */
     private FragmentTransaction transaction;
+    /**
+     * FloatingActionButton
+     */
     private FloatingActionButton fab;
 
+    /**
+     * Create the view of main activity pages
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_bells_main);
-
-
 
         //Go to the Dashboard
         fragment = new Dashboard();
@@ -115,7 +137,9 @@ public class SmartBellsMainActivity extends AppCompatActivity
         });
 
         //*******************************DRAWER****************************************************
-
+        /**
+         * DrawerLayout of the main page
+         */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -144,21 +168,35 @@ public class SmartBellsMainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml
+     * @param item : Item of the mene
+     * @return super.onOptionsItemSelected(item);
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        /**
+         * Item id
+         */
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        /**
+         * noinspection SimplifiableIfStatement
+         */
+
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Navigates when an item selected
+     * @param item : An item of the menu
+     * @return
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

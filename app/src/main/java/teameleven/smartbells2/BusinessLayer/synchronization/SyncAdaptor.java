@@ -82,6 +82,7 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         if (extras.getBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED)) {
             Log.d("Syncing", " - New User            - Recreating Database");
             initialDatabaseSync();
+            syncCount = 0;
         }else{
             Log.d("Syncing", " - Old user, checking for updates! testing");
             if (database.hasUpdates()) {
@@ -98,14 +99,18 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                 ArrayList<int[]> updates = database.readUpdateRecord();
 
                 for (int[] x : updates) {
-                    modifier = "/" + String.valueOf(x[0]);
-                    tableID = setRestID(x[1]);
-                    httpType = setHTTPType(x[2]);
-                    if (x[2] == 0) {
+                    modifier = "/" + String.valueOf(x[0]);//sets the id of the object to be altered
+                    tableID = setRestID(x[1]);//sets the table id
+                    httpType = setHTTPType(x[2]);//sets the http call type
+                    if (x[2] == 0) {//if GET calltype, nullify modifier
                         modifier = "";
-                    } else if (x[2] != 2) {
+                        database.deleteObject(x[0], x[1]);//delete old record -ensures no duplicates
+                    } else if (x[2] == 1) {//if call type update, table class to be changed to
                         object = getChangedObject(x[0], x[1]);
-                    }
+                        database.deleteObject(x[0], x[1]);//delete old record -ensures no duplicates
+                    }//if call type is delete, object remains null
+
+                    //perform the RESTCall, based upon parameters from update table
                     AsyncTask result = new RESTCall()
                             .execute(tableID + modifier, httpType, object, database.getTokenAsString());
                     try {
@@ -117,6 +122,7 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                     }
                 }
                 if (syncCount == 15) {
+                    //recreates database every 15 synchronization cycles
                     Log.d("Syncing", " - SmartBells recreating Database");
                     initialDatabaseSync();
                     syncCount = 0;

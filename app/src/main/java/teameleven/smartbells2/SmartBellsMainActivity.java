@@ -170,7 +170,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
         if (id == R.id.nav_dashboard) {
             fragment = new Dashboard();
         } else if (id == R.id.nav_beginworkout) {
-            //fragment = new BeginWorkout2();
             fragment = new BeginWorkout();
         } else if (id == R.id.nav_achievements) {
             fragment = new AchievementDashboard();

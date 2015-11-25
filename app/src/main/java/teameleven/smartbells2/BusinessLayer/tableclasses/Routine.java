@@ -324,7 +324,7 @@ public class Routine {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        database.insertRoutine(routine);
+        database.insertRoutine(routine, false);
         return null;
     }
 

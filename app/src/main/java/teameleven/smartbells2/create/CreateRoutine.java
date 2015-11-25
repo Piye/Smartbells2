@@ -218,8 +218,9 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
                     routine.setIs_Public(true);
                     //Log.d("CreateRoutine.saveRoutine - ", routine.toString());
                     //database is called in restputroutine. both calls not necessary
-                    //database.insertRoutine(routine);
-                    routine.RestPutRoutine(database);
+                    database.insertRoutine(routine, true);
+                    //routine.RestPutRoutine(database);//should not call rest here - data will be
+                    //input into update table for later synchronizing
                     //Close the database
                     database.closeLocalDatabase();
 

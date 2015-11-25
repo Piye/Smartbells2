@@ -1,9 +1,12 @@
 package teameleven.smartbells2;
-//TODO implement progress dialogs
 //TODO implement new validation in signup for using existing user details.
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,6 +40,17 @@ public class LoginActivity extends Activity {
     private Button mLogInButton;
     private TextView mSignUp;
     String TAG = "DEBUGGING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+
+    /*
+    This is to set up a dummy account. if we had more time, we could easily change to
+    an authenticator pattern for the Account. However, for the sake of this project,
+     we'll keep it like this
+     */
+    private static final String AUTHORITY =
+            "teameleven.smartbells2.businesslayer.synchronization.provider";
+    private static final String ACCOUNT_TYPE = "https://smart-bells-staging.herokuapp.com";
+    private static final String ACCOUNT = "DefaultAccount";
+    Account account;
 
     SessionManager session;
 
@@ -79,18 +93,21 @@ public class LoginActivity extends Activity {
             mPassword.setText("");
         } else {
 
-            //temporary  //TODO ADD PROGRESS DIALOG
-            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+            //todo temporary
+            //Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
 
             //instantiate the storage session
             session = new SessionManager(getApplicationContext());
 
             session.createLoginSession(getUsername(), getPassword());
 
-            //Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
-
-            //move to main activity
-            //Intent intent = new Intent(this, SmartBellsMainActivity.class);
+            /*
+             * this block of code runs the Synchronization setup.
+             * It will also run an initial Synchronization
+             * As it runs this on a background thread, in theory
+             * this should occur as the loading screen is showing
+             */
+            account = CreateSyncAccount(this);
 
             //move to the splashScreen instead
             Intent intent = new Intent(this, LoadingSplashScreen.class);
@@ -101,7 +118,6 @@ public class LoginActivity extends Activity {
 
     }
 
-    //todo review below
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed Called");
@@ -147,6 +163,7 @@ public class LoginActivity extends Activity {
             Authentication auth = new Authentication(getUsername(), getPassword());
 
             String authorized = auth.restAuthentication();
+            Log.d("THIS IS THE TOKEN", authorized);
 
             if (authorized.equals("")) {
                 Toast.makeText(this, "Invalid Username or Password", Toast.LENGTH_SHORT).show();
@@ -161,9 +178,8 @@ public class LoginActivity extends Activity {
 
                     String accessToken = json.getString("authentication_token");
                     int user_id = json.getInt("id");
-                    Log.d("LoginActivity.validate - token checking - ", user_id + "<-id token ->" +  accessToken);
+                    Log.d("LoginActivity.validate - token checking - ", user_id + "<-id token ->" + accessToken);
                     db.insertToken(accessToken, user_id);
-                    initialDatabaseSync(db);
                 } catch (SQLException | JSONException e) {
                     e.printStackTrace();
                 }
@@ -176,31 +192,26 @@ public class LoginActivity extends Activity {
         return valid;
     }
 
-    private void initialDatabaseSync(DatabaseAdapter db) {
-        db.updateDB();
-        long x = System.currentTimeMillis();
-        long y;
 
+    public static Account CreateSyncAccount(Context context){
+        Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
 
-        ArrayList<Exercise> exercise = Exercise.restGetAll();
-        Log.d("LoginActivity.initialDatabaseSync - Exercise row count = ", String.valueOf(exercise.size()));
-        y = (System.currentTimeMillis() - x);
-        Log.d("time taken = ", String.format("%s milliseconds", y));
-        db.loadAllExercises(exercise);
+        AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
 
+        if (accountManager.addAccountExplicitly(newAccount, null, null)){
+            Log.d("NEW ACCOUNT CREATED -- ", " - Returning new account");
+            ContentResolver.setIsSyncable(newAccount, AUTHORITY, 1);
+            ContentResolver.setSyncAutomatically(newAccount, AUTHORITY, true);
 
-        ArrayList<Routine> routines = Routine.restGetAll(db.getUserIDForSession());
-        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
-        y = (System.currentTimeMillis() - x);
-        Log.d("time taken = ", String.format("%s milliseconds", y));
-        db.loadAllRoutines(routines);
+            Bundle sync = new Bundle();
+            sync.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            sync.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+            ContentResolver.requestSync(newAccount, AUTHORITY, sync);
+            return newAccount;
+        }
 
-
-        ArrayList<WorkoutSession> workoutSessions = WorkoutSession.
-                restGetAll(db.getUserIDForSession());
-        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
-        y = (System.currentTimeMillis() - x);
-        Log.d("time taken = ", String.format("%s milliseconds", y));
-        db.loadAllWorkoutSessions(workoutSessions);
+        Log.d("No ACCOUNT CREATED -- ", " - Returning old account");
+        return newAccount;
     }
+
 }

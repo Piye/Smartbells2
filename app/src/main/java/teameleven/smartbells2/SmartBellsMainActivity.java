@@ -14,7 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Toast;
 
+import teameleven.smartbells2.businesslayer.SessionManager;
 import teameleven.smartbells2.create.CreateCustomSession;
 import teameleven.smartbells2.create.CreateExercise;
 import teameleven.smartbells2.create.CreateRoutine;
@@ -24,10 +26,12 @@ public class SmartBellsMainActivity extends AppCompatActivity
                                     implements NavigationView.OnNavigationItemSelectedListener {
 
     public static Dashboard dashboardTab = new Dashboard();
-    public static BeginWorkout2 bw2 = new BeginWorkout2();
+    //public static BeginWorkout2 bw2 = new BeginWorkout2();
+    public static BeginWorkout bw2 = new BeginWorkout();
     private Fragment fragment = null;
     private FragmentTransaction transaction;
     private FloatingActionButton fab;
+    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,11 @@ public class SmartBellsMainActivity extends AppCompatActivity
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_main, fragment);
         transaction.commit();
+
+        //instantiate session
+        session = new SessionManager(getApplicationContext());
+        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+        session.checkLogin();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -134,6 +143,13 @@ public class SmartBellsMainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        //when the activity is resumed we check to see if the user is still logged in
+        session.checkLogin();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -169,7 +185,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
         if (id == R.id.nav_dashboard) {
             fragment = new Dashboard();
         } else if (id == R.id.nav_beginworkout) {
-            fragment = new BeginWorkout2();
+            fragment = new BeginWorkout();
         } else if (id == R.id.nav_achievements) {
             fragment = new AchievementDashboard();
         } else if (id == R.id.nav_about) {
@@ -178,7 +194,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
             //View and edit profile
             fragment = new ViewProfile();
         } else if (id == R.id.nav_logout) {
-            //logout
+            session.logoutUser();
         }
 
         if (fragment != null) {

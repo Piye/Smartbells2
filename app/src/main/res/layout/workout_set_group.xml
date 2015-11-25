@@ -35,7 +35,7 @@
             android:id="@+id/editResistanceText"
             android:layout_weight="1" />
 
-        </LinearLayout>
+    </LinearLayout>
 
         <!-- Reps Per Set -->
         <LinearLayout

@@ -42,8 +42,8 @@ public class Authentication extends User {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "PRINTING ACCESS_TOKEN");
-        Log.d(TAG, accessToken);
+       // Log.d(TAG, "PRINTING ACCESS_TOKEN");
+        //Log.d(TAG, accessToken);
         this.accessToken = accessToken;
     }
 

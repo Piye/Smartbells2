@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sync-adapter
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:contentAuthority="businessLayer.synchronization.provider"
+    android:contentAuthority="teameleven.smartbells2.businesslayer.synchronization.provider"
     android:accountType="https://smart-bells-staging.herokuapp.com"
     android:userVisible="false"
     android:supportsUploading="true"

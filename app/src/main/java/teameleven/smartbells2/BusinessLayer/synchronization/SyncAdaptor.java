@@ -3,6 +3,7 @@ package teameleven.smartbells2.businesslayer.synchronization;
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.AsyncTask;
@@ -77,80 +78,54 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                 String authority,
                 ContentProviderClient provider,
                 SyncResult syncResult) {
-        Log.d("SmartBells.OnPerformSync -", " checking for updates");
-        if (database.hasUpdates()){
-            Log.d("SmartBells has Updates", "");
-            //table name
-            String tableID;
-            //type of call (GET, UPDATE, DELETE)
-            String httpType;
-            //Object, if required
-            String object = null;
-            String modifier = "";
-            //id of object to be changed
-            //update table records
-            ArrayList<int[]> updates = database.readUpdateRecord();
+        Log.d("Syncing", "- SmartBells.OnPerformSync - checking for updates");
+        if (extras.getBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED)) {
+            Log.d("Syncing", " - New User            - Recreating Database");
+            initialDatabaseSync();
+        }else{
+            Log.d("Syncing", " - Old user, checking for updates! testing");
+            if (database.hasUpdates()) {
+                Log.d("Syncing", " - SmartBells has Updates");
+                //table name
+                String tableID;
+                //type of call (GET, UPDATE, DELETE)
+                String httpType;
+                //Object, if required
+                String object = null;
+                String modifier = "";
+                //id of object to be changed
+                //update table records
+                ArrayList<int[]> updates = database.readUpdateRecord();
 
-            for (int[] x : updates){
-                modifier = "/" + String.valueOf(x[0]);
-                tableID = setRestID(x[1]);
-                httpType = setHTTPType(x[2]);
-                if (x[2] == 0){
-                    modifier = "";
-                }else if(x[2] != 2){
-                    object = getChangedObject(x[0], x[1]);
+                for (int[] x : updates) {
+                    modifier = "/" + String.valueOf(x[0]);
+                    tableID = setRestID(x[1]);
+                    httpType = setHTTPType(x[2]);
+                    if (x[2] == 0) {
+                        modifier = "";
+                    } else if (x[2] != 2) {
+                        object = getChangedObject(x[0], x[1]);
+                    }
+                    AsyncTask result = new RESTCall()
+                            .execute(tableID + modifier, httpType, object, database.getTokenAsString());
+                    try {
+                        JSONObject json = (JSONObject) result.get();
+                        saveToDatabase(json, x[1]);
+
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 }
-                AsyncTask result = new RESTCall()
-                        .execute(tableID + modifier, httpType, object, database.getTokenAsString());
-                try {
-                    JSONObject json = (JSONObject) result.get();
-                    saveToDatabase(json, x[1]);
-
-                    writeRecordLog(json.toString(4));
-
-
-                } catch (InterruptedException | ExecutionException | JSONException e) {
-                    e.printStackTrace();
+                if (syncCount == 15) {
+                    Log.d("Syncing", " - SmartBells recreating Database");
+                    initialDatabaseSync();
+                    syncCount = 0;
                 }
-            }
-            syncCount++;
-            if (syncCount == 15){
-                Log.d("SmartBells recreating Database", "");
-                initialDatabaseSync();
-                syncCount = 0;
+                syncCount++;
             }
         }
     }
 
-    /**
-     *
-     * @param record
-     */
-    private void writeRecordLog(String record) {
-        try{
-            OutputStreamWriter outputStreamWriter =
-                    new OutputStreamWriter(getContext().openFileOutput
-                            ("SyncTracker.txt", getContext().MODE_PRIVATE));
-            outputStreamWriter.write(record + "\n\n\n");
-            outputStreamWriter.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
-    private boolean isExternalStorageWritable(){
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)){
-            return true;
-        }
-        return false;
-    }
     /**
      *
      * @param json
@@ -159,24 +134,19 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
     private void saveToDatabase(JSONObject json, int table) {
         switch (table){
             case(0)://exercises
-                Exercise exercise = new Exercise(json);
-                database.insertExercise(exercise);
+                database.insertExercise(new Exercise(json));
             break;
             case(1)://set groups
-                SetGroup setGroup = new SetGroup(json);
-                database.insertSetGroup(setGroup);
+                database.insertSetGroup(new SetGroup(json));
             break;
             case(2)://routine
-                Routine routine = new Routine(json);
-                database.insertRoutine(routine);
+                database.insertRoutine(new Routine(json));
             break;
             case(3)://workout session
-                WorkoutSession session = new WorkoutSession(json);
-                database.insertWorkoutSession(session);
+                database.insertWorkoutSession(new WorkoutSession(json));
             break;
             case(4)://workout set group
-                WorkoutSetGroup workoutSetGroup = new WorkoutSetGroup(json);
-                database.insertWorkoutSetGroup(workoutSetGroup);
+                database.insertWorkoutSetGroup(new WorkoutSetGroup(json));
             break;
         }
     }

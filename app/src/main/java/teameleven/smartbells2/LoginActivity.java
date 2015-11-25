@@ -47,8 +47,8 @@ public class LoginActivity extends Activity {
      we'll keep it like this
      */
     private static final String AUTHORITY =
-            "teameleven.smartbells_prototype0001.businesslayer.synchronization.provider";
-    private static final String ACCOUNT_TYPE = "smart-bells-staging.herokuapp.com";
+            "teameleven.smartbells2.businesslayer.synchronization.provider";
+    private static final String ACCOUNT_TYPE = "https://smart-bells-staging.herokuapp.com";
     private static final String ACCOUNT = "DefaultAccount";
     Account account;
 
@@ -107,11 +107,7 @@ public class LoginActivity extends Activity {
              * As it runs this on a background thread, in theory
              * this should occur as the loading screen is showing
              */
-            //account = CreateSyncAccount(this);
-            Bundle sync = new Bundle();
-            sync.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-            sync.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-            ContentResolver.requestSync(account, AUTHORITY, sync);
+            account = CreateSyncAccount(this);
 
             //move to the splashScreen instead
             Intent intent = new Intent(this, LoadingSplashScreen.class);
@@ -182,9 +178,8 @@ public class LoginActivity extends Activity {
 
                     String accessToken = json.getString("authentication_token");
                     int user_id = json.getInt("id");
-                    Log.d("LoginActivity.validate - token checking - ", user_id + "<-id token ->" +  accessToken);
+                    Log.d("LoginActivity.validate - token checking - ", user_id + "<-id token ->" + accessToken);
                     db.insertToken(accessToken, user_id);
-                    initialDatabaseSync(db);
                 } catch (SQLException | JSONException e) {
                     e.printStackTrace();
                 }
@@ -195,34 +190,6 @@ public class LoginActivity extends Activity {
         }
 
         return valid;
-    }
-
-    private void initialDatabaseSync(DatabaseAdapter db) {
-        db.updateDB();
-        long x = System.currentTimeMillis();
-        long y;
-
-
-        ArrayList<Exercise> exercise = Exercise.restGetAll();
-        Log.d("LoginActivity.initialDatabaseSync - Exercise row count = ", String.valueOf(exercise.size()));
-        y = (System.currentTimeMillis() - x);
-        Log.d("time taken = ", String.format("%s milliseconds", y));
-        db.loadAllExercises(exercise);
-
-
-        ArrayList<Routine> routines = Routine.restGetAll(db.getUserIDForSession());
-        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
-        y = (System.currentTimeMillis() - x);
-        Log.d("time taken = ", String.format("%s milliseconds", y));
-        db.loadAllRoutines(routines);
-
-
-        ArrayList<WorkoutSession> workoutSessions = WorkoutSession.
-                restGetAll(db.getUserIDForSession());
-        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
-        y = (System.currentTimeMillis() - x);
-        Log.d("time taken = ", String.format("%s milliseconds", y));
-        db.loadAllWorkoutSessions(workoutSessions);
     }
 
 
@@ -236,6 +203,10 @@ public class LoginActivity extends Activity {
             ContentResolver.setIsSyncable(newAccount, AUTHORITY, 1);
             ContentResolver.setSyncAutomatically(newAccount, AUTHORITY, true);
 
+            Bundle sync = new Bundle();
+            sync.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            sync.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+            ContentResolver.requestSync(newAccount, AUTHORITY, sync);
             return newAccount;
         }
 

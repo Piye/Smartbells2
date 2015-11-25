@@ -13,8 +13,6 @@ import teameleven.smartbells2.LoginActivity;
  */
 public class SessionManager {
 
-    //todo change to singleton????
-
     // Shared Preferences
     SharedPreferences pref;
 
@@ -76,7 +74,6 @@ public class SessionManager {
         if (!this.isLoggedIn()) {
             // user is not logged in redirect him to Login Activity
             Intent intent = new Intent(_context, LoginActivity.class);
-            //TODO review use of flags
             // Closing all the Activities
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
@@ -90,21 +87,6 @@ public class SessionManager {
     }
 
     /**
-     * Get stored session data
-     */
-    /*public HashMap<String, String> getUserDetails() {
-        HashMap<String, String> user = new HashMap<String, String>();
-        // user name
-        user.put(KEY_NAME, pref.getString(KEY_NAME, null));
-
-        // user email id
-        //user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
-
-        // return user
-        return user;
-    }*/
-
-    /**
      * Clear session details
      */
     public void logoutUser() {
@@ -112,7 +94,7 @@ public class SessionManager {
         editor.clear();
         editor.commit();
 
-        // After logout redirect user to Loing Activity
+        // After logout redirect user to Login Activity
         Intent intent = new Intent(_context, LoginActivity.class);
         // Closing all the Activities
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

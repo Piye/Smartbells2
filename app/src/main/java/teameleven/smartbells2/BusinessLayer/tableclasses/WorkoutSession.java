@@ -285,7 +285,7 @@ public class WorkoutSession {
         WorkoutSession session = null;
         try {
             session = new WorkoutSession((JSONObject)test.get());
-            database.insertWorkoutSession(session);
+            database.insertWorkoutSession(session, false);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

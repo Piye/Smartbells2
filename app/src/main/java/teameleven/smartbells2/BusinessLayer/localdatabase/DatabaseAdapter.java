@@ -177,11 +177,11 @@ public class DatabaseAdapter{
      *                        0 - C - Insert statement
      *                        1 - U - Update Statement
      *                        2 - D - Delete Statement
-     * @return row number of the insert
+     * @return row number of the insert, 0 if a delete, or no rows created
      */
     private long insertUpdateRecord(Long id_num, String tableIdentifier, int transactionType) throws SQLException {
         /*
-        There are not currently any updates(U) on this database.
+        There are not currently any updates(U) in this database.
         If in the future we add them, ensure that they hit this method.
         insertUpdateRecord(objectID, tableIdentifier, 1);
          */
@@ -208,14 +208,44 @@ public class DatabaseAdapter{
         if (transactionType <0 || transactionType > 2 )
             throw new SQLException("Improper transaction type, should be between 0 and 2");
 
+        ArrayList<int[]> records = readUpdateRecord();
 
+        if (records.size() != 0){//testing for multiple entries on same record
+            for (int index = 0; index < records.size(); index++){//run through table
+                if (records.get(index)[0] == id_num && records.get(index)[1] == tableNum){
+                    // id num and table num equal
+                    if (transactionType == 1){                  //update statement
+                        if (records.get(index)[2] == 0 ){
+                            /*
+                            previous statement doesn't matter, because whether it was a create or an
+                            update, either way the record can remain the same. this is assuming
+                            the record already exists in this table. in which case, create and
+                            update are equivalent. this is not the case when creating a change to a
+                            record already in the remote database, only the local.
+                             */
+                            return 0;
+                        }
+                    }else if (transactionType == 2){             //delete statement
+                        if (records.get(index)[2] == 0){        //previous statement was create
+                            /*
+                            In this case, if the previous statement was a create, then the datapoint
+                            is not in the database server. because of this, we must remove it from
+                            the local database, and never add it to the remote server. this is done
+                            by this method, deleting the record in question
+                             */
+                            return database.delete(UPDATE_TABLE, UPDATE_ID + " = ?", new String[]{String.valueOf(id_num)});
+                        }
+                    }else throw new SQLException("Create Statement on non-unique key");
+                }
+            }
+        }
         ContentValues initialValues = new ContentValues();
         initialValues.put(UPDATE_ID, id_num);
         initialValues.put(UPDATE_TABLE_IDENTIFIER, tableNum);
         initialValues.put(UPDATE_TYPE, transactionType);
 
         return database.insert(UPDATE_TABLE, null, initialValues);
-        }
+    }
 
     /**
      * reads the update table, and returns an integer representation of the results.
@@ -307,12 +337,12 @@ public class DatabaseAdapter{
         database.endTransaction();
     }
 
-    public void insertRoutine(Routine routine) {
+    public void insertRoutine(Routine routine, boolean sync) {
 
         Log.d("DatabaseAdaptor.insertRoutine", routine.toString());
         String setgroupid = "";
-        for (SetGroup x: routine.getSetGroups()){
-            setgroupid += String.valueOf( x.getId());
+        for (SetGroup setGroup: routine.getSetGroups()){
+            insertSetGroup(setGroup, sync);
         }
         Log.d("DatabaseAdaptor.insertRoutine", setgroupid);
         Log.d("DatabaseAdaptor.insertRoutine", String.valueOf
@@ -361,14 +391,16 @@ public class DatabaseAdapter{
         }
 
     //Delete Routine
-    public long deleteRoutine(String routineId) {
+    public long deleteRoutine(String routineId, boolean sync) {
 
         //Delete row from routine table
         long v = database.delete(ROUTINE_TABLE, PK_ROUTINE_ID + "=" + routineId, null);
-        try {
-            insertUpdateRecord(Long.valueOf(routineId), ROUTINE_TABLE, 2);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                insertUpdateRecord(Long.valueOf(routineId), ROUTINE_TABLE, 2);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return v;
     }
@@ -551,9 +583,9 @@ public class DatabaseAdapter{
     }
     /**********************************************************************************************/
 
-    public void insertWorkoutSession(WorkoutSession session) {
+    public void insertWorkoutSession(WorkoutSession session, boolean sync) {
         for (WorkoutSetGroup setgroup: session.getSetGroups())
-            insertSetGroup(setgroup.getSet_group());//todo check whether this works
+            insertSetGroup(setgroup.getSet_group(), sync);//todo check whether this works
         insertWorkoutSession(session.getUser_Id(), session.getName(), null, null, null);
     }
 
@@ -583,15 +615,17 @@ public class DatabaseAdapter{
     }
 
     //Delete Workout Session
-    public long deleteWorkoutSession(String workoutsessionid) {
+    public long deleteWorkoutSession(String workoutsessionid, boolean sync) {
 
         //Delete row
         long v = database.delete(WORKOUTSESSION_TABLE, PK_WORKOUTSESSION_ID
                 + "=" + workoutsessionid, null);
-        try {
-            insertUpdateRecord(Long.valueOf(workoutsessionid), WORKOUTSESSION_TABLE, 2);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                insertUpdateRecord(Long.valueOf(workoutsessionid), WORKOUTSESSION_TABLE, 2);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return v;
     }
@@ -609,14 +643,19 @@ public class DatabaseAdapter{
         return myCursor;
     }
 
-    /**********************************WORKOUT SETGROUP TABLE
+    /**********************************WORKOUT SETGROUP TABLE **************************************/
+    /**
+     *
+     * @param workoutSetGroupid
      * @param exerciseid
-     * @param workoutsessionid**************************************/
-
-    //insert workoutsetgroup
-    public long insertWorkoutSetGroup(  int workoutSetGroupid,
-                                        int exerciseid,
-                                        int workoutsessionid) {
+     * @param workoutsessionid
+     * @param sync
+     * @return
+     */
+    public long insertWorkoutSetGroup(int workoutSetGroupid,
+                                      int exerciseid,
+                                      int workoutsessionid,
+                                      boolean sync) {
 
         ContentValues initialValues = new ContentValues();
         initialValues.put(PK_WORKOUTSETGROUP_ID, workoutSetGroupid);
@@ -626,25 +665,29 @@ public class DatabaseAdapter{
 
         //insert
         long result = database.insert(WORKOUTSETGROUP_TABLE, null, initialValues);
-        try {
-            insertUpdateRecord(result, WORKOUTSETGROUP_TABLE, 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                insertUpdateRecord(result, WORKOUTSETGROUP_TABLE, 0);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
     /**********************************************************************************************/
 
     //Delete Workout Set Group
-    public long deleteWorkoutSetGroup(String workoutsetgroupid) {
+    public long deleteWorkoutSetGroup(String workoutsetgroupid, boolean sync) {
 
         //Delete row
         long v = database.delete(WORKOUTSETGROUP_TABLE, PK_WORKOUTSETGROUP_ID
                 + "=" + workoutsetgroupid, null);
-        try {
-            insertUpdateRecord(Long.valueOf(workoutsetgroupid), WORKOUTSETGROUP_TABLE, 2);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                insertUpdateRecord(Long.valueOf(workoutsetgroupid), WORKOUTSETGROUP_TABLE, 2);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return v;
     }
@@ -691,12 +734,14 @@ public class DatabaseAdapter{
     }
     /**********************************SETGROUP TABLE**********************************************/
 
-    public void insertSetGroup(SetGroup set_group) {
+    public void insertSetGroup(SetGroup set_group, boolean sync) {
         insertSetGroup(
                 set_group.getExercise().getId(),
                 set_group.getNumberOfSets(),
                 set_group.getRepsPerSet(),
-                null, null);
+                set_group.getCreationDate(),
+                set_group.getLastUpdated(),
+                sync);
     }
 
     private ContentValues setGroupAttributes(SetGroup setgroup){
@@ -710,16 +755,13 @@ public class DatabaseAdapter{
         initialValuesSetGroup.put(SETGROUP_UPDATED_AT, setgroup.getLastUpdated());
         return initialValuesSetGroup;
     }
-
-
-    /**********************************************************************************************/
-
     //Insert Set Group
     public long insertSetGroup(int exerciseId,
                                int sets,
                                int reps,
                                String createdAt,
-                               String updatedAt) {
+                               String updatedAt,
+                               boolean sync) {
 
         ContentValues initialValues = new ContentValues();
 
@@ -732,24 +774,28 @@ public class DatabaseAdapter{
         //insert
         long result;
         result = database.insert(SETGROUP_TABLE, null, initialValues);
-        try {
-            insertUpdateRecord(result, SETGROUP_TABLE, 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                insertUpdateRecord(result, SETGROUP_TABLE, 0);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
 
     //Delete Set Groups
-    public long deleteSetGroup(String setgroupid) {
+    public long deleteSetGroup(String setgroupid, boolean sync) {
 
         //Delete row
         long v = database.delete(SETGROUP_TABLE, PK_SETGROUP_ID
                 + "=" + setgroupid, null);
-        try {
-            insertUpdateRecord(Long.valueOf(setgroupid), SETGROUP_TABLE, 2);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                insertUpdateRecord(Long.valueOf(setgroupid), SETGROUP_TABLE, 2);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return v;
     }
@@ -803,18 +849,20 @@ public class DatabaseAdapter{
     /**
      *
      * @param exercise
+     * @param sync
      */
-    public void insertExercise(ArrayList<Exercise> exercise) {
+    public void insertExercise(ArrayList<Exercise> exercise, boolean sync) {
         for (Exercise x : exercise){
-            insertExercise(x);
+            insertExercise(x, sync);
         }
     }
 
     /**
      *
      * @param exercise
+     * @param sync
      */
-    public void insertExercise(Exercise exercise){
+    public void insertExercise(Exercise exercise, boolean sync){
         insertExercise(
                 exercise.getId(),
                 exercise.getName(),
@@ -822,7 +870,7 @@ public class DatabaseAdapter{
                 exercise.getCreated_At(),
                 exercise.getUpdated_At(),
                 exercise.getIsPublic(),
-                exercise.getUser_Id());
+                exercise.getUser_Id(), sync);
     }
 
     /**
@@ -833,6 +881,7 @@ public class DatabaseAdapter{
      * @param updatedAt
      * @param is_Public
      * @param user_ID
+     * @param sync
      * @return
      */
     public long insertExercise(int exerciseID,
@@ -841,7 +890,8 @@ public class DatabaseAdapter{
                                String createdAt,
                                String updatedAt,
                                boolean is_Public,
-                               int user_ID) {
+                               int user_ID,
+                               boolean sync) {
         //Log.d("DatabaseAdaptor.insertExercise(name) - ", exerciseName);
         //Log.d("DatabaseAdaptor.insertExercise(increase) - ", increasePerSession);
         ContentValues initialValues = new ContentValues();
@@ -856,10 +906,12 @@ public class DatabaseAdapter{
         //insert
         long result;
         result =  database.insert(EXERCISE_TABLE, null, initialValues);
-        try {
-            insertUpdateRecord(result, EXERCISE_TABLE, 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                insertUpdateRecord(result, EXERCISE_TABLE, 0);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
@@ -881,15 +933,17 @@ public class DatabaseAdapter{
         return initialValues;
     }
     //Delete Exercises
-    public long deleteExercise(String exerciseid) {
+    public long deleteExercise(String exerciseid, boolean sync) {
 
         //Delete row
         long v = database.delete(EXERCISE_TABLE, PK_EXERCISE_ID
-                + "=" + exerciseid, null);
-        try {
-            insertUpdateRecord(Long.valueOf(exerciseid), EXERCISE_TABLE, 2);
-        } catch (SQLException e) {
-            e.printStackTrace();
+                + " = " + exerciseid, null);
+        if (sync) {
+            try {
+                insertUpdateRecord(Long.valueOf(exerciseid), EXERCISE_TABLE, 2);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return v;
     }
@@ -908,7 +962,6 @@ public class DatabaseAdapter{
     public ArrayList<Exercise> getExercises(){
         String[] columns = new String[]{EXERCISE_NAME, PK_EXERCISE_ID};
         Cursor cursor = database.query(EXERCISE_TABLE, columns, null, null, null, null, null);
-        //todo should be "where user_id = user_id" - only pull the users object
         ArrayList<Exercise> exercises = new ArrayList<>();
         Exercise exercise;
 
@@ -1012,13 +1065,43 @@ public class DatabaseAdapter{
         return getObject(WORKOUTSETGROUP_TABLE, PK_WORKOUTSETGROUP_ID, id);
     }
 
-    public void insertWorkoutSetGroup(WorkoutSetGroup workoutSetGroup) {
+    public void insertWorkoutSetGroup(WorkoutSetGroup workoutSetGroup, boolean sync) {
         insertWorkoutSetGroup(
                 workoutSetGroup.getSet_group().getId(),
                 workoutSetGroup.getSet_group().getExerciseId(),
-                workoutSetGroup.getWorkoutSessionId());
+                workoutSetGroup.getWorkoutSessionId(), sync);
     }
 
+    public boolean getDatabaseLoaded(){
+        Cursor query = database.rawQuery("select count(*) from " + EXERCISE_TABLE, null);
+        query.moveToFirst();
+        int result = query.getInt(0);
+        Log.d("number of exercises", String.valueOf(result));
+        if (result > 0){
+            return true;
+        }
+            return false;
+    }
+
+    /**
+     *
+     * @param id_num
+     * @param tableID
+     */
+    public void deleteObject(int id_num, int tableID) {
+            switch (tableID){
+                case(0)://exercises
+                    deleteExercise(String.valueOf(id_num), false);
+                case(1)://set groups
+                    deleteSetGroup(String.valueOf(id_num), false);
+                case(2)://routines
+                    deleteRoutine(String.valueOf(id_num), false);
+                case(3)://workout session
+                    deleteWorkoutSession(String.valueOf(id_num), false);
+                case(4)://workout set group
+                    deleteWorkoutSetGroup(String.valueOf(id_num), false);
+            }
+        }
 
     //********************************************************************************************//
     private static class DatabaseHelper extends SQLiteOpenHelper {

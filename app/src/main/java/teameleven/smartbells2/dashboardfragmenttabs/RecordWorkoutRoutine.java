@@ -4,10 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import teameleven.smartbells2.R;
 import teameleven.smartbells2.BeginWorkout;
+import teameleven.smartbells2.R;
 
 /**
  * Created by Jare on 2015-11-03.
@@ -26,11 +25,6 @@ public class RecordWorkoutRoutine extends AppCompatActivity {
         nameValue = getIntent().getStringExtra(BeginWorkout.ITEM_NAME);
         nameView = (TextView) findViewById(R.id.nameTextValue);
         nameView.setText(nameValue);
-    }
-
-    //Save new workout
-    public void saveSession(View view) {
-        Toast.makeText(this, "Save a new Workout Session", Toast.LENGTH_LONG).show();
     }
 
     //Cancel - back to menu

@@ -6,7 +6,6 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import teameleven.smartbells2.businesslayer.RESTCall;
@@ -96,8 +95,6 @@ public class User {
             Log.d(TAG, accessToken);
             //return result;
         } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();

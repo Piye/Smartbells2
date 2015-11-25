@@ -74,7 +74,7 @@ public class Exercise {
      */
     public Exercise(JSONObject exercise) {
         try {
-            //Log.d("Constructor exercise - ",exercise.toString());
+            Log.d("Constructor exercise - ",exercise.toString());
             if (exercise.has("exercise")) exercise = exercise.getJSONObject("exercise");
 
             //Log.d("Exercise.JSONConstructor - ", exercise.toString(4));
@@ -93,7 +93,7 @@ public class Exercise {
             }else{
                 user_Id = 0;
             }
-            //Log.d("Constructor, Exercise - ",toString());
+            Log.d("Constructor, Exercise - ",toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -343,7 +343,7 @@ public class Exercise {
 
         try {
             exercise = new Exercise(new JSONObject(test.get().toString()));
-            database.insertExercise(exercise, false);
+            database.insertExercise(exercise);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -374,6 +374,8 @@ public class Exercise {
             e.printStackTrace();
         }
         Log.d("database load - ", this.toString());
-        database.insertExercise(exercise, false);
+        database.insertExercise(exercise);
     }
+
+
 }

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,12 +102,7 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
     }
 
     private boolean validate() {
-
-        if (addExerciseName() != null && addIncreasePerSession() != null) {
-            return true;
-        }
-        Toast.makeText(getActivity(), "Please fill in all fields.", Toast.LENGTH_LONG).show();
-        return false;
+        return true;
     }
 
     /************************************** BUTTONS ***********************************************/
@@ -125,21 +119,27 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
             case R.id.saveExercise:
                 //Add new Exercise
                 if(validate()){
-                    try {
-                        exercise = new Exercise();
-                        exercise.setName(addExerciseName());
-                        exercise.setIncrease_Per_Session(Integer.parseInt(addIncreasePerSession()));
 
-                        //loads either rest or the database. Rest also loads database
-                        //exercise.restPutExercise(database);//both
-                        Log.d("CreateExercise.onClick - ", exercise.toString());
-                        database.insertExercise(exercise, true);//database
+                    if (addExerciseName() != null && addIncreasePerSession() != null) {
+                        try {
+                            Exercise.restGetExercise(1);
+                            exercise = new Exercise();
+                            exercise.setName(this.addExerciseName());
+                            exercise.setIncrease_Per_Session(Integer.parseInt(addIncreasePerSession()));
 
-                        //todo this is currently blocked while the data is being retrieved. we can work with
-                        //this later, however for the time being it is good enough for testing purposes.
-                    } catch (Exception ex) {
-                        Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                            //loads either rest or the database. Rest also loads database
+                            //exercise.restPutExercise(database);//both
+                            database.insertExercise(exercise);//database
+
+                            //todo this is currently blocked while the data is being retrieved. we can work with
+                            //this later, however for the time being it is good enough for testing purposes.
+                        } catch (Exception ex) {
+                            Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "Please fill in all fields.", Toast.LENGTH_LONG).show();
                     }
+
                     //Close the database
                     database.closeLocalDatabase();
 
@@ -151,6 +151,7 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
                     transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();
+
                 }
 
                 break;

@@ -310,12 +310,15 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
 
                     //Back to menu
                     Toast.makeText(getActivity(), "routine " + routine.getName() + " created!!.", Toast.LENGTH_LONG).show();
+
                     fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
                     fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                     fragment = new Dashboard();
                     transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();
+
+                    //TODO Add to routine list here??
 
                 }
                 break;

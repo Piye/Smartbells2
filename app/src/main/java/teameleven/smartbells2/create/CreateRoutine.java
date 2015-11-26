@@ -11,6 +11,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -83,9 +84,12 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
      */
     private RadioGroup radioGroup;
     /**
-     * Bublic radio button
+     * Public radio button
      */
     private RadioButton publicButton;
+
+    private RadioButton publicRoutine;
+    private RadioButton privateRoutine;
     /**
      * A number of groups
      */
@@ -106,6 +110,9 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
      * onCreate - Create view of input screen for creating  set group
      * @param savedInstanceState
      */
+    private EditText mRoutineName;
+    private EditText mNumOfSets;
+    private EditText mRepsPerSet;
     //@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -144,10 +151,10 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
      * @return Routine name
      */
     public String addRoutineName() {
-        TextView name = (TextView) getActivity().findViewById(R.id.editNameText);
+        mRoutineName = (EditText) getActivity().findViewById(R.id.editNameText);
         //Call setName() in Routine class
         //routine.setName(name.getText().toString());
-        return name.getText().toString();
+        return mRoutineName.getText().toString();
     }
 
     /**
@@ -160,13 +167,15 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 // get selected radio button from radioGroup
-                int selectedId = radioGroup.getCheckedRadioButtonId();
+                //int selectedId = radioGroup.getCheckedRadioButtonId();
                 // declaring "public" radio button value
-                RadioButton publicRoutine = (RadioButton) getActivity().findViewById(R.id.publicTextView);
+                publicRoutine = (RadioButton) getActivity().findViewById(R.id.publicTextView);
+                privateRoutine = (RadioButton) getActivity().findViewById(R.id.privateTextView);
                 // Comparison selectedId and buttonId
-                if (selectedId == publicRoutine.getId()) {
+                //if (selectedId == publicRoutine.getId()) {
+                if (publicRoutine.isChecked()) {
                     isPublic = true;
-                } else {
+                }else if(privateRoutine.isChecked()){
                     isPublic = false;
                 }
                 //Toast.makeText(CreateRoutine.this,
@@ -220,11 +229,11 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
      * Return a number of sets of exercise
      * @return a number of sets
      */
-    public int addNumberOfSets() {
-        TextView setsText = (TextView) getActivity().findViewById(R.id.editSetsText);
+    public String addNumberOfSets() {
+        mNumOfSets = (EditText) getActivity().findViewById(R.id.editSetsText);
         //call set method in routine class
         //exercise.setSets(Integer.getInteger(setsText.toString()));
-        return Integer.parseInt(setsText.getText().toString());
+        return mNumOfSets.getText().toString();
     }
 
 
@@ -234,15 +243,30 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
      * Get a number of reps per set
      * @return A number of reps
      */
-    public int addRepsPerSet() {
-        TextView repsText = (TextView) getActivity().findViewById(R.id.editRepsText);
+    public String addRepsPerSet() {
+        mRepsPerSet = (EditText) getActivity().findViewById(R.id.editRepsText);
         //call set method in routine class
         //exercise.setReps(Integer.getInteger(repsText.toString()));
-        return Integer.parseInt(repsText.getText().toString());
+        return mRepsPerSet.getText().toString();
     }
 
     private boolean validate() {
-        return true;
+
+        boolean valid = true;
+        if(addNumberOfSets().isEmpty()){
+            mNumOfSets.setError("Please enter the number of sets for your session");
+            valid = false;
+        }
+        if(addRoutineName().isEmpty()){
+            mRoutineName.setError("Please enter the name of your session");
+            valid = false;
+        }
+        if(addRepsPerSet().isEmpty()){
+            mRepsPerSet.setError("Please enter the number of reps per set");
+            valid = false;
+        }
+        return valid;
+        //return true;
     }
 
     /**
@@ -270,12 +294,12 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
                 if (validate()) {
                     SetGroup setGroup = new SetGroup(
                             database.getExerciseIdByName(exerciseName),
-                            addNumberOfSets(),
-                            addRepsPerSet());
+                            Integer.parseInt(addNumberOfSets()),
+                            Integer.parseInt(addRepsPerSet()));
                     Routine routine = new Routine();
                     routine.getSetGroups().add(setGroup);
                     routine.setName(addRoutineName());
-                    routine.setIs_Public(true);
+                    routine.setIs_Public(isPublic);
                     //Log.d("CreateRoutine.saveRoutine - ", routine.toString());
                     //database is called in restputroutine. both calls not necessary
                     database.insertRoutine(routine, true);

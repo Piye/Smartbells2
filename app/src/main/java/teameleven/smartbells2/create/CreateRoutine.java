@@ -10,6 +10,7 @@ package teameleven.smartbells2.create;
  */
 
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,7 @@ import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
 import teameleven.smartbells2.Dashboard;
 import teameleven.smartbells2.R;
+import teameleven.smartbells2.dashboardfragmenttabs.RoutineDialogFragment;
 
 //import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
 //import teameleven.smartbells2.BusinessLayer.tableclasses.Exercise;
@@ -58,9 +60,11 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
     private RadioButton publicButton;
     int numberOfGroups = 1;
 
-    private Button save;
+    private Button save, addExerciseButton;
     private Button cancel;
     private FloatingActionButton fab;
+
+
     /**
      * onCreate
      *
@@ -80,6 +84,8 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         //Spinner
         exerciseSpinner = (Spinner) view.findViewById(R.id.exerciseSpinner);
         addListenerOnSpinnerExerciseSelection();
+        //Add SetGroup "Add Exercise"
+        addExerciseButton = (Button) view.findViewById(R.id.addExerciseListButton);
 
         //Open Database
         database = new DatabaseAdapter(getActivity());
@@ -93,8 +99,11 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         ArrayList<String> exerciseList = database.getExercisesAsStrings();
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, exerciseList);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        exerciseSpinner.setAdapter(adapter);
+        //todo: If an available workout is pre-selected, show name, and routines saved to it.
+        //Basic- Very veerrryy basic example below.
+        TextView workout_name = (TextView) view.findViewById(R.id.editNameText);
+        workout_name.setText("Get_From_Database_Name");
+
 
         return view;
     }
@@ -196,8 +205,12 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
 
         switch (v.getId()) {
             //Move to a new FRAGMENT for each button
-            case R.id.add_setgroup:
-                //Pop set group dialog window
+            case R.id.addExerciseListButton:
+
+                    FragmentManager fm = getActivity().getFragmentManager();
+                    RoutineDialogFragment dialog = new RoutineDialogFragment();
+                    dialog.show(fm, "tag");
+               //Pop set group dialog window
                 /*
                 fragment = new CreateSetGroupDialog();
                 transaction = getFragmentManager().beginTransaction();

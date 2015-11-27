@@ -2,12 +2,15 @@ package teameleven.smartbells2.dashboardfragmenttabs;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import teameleven.smartbells2.R;
 import teameleven.smartbells2.BeginWorkout;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
  * Created by Jare on 2015-11-03.
@@ -16,6 +19,10 @@ public class RecordWorkoutRoutine extends AppCompatActivity {
 
     private String nameValue = null;
     private TextView nameView = null;
+    private TextView mExercise;
+    private EditText mResistance;
+    private EditText mSets;
+    private EditText mReps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +32,39 @@ public class RecordWorkoutRoutine extends AppCompatActivity {
         //Get the name value passed and set it to the textview value
         nameValue = getIntent().getStringExtra(BeginWorkout.ITEM_NAME);
         nameView = (TextView) findViewById(R.id.nameTextValue);
+        mExercise = (TextView) findViewById(R.id.exerciseTextViewCustom);
+        //todo need to get the exercise name here and set the mExercise text with it.
         nameView.setText(nameValue);
+        mResistance = (EditText) findViewById(R.id.editResistanceText);
+        mSets = (EditText) findViewById(R.id.editSetsTextCustom);
+        mReps = (EditText) findViewById(R.id.editRepsTextCustom);
+    }
+
+    public boolean validate(){
+        boolean valid = true;
+        if(mSets.getText().toString().isEmpty()){
+            mSets.setError("Please enter the number of sets for your session");
+            valid = false;
+        }
+        if(mResistance.getText().toString().isEmpty()){
+            mResistance.setError("Please enter the resistance for your session");
+            valid = false;
+        }
+        if(mReps.getText().toString().isEmpty()){
+            mReps.setError("Please enter the number of reps per set");
+            valid = false;
+        }
+        return valid;
     }
 
     //Save new workout
     public void saveSession(View view) {
-        Toast.makeText(this, "Save a new Workout Session", Toast.LENGTH_LONG).show();
+        if(validate()){
+            DatabaseAdapter db = new DatabaseAdapter(this);
+            //db.insertWorkoutSession()
+            Toast.makeText(this, "Session Saved", Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
     //Cancel - back to menu

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/side_nav_bar"
         android:layout_margin="0dp"
         android:layout_weight="1"
         >
@@ -22,7 +22,7 @@
             android:gravity="center_vertical"
             android:textColor="@color/white"
             android:id="@+id/createRoutineTitleTextView"
-            android:layout_margin="50dp"/>
+            android:layout_margin="45dp"/>
 
     </LinearLayout>
 

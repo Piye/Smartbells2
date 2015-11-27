@@ -12,6 +12,7 @@
         android:gravity="center"
         android:background="@color/colorPrimary"
         android:layout_margin="0dp"
+        android:layout_weight="1"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -25,17 +26,12 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="10dp"
-        >
         <!-- NAME -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_margin="2dp"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -43,7 +39,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Name:"
                 android:id="@+id/nameTextView"
-                android:layout_margin="2dp"/>
+                />
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,6 +50,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
             >
             <RadioGroup
                 android:layout_width="wrap_content"
@@ -82,6 +80,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_margin="2dp"
             >
 
             <TextView
@@ -94,117 +94,21 @@
 
         </LinearLayout>
 
-        <!-- SET GROUPS -->
+        <!-- Workout SET GROUPS -->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
             >
 
-            <!-- EXERCISE -->
+            <include layout="@layout/workout_set_group"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Exercise"
-                    android:id="@+id/exerciseTextView"
-                    android:layout_margin="2dp"
-                    android:layout_weight="1"/>
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/exerciseSpinner"
-                    android:spinnerMode="dropdown"
-                    android:layout_margin="2dp"
-                    android:layout_weight=".5"/>
-
-            </LinearLayout>
-
-            <!-- RESISTANCE LEVEL -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Resistance Level:"
-                    android:id="@+id/resistanceTextView"
-                    android:layout_weight="1"/>
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:id="@+id/editResistanceText"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-            <!-- SETS -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Sets"
-                    android:id="@+id/setsTextView"
-                    android:layout_margin="1dp"
-                    android:layout_weight=".2"
-                    />
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="10"
-                    android:id="@+id/editSetsText"
-                    android:gravity="center"
-                    android:layout_weight=".1"
-                    android:numeric="integer" />
-            </LinearLayout>
-
-            <!-- Reps -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Reps Per Set"
-                    android:id="@+id/repsTextView"
-                    android:layout_margin="1dp"
-                    android:layout_weight="1.1"
-                    />
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="5"
-                    android:id="@+id/editRepsText"
-                    android:gravity="center"
-                    android:layout_weight=".5"
-                    android:numeric="integer" />
-
-            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+
 
         <!-- Buttons -->
 
@@ -213,7 +117,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_margin="2dp"
-            android:layout_gravity="bottom">
+            android:layout_gravity="bottom"
+            android:layout_weight="1">
 
             <Button
                 android:layout_width="wrap_content"
@@ -225,11 +130,12 @@
                 android:layout_weight=".5"
                 android:layout_margin="2dp"
                 android:onClick="saveSession"
-                android:id="@+id/saveButton"/>
-            <!--android:onClick="saveRoutine"-->
+                android:id="@+id/saveNewCustomSession"/>
+
 
 
             <Button
+                android:id="@+id/cancelCreateCustomSession"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -238,7 +144,7 @@
                 android:text="Cancel"
                 android:layout_weight=".5"
                 android:layout_margin="2dp"
-                android:onClick="cancelCreateCustomSession"/>
+                />
 
         </LinearLayout>
 

@@ -3,7 +3,7 @@
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:accountType="https://smart-bells-staging.herokuapp.com"
-    android:icon="@drawable/blue_bell_s"
+    android:icon="@drawable/ic_s_bell"
     android:label="@string/app_name"
 
 />

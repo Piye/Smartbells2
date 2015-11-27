@@ -39,7 +39,7 @@ public class MyRoutines_Fragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         //Tells main activity ADD button what type of item to add (ACHIEVEMENTS)
-        SmartBellsMainActivity.bw2.setCheckTabPage(0);
+        SmartBellsMainActivity.bw2.setCheckTabPage(4);
 
         //Open Database
         db = new DatabaseAdapter(getActivity());

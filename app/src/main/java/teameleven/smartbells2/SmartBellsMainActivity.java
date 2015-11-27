@@ -131,18 +131,13 @@ public class SmartBellsMainActivity extends AppCompatActivity
                 /* BEGIN WORKOUT FRAGMENT TAB SELECTED */
 
                 //This might go all together? Will keep if we decide to add a new tab type.
-                if( bw2.getCheckBWTabPage() == 10) {
+                if( bw2.getCheckBWTabPage() == 4) {
                     fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
                             new AccelerateInterpolator(2)).start();
                     fragment = new CreateCustomSession();
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();
-                }
-
-                //This might go all together? Will keep if we decide to add a new tab type.
-                if (bw2.getCheckBWTabPage() == 10) {
-
                 }
 
             }
@@ -188,7 +183,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
             //if the dashboard is visible close the app
             //close app if back is pressed on login activity
             new AlertDialog.Builder(this)
-                    .setMessage("Are you sure you want to exit?")
+                    .setMessage("Are you sure you want to leave?")
                     .setNegativeButton(android.R.string.no, null)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
@@ -226,7 +221,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
          * Item id
          */
         int id = item.getItemId();
-
         /**
          * noinspection SimplifiableIfStatement
          */
@@ -265,20 +259,16 @@ public class SmartBellsMainActivity extends AppCompatActivity
             //View and edit profile
             fragment = new ViewProfile();
         } else if (id == R.id.nav_logout) {
-
-            //if the dashboard is visible close the app
-            //close app if back is pressed on login activity
+            //Confirm logout
             new AlertDialog.Builder(this)
-                    .setMessage("Are you sure you want to exit?")
+                    .setMessage("Are you sure you want to logout?")
                     .setNegativeButton(android.R.string.no, null)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface arg0, int arg1) {
                             SmartBellsMainActivity.super.onBackPressed();
                             Intent intent = new Intent(Intent.ACTION_MAIN);
-
                             intent.addCategory(Intent.CATEGORY_HOME);
-
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             session.logoutUser();

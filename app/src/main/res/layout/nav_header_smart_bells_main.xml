@@ -21,9 +21,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:paddingBottom="45dp"
-        android:paddingTop="45dp"
-        android:src="@drawable/ic_launcher2"
+        android:paddingBottom="55dp"
+        android:paddingTop="55dp"
+        android:src="@drawable/ic_s_bell"
         android:id="@+id/imageView"
         />
 
@@ -35,7 +35,7 @@
         android:paddingBottom="50dp"
         android:paddingRight="50dp"
         android:paddingTop="50dp"
-        android:text="SmartBells \nMenu"
+        android:text="Smart-Bells Menu"
         android:textColor="@color/white"
         android:textSize="14sp"
         />

@@ -8,11 +8,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import teameleven.smartbells2.BeginWorkout;
 import teameleven.smartbells2.R;
 
 /**
@@ -32,6 +35,8 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
     private EditText mNumOfSets;
     // Edit text field of the custom session a number of reps per set
     private EditText mRepsPerSet;
+    // Save Button
+    private Button save;
     // Cancel Button
     private Button cancel;
     // Floating Action Button
@@ -50,8 +55,12 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
         //Main view
         View view = inflater.inflate(R.layout.create_custom_session, container, false);
         //CancelButton
-        //cancel = (Button) view.findViewById(R.id.cancelCreateRoutine);
-        //cancel.setOnClickListener(this);
+        cancel = (Button) view.findViewById(R.id.cancelCreateCustomSession);
+        cancel.setOnClickListener(this);
+
+        //SaveButton
+        save = (Button) view.findViewById(R.id.saveNewCustomSession);
+        save.setOnClickListener(this);
 
         return view;
 /*
@@ -212,21 +221,22 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
                 transaction.commit();
                 */
                 break;
-            case R.id.design_routine:
+            case R.id.saveNewCustomSession:
+                Toast.makeText(getActivity(),"Save a Session!",Toast.LENGTH_LONG).show();
                 //Add new workout
                 break;
-            /*case R.id.cancelCreateCustomSession:
+            case R.id.cancelCreateCustomSession:
 
                 fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
                 fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-                fragment = new BeginWorkout2();
+                fragment = new BeginWorkout();
                 transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.content_main, fragment);
                 transaction.commit();
                 //Kill the fragment
                 //getFragmentManager().beginTransaction().remove(this).commit();
                 break;
-                */
+
         }
     }
 

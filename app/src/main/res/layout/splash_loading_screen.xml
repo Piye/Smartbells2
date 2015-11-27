@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/side_nav_bar">
 
     <TextView
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
 
     <ImageView
         android:id="@+id/splash_image"
-        android:layout_width="126dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:src="@drawable/splash_logo"
         android:layout_gravity="center" />

@@ -8,13 +8,13 @@
 
 
     <!-- SETTINGS -->
-    <string name="app_name">SmartBells2</string>
+    <string name="app_name">Smart-Bells</string>
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
     <string name="action_about">About</string>
 
     <!--SPLASH SCREEN -->
-    <string name="splash_welcome">Welcome to SmartBells!</string>
+    <string name="splash_welcome">Welcome to Smart-Bells!</string>
     <string name="loading_bar">loading...</string>
 
     <!--ABOUT PAGE -->

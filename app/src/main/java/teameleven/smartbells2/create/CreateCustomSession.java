@@ -10,13 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import teameleven.smartbells2.BeginWorkout;
 import teameleven.smartbells2.R;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
  * This class is the screen of creating custom session
@@ -35,6 +40,8 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
     private EditText mNumOfSets;
     // Edit text field of the custom session a number of reps per set
     private EditText mRepsPerSet;
+    //Database Adapter
+    private DatabaseAdapter database;
     // Save Button
     private Button save;
     // Cancel Button
@@ -54,6 +61,11 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
 
         //Main view
         View view = inflater.inflate(R.layout.create_custom_session, container, false);
+
+        //Spinner
+        exerciseSpinner = (Spinner) view.findViewById(R.id.exerciseSpinner);
+        addListenerOnSpinnerExerciseSelection();
+
         //CancelButton
         cancel = (Button) view.findViewById(R.id.cancelCreateCustomSession);
         cancel.setOnClickListener(this);
@@ -62,10 +74,8 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
         save = (Button) view.findViewById(R.id.saveNewCustomSession);
         save.setOnClickListener(this);
 
-        return view;
-/*
         //Set up the exercise Spinner
-        database = new DatabaseAdapter(this);
+        database = new DatabaseAdapter(getActivity());
         try {
             database.openLocalDatabase();
         } catch (SQLException e) {
@@ -73,10 +83,12 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
         }
         //Get list of Exercises from the database
         ArrayList<String> exerciseList = database.getExercisesAsStrings();
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseList);
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, exerciseList);
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         exerciseSpinner.setAdapter(adapter);
-*/
+
+        return view;
     }
 
     //Add Name
@@ -113,18 +125,20 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
      * @return Exercise Name
      */
     public String addListenerOnSpinnerExerciseSelection() {
-        //exerciseSpinner = (Spinner) findViewById(R.id.exerciseSpinner);
         exerciseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                //Get Set Groups(Exercise List)
                 exerciseName = parent.getItemAtPosition(position).toString();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 //Do Nothing
             }
         });
+
         return exerciseName;
     }
 

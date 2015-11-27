@@ -213,7 +213,7 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 //Get Set Groups(Exercise List)
-                exerciseName = (String) parent.getItemAtPosition(position).toString();
+                exerciseName = parent.getItemAtPosition(position).toString();
             }
 
             @Override

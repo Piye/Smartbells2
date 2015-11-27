@@ -1,5 +1,8 @@
 package teameleven.smartbells2;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -42,6 +45,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
     /**
      * Fragment
      */
+    private Fragment fragmentDashBoard = null;
     private Fragment fragment = null;
     /**
      * FragmentTransaction
@@ -63,9 +67,9 @@ public class SmartBellsMainActivity extends AppCompatActivity
         setContentView(R.layout.activity_smart_bells_main);
 
         //Go to the Dashboard
-        fragment = new Dashboard();
+        fragmentDashBoard = new Dashboard();
         transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_main, fragment);
+        transaction.replace(R.id.content_main, fragmentDashBoard);
         transaction.commit();
 
         //instantiate session
@@ -175,11 +179,37 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        //
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //If the drawer is open close the drawer
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (fragmentDashBoard.isVisible() ) {
+            //if the dashboard is visible close the app
+            //close app if back is pressed on login activity
+            new AlertDialog.Builder(this)
+                    .setMessage("Are you sure you want to exit?")
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            SmartBellsMainActivity.super.onBackPressed();
+                            Intent intent = new Intent(Intent.ACTION_MAIN);
+
+                            intent.addCategory(Intent.CATEGORY_HOME);
+
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }).create().show();
         } else {
-            super.onBackPressed();
+            //else go to the dashboard
+            fragmentDashBoard = new Dashboard();
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.content_main, fragmentDashBoard);
+            transaction.commit();
+
         }
     }
 
@@ -221,7 +251,10 @@ public class SmartBellsMainActivity extends AppCompatActivity
         //Drawer Selected Items
         //Handle the Actions
         if (id == R.id.nav_dashboard) {
-            fragment = new Dashboard();
+            fragmentDashBoard = new Dashboard();
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.content_main, fragmentDashBoard);
+            transaction.commit();
         } else if (id == R.id.nav_beginworkout) {
             fragment = new BeginWorkout();
         } else if (id == R.id.nav_achievements) {
@@ -232,7 +265,26 @@ public class SmartBellsMainActivity extends AppCompatActivity
             //View and edit profile
             fragment = new ViewProfile();
         } else if (id == R.id.nav_logout) {
-            session.logoutUser();
+
+            //if the dashboard is visible close the app
+            //close app if back is pressed on login activity
+            new AlertDialog.Builder(this)
+                    .setMessage("Are you sure you want to exit?")
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            SmartBellsMainActivity.super.onBackPressed();
+                            Intent intent = new Intent(Intent.ACTION_MAIN);
+
+                            intent.addCategory(Intent.CATEGORY_HOME);
+
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            session.logoutUser();
+                        }
+                    }).create().show();
+
         }
 
         if (fragment != null) {

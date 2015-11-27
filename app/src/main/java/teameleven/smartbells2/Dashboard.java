@@ -177,5 +177,4 @@ public class Dashboard extends Fragment {
         System.err.print(checkTabPage);
     }
 
-
 }

@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Create a Custom Session"
+            android:gravity="center_vertical"
             android:textColor="@color/white"
             android:id="@+id/createRoutineTitleTextView"
             android:layout_margin="50dp"/>
@@ -147,6 +148,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:ems="10"
+                    android:gravity="center"
                     android:id="@+id/editResistanceText"
                     android:layout_weight="1" />
 
@@ -171,6 +173,7 @@
                     android:inputType="number"
                     android:ems="10"
                     android:id="@+id/editSetsText"
+                    android:gravity="center"
                     android:layout_weight=".1"
                     android:numeric="integer" />
             </LinearLayout>
@@ -195,6 +198,7 @@
                     android:inputType="number"
                     android:ems="5"
                     android:id="@+id/editRepsText"
+                    android:gravity="center"
                     android:layout_weight=".5"
                     android:numeric="integer" />
 

@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:layout_margin="0dp"
         android:background="@color/colorPrimary"
-        android:layout_weight="2">
+        >
 
         <TextView
             android:id="@+id/createRoutineTitleTextView"
@@ -61,27 +61,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Private"
-            android:id="@+id/privateTextView"
-            android:layout_margin="2dp"/>
-            <!--android:onClick="saveRoutine"-->
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Private"
+                android:id="@+id/privateTextView"
+                android:layout_margin="2dp"/>
 
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Public"
-            android:id="@+id/publicTextView"
-            android:checked="true"
-            android:layout_margin="2dp"/>
-            <!--
-            android:onClick="cancelCreatRoutine"-->
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Public"
+                android:id="@+id/publicTextView"
+                android:checked="true"
+                android:layout_margin="2dp"/>
 
         </RadioGroup>
+
     </LinearLayout>
+
     <!-- SET GROUPS TITLE -->
 
     <LinearLayout
@@ -162,6 +161,7 @@
                 android:inputType="number"
                 android:ems="10"
                 android:id="@+id/editSetsText"
+                android:gravity="center"
                 android:layout_weight=".1"
                 android:numeric="integer" />
             </LinearLayout>
@@ -186,6 +186,7 @@
                 android:inputType="number"
                 android:ems="5"
                 android:id="@+id/editRepsText"
+                android:gravity="center"
                 android:layout_weight=".5"
                 android:numeric="integer" />
             </LinearLayout>
@@ -199,8 +200,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_gravity="bottom"
                 android:layout_margin="2dp"
-                android:layout_marginBottom="0dp">
+                >
 
                 <Button
                     android:layout_width="match_parent"

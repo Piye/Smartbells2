@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.TextView;
 
 /**
  * Explanation about the team eleven
@@ -16,7 +17,7 @@ public class About extends Fragment {
     /**
      * View for inflater of the about_page
      */
-    private View rootView;
+    private TextView link;
     /**
      * FloatingActionButton
      */
@@ -32,6 +33,10 @@ public class About extends Fragment {
                 new AccelerateInterpolator(2)).start();
 
         View rootView = inflater.inflate(R.layout.about_page, container, false);
+
+        //link = (TextView) getActivity().findViewById(R.id.webAppLink);
+        //link.setMovementMethod(LinkMovementMethod.getInstance());
+
         return rootView;
     }
 

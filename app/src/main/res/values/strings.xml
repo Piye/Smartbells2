@@ -18,7 +18,7 @@
     <string name="loading_bar">loading...</string>
 
     <!--ABOUT PAGE -->
-    <string name="about_title"><big><bold>About SmartBells</bold></big></string>
+    <string name="about_title"><big><bold>About</bold></big></string>
     <string name="team_eleven"><bold>TeamEleven Members:</bold></string>
     <string name="member1">Wonkyoung Chung</string>
     <string name="member2">Kyle Geraghty</string>
@@ -36,6 +36,10 @@
         supplied Application Programming Interface (API) to allow synchronization
         between the web application and the Android application.
     </string>
+
+    <string name="followthelink">Smart-Bells web app.</string>
+    <string name="webAppLinkString"><a href="https://smart-bells-staging.herokuapp.com/">https://smart-bells-staging.herokuapp.com</a></string>
+
 
     <!--Headings-->
 

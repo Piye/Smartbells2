@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
+
 import teameleven.smartbells2.R;
 import teameleven.smartbells2.BeginWorkout;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
@@ -17,8 +19,8 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
  */
 public class RecordWorkoutRoutine extends AppCompatActivity {
 
-    private String nameValue = null;
-    private TextView nameView = null;
+    private String nameValue;
+    private TextView nameView;
     private TextView mExercise;
     private EditText mResistance;
     private EditText mSets;
@@ -30,11 +32,12 @@ public class RecordWorkoutRoutine extends AppCompatActivity {
         setContentView(R.layout.record_workout);
 
         //Get the name value passed and set it to the textview value
-        nameValue = getIntent().getStringExtra(BeginWorkout.ITEM_NAME);
+        //nameValue = getIntent().getStringExtra(BeginWorkout.ITEM_NAME);
+        nameValue = getIntent().getStringExtra(MyRoutines_Fragment.ROUTINE_ITEM_NAME);
         nameView = (TextView) findViewById(R.id.nameTextValue);
         mExercise = (TextView) findViewById(R.id.exerciseTextViewCustom);
         //todo need to get the exercise name here and set the mExercise text with it.
-        nameView.setText(nameValue);
+        nameView.setText(nameValue.toString());
         mResistance = (EditText) findViewById(R.id.editResistanceText);
         mSets = (EditText) findViewById(R.id.editSetsTextCustom);
         mReps = (EditText) findViewById(R.id.editRepsTextCustom);
@@ -60,9 +63,19 @@ public class RecordWorkoutRoutine extends AppCompatActivity {
     //Save new workout
     public void saveSession(View view) {
         if(validate()){
+
             DatabaseAdapter db = new DatabaseAdapter(this);
-            //db.insertWorkoutSession()
-            Toast.makeText(this, "Session Saved", Toast.LENGTH_LONG).show();
+            try {
+                db.openLocalDatabase();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            //add new workout to the workoutsession in database
+            db.insertWorkoutSession(db.getUserIDForSession(), nameValue, null, null, null);
+            Toast.makeText(this, "Session Saved!", Toast.LENGTH_LONG).show();
+            //close the database
+            db.closeLocalDatabase();
+            //close activity
             finish();
         }
     }

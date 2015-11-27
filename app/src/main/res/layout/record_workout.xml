@@ -19,7 +19,6 @@
             android:id="@+id/nameTextValue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="name"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white"
             android:textSize="34dp"

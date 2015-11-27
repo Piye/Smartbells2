@@ -54,15 +54,6 @@ public class Exercise {
 
     /**************************************Constructors********************************************/
     /**
-     * Constructor, sets name of object
-     *
-     * @param name : name of the exercise to be created.
-     */
-    public Exercise(String name) {
-        this.setName(name);
-    }
-
-    /**
      * Default constructor
      */
     public Exercise() {
@@ -89,11 +80,13 @@ public class Exercise {
                 is_Public = false;
             }
             if (!exercise.isNull("user_id")) {
+                Log.d("setting user id  -  ", String.valueOf(exercise.getInt("user_id")));
                 user_Id = exercise.getInt("user_id");
+                Log.d("user_id set to ", String.valueOf(user_Id));
             }else{
                 user_Id = 0;
             }
-            //Log.d("Constructor, Exercise - ",toString());
+            Log.d("Constructor, Exercise - ", toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -134,16 +127,16 @@ public class Exercise {
      * @param id : Excercise id
      * @return : a result of rest call to get an record of exercise
      */
-    public static String restGetExercise(int id) {
+    public static JSONObject restGetExercise(int id) {
         try {
             String temp = RESTID + "/" + String.valueOf(id);
             System.out.println(temp);
             AsyncTask test = new RESTCall().execute(temp, "GET");
-            return (String) test.get();
+            return (JSONObject) test.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        return "Rest Call Failed";
+        return null;
     }
 
     /**
@@ -319,7 +312,7 @@ public class Exercise {
             if (created_At != null) json.put("created_at", created_At);
             if (updated_At != null) json.put("updated_at", updated_At);
             json.put("is_public", is_Public);
-            if (user_Id != 0) json.put("user_id", id);
+            if (user_Id != 0) json.put("user_id", user_Id);
             exercise.put("exercise", json);
             return exercise;
         } catch (JSONException e) {
@@ -328,52 +321,55 @@ public class Exercise {
         return null;
     }
 
-    /**
-     * Accesses the Database and the RESTCall class create a new object from the Server,
-     * and save it into the database. This creates a new Object on the server
-     *
-     * @param database
-     */
-    public void restPOST(DatabaseAdapter database) {
-        Log.d("Exercise.restPOST", this.createJSON().toString());
-        AsyncTask test = new RESTCall()
-                .execute(RESTID, "POST", createJSON().toString(), database.getTokenAsString());
-        //send to database here also
-        Exercise exercise = null;
-
-        try {
-            exercise = new Exercise(new JSONObject(test.get().toString()));
-            database.insertExercise(exercise, false);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.d("database load - ", exercise.toString());
-    }
-
-    /**
-     * Insert an exercise record
-     * @param database : Database Adapter
-     */
-    public void restPUT(DatabaseAdapter database) {
-        Log.d("Exercise.restPOST", this.createJSON().toString());
-        AsyncTask test = new RESTCall()
-                .execute(RESTID, "GET", createJSON().toString(), database.getTokenAsString());
-        //send to database here also
-        Exercise exercise = null;
-        try {
-            exercise = new Exercise(new JSONObject(test.get().toString()));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.d("database load - ", this.toString());
-        database.insertExercise(exercise, false);
-    }
 }
+//
+//
+//    /**
+//     * Accesses the Database and the RESTCall class create a new object from the Server,
+//     * and save it into the database. This creates a new Object on the server
+//     *
+//     * @param database
+//     */
+//public void restPOST(DatabaseAdapter database) {
+//    Log.d("Exercise.restPOST", this.createJSON().toString());
+//    AsyncTask test = new RESTCall()
+//            .execute(RESTID, "POST", createJSON().toString(), database.getTokenAsString());
+//    //send to database here also
+//    Exercise exercise = null;
+//
+//    try {
+//        exercise = new Exercise(new JSONObject(test.get().toString()));
+//        database.insertExercise(exercise, false);
+//    } catch (InterruptedException e) {
+//        e.printStackTrace();
+//    } catch (ExecutionException e) {
+//        e.printStackTrace();
+//    } catch (JSONException e) {
+//        e.printStackTrace();
+//    }
+//    Log.d("database load - ", exercise.toString());
+//}
+//
+//    /**
+//     * Insert an exercise record
+//     * @param database : Database Adapter
+//     */
+//    public void restPUT(DatabaseAdapter database) {
+//        Log.d("Exercise.restPOST", this.createJSON().toString());
+//        AsyncTask test = new RESTCall()
+//                .execute(RESTID, "GET", createJSON().toString(), database.getTokenAsString());
+//        //send to database here also
+//        Exercise exercise = null;
+//        try {
+//            exercise = new Exercise(new JSONObject(test.get().toString()));
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        Log.d("database load - ", this.toString());
+//        database.insertExercise(exercise, false);
+//    }
+// */

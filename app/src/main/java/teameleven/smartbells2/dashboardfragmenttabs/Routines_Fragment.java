@@ -1,14 +1,19 @@
 package teameleven.smartbells2.dashboardfragmenttabs;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -37,6 +42,7 @@ public class Routines_Fragment extends ListFragment {
      * List for display
      */
     public ArrayList<String> list;
+
 
     /**
      *
@@ -76,6 +82,9 @@ public class Routines_Fragment extends ListFragment {
         setListAdapter(adapter);
 
 
+        //imageView = (ImageView) getActivity().findViewById(R.id.routineListIcon);
+        //imageView.setOnClickListener(this);
+
         //close the database
         db.closeLocalDatabase();
 
@@ -91,11 +100,35 @@ public class Routines_Fragment extends ListFragment {
      */
     @Override
     public void onListItemClick(ListView lv, View view, int position, long id) {
-        //Start an intent when a list item is clicked
+        final int pos = position;
 
-        Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
-        //When we start the new intent we want to pass the name of the Routine from the list
-        intent.putExtra(ROUTINE_ITEM_NAME, list.get(position));
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
+                }
+                });
+            builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface arg0, int arg1) {
+                    //Start an intent when a list item is clicked
+                    Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
+                    //When we start the new intent we want to pass the name of the Routine from the list
+                    intent.putExtra(ROUTINE_ITEM_NAME, list.get(pos));
+                    startActivity(intent);
+                }
+
+            });
+
+            Dialog mydialog = builder.setView(new View(getActivity())).create();
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.copyFrom(mydialog.getWindow().getAttributes());
+        params.width = 600;
+        params.height = 250;
+        mydialog.show();
+        mydialog.getWindow().setAttributes(params);
 
 //        Pull Ispublic, reps, sets from DB, pass to proper view area, below is not how to implement. Just a reference for myself - Jordan
 //        intent.putExtra(ROUTINE_ISPUBLIC, list.get(position));
@@ -103,7 +136,6 @@ public class Routines_Fragment extends ListFragment {
 //        intent.putExtra(ROUTINE_SETS, list.get(position));
 
 
-        startActivity(intent);
     }
 
     //run list code on tab select
@@ -112,7 +144,6 @@ public class Routines_Fragment extends ListFragment {
         super.onStart();
         getListView();
     }
-
 
 }
 

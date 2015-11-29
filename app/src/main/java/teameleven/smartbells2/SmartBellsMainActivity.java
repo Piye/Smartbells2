@@ -58,7 +58,10 @@ public class SmartBellsMainActivity extends AppCompatActivity
      * FloatingActionButton
      */
     private FloatingActionButton fab;
+
     private SessionManager session;
+
+    private int fragmentShowing = 0;
 
     /**
      * Create the view of main activity pages
@@ -74,6 +77,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_main, fragmentDashBoard);
         transaction.commit();
+        fragmentShowing = 0;
 
         //instantiate session
         session = new SessionManager(getApplicationContext());
@@ -102,6 +106,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
                     //hide the fab
                     fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
                                                             new AccelerateInterpolator(2)).start();
+
                     fragment = new CreateWorkout();
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
@@ -182,32 +187,32 @@ public class SmartBellsMainActivity extends AppCompatActivity
         //If the drawer is open close the drawer
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (fragmentDashBoard.isVisible() ) {
+        } else if ( fragmentShowing == 0 ) {
             //if the dashboard is visible close the app
             //close app if back is pressed on login activity
             new AlertDialog.Builder(this)
-                    .setMessage("Are you sure you want to leave?")
+                    .setMessage("Are you sure you want to leave the app?")
                     .setNegativeButton(android.R.string.no, null)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface arg0, int arg1) {
                             SmartBellsMainActivity.super.onBackPressed();
+
                             Intent intent = new Intent(Intent.ACTION_MAIN);
-
                             intent.addCategory(Intent.CATEGORY_HOME);
-
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                             startActivity(intent);
                             finish();
                         }
                     }).create().show();
         } else {
             //else go to the dashboard
-            fragmentDashBoard = new Dashboard();
+            fragment = new Dashboard();
             transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.content_main, fragmentDashBoard);
+            transaction.replace(R.id.content_main, fragment);
             transaction.commit();
-
+            fragmentShowing = 0;
         }
     }
 
@@ -227,7 +232,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
         /**
          * noinspection SimplifiableIfStatement
          */
-
         if (id == R.id.action_settings) {
             return true;
         }
@@ -248,21 +252,29 @@ public class SmartBellsMainActivity extends AppCompatActivity
         //Drawer Selected Items
         //Handle the Actions
         if (id == R.id.nav_dashboard) {
-            fragmentDashBoard = new Dashboard();
-            transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.content_main, fragmentDashBoard);
-            transaction.commit();
+            fragmentShowing = 0;
+            fragment = new Dashboard();
         } else if (id == R.id.nav_beginworkout) {
+            fragmentShowing = 1;
             fragment = new BeginWorkout();
         } else if (id == R.id.nav_achievements) {
+<<<<<<< HEAD
             fragment = new Achievement_Fragment();
         } else if (id == R.id.nav_records){
             fragment = new New_Records_Fragment();
         }
         else if (id == R.id.nav_about) {
+=======
+            fragmentShowing = 2;
+            fragment = new AchievementDashboard();
+        } else if (id == R.id.nav_about) {
+            //View about page
+            fragmentShowing = 3;
+>>>>>>> origin/master
             fragment = new About();
         } else if (id == R.id.nav_profile) {
             //View and edit profile
+            fragmentShowing = 4;
             fragment = new ViewProfile();
         } else if (id == R.id.nav_logout) {
             //Confirm logout

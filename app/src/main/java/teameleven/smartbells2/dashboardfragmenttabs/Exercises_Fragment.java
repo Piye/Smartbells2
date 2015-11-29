@@ -1,11 +1,17 @@
 package teameleven.smartbells2.dashboardfragmenttabs;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -63,10 +69,55 @@ public class Exercises_Fragment extends ListFragment {
     }
 
     //run list code on tab select
+<<<<<<< HEAD
 //    @Override
 //    public void onStart()
 //    {
 //        super.onStart();
 //        getListView();
 //    }
+=======
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        getListView();
+    }
+
+    @Override
+    public void onListItemClick(ListView lv, View view, int position, long id) {
+        final int pos = position;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
+            }
+        });
+        builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+
+                Toast.makeText(getActivity(), "Edit", Toast.LENGTH_LONG).show();
+                //Start an intent to edit Exercise
+                //Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
+                //When we start the new intent we want to pass the name of the Routine from the list
+                //intent.putExtra(EXERCISE_NAME, listOfExercises.get(pos));
+                //startActivity(intent);
+            }
+
+        });
+
+        Dialog mydialog = builder.setView(new View(getActivity())).create();
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.copyFrom(mydialog.getWindow().getAttributes());
+        params.width = 600;
+        params.height = 250;
+        mydialog.show();
+        mydialog.getWindow().setAttributes(params);
+
+    }
+>>>>>>> origin/master
 }

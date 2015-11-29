@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
@@ -21,11 +22,13 @@ public class ExerciseTest extends TestCase{
     DatabaseAdapter database;
 
     public void testExercise() throws Exception {
+        int random = new Random().nextInt(exercises.size());
+        int counter = 0;
         for (Exercise x : exercises){
-            assertNotNull(x);
-            //testJSON(x);
-            testDatabase(x);
 
+            assertNotNull(x);
+            if (random == counter) testJSON(x);
+            counter++;
         }
     }
 
@@ -57,18 +60,7 @@ public class ExerciseTest extends TestCase{
                 jsonTemp.toString().equals(jsonResult.toString()));
     }
 
-    public void testDatabase(Exercise x){
-        assertNotNull(database);
-        ArrayList<Exercise> exercises = database.getExercises();
-        for (Exercise z : exercises){
-            assertTrue (z.getId() == x.getId()); if (z == x);
-            try {
-                assertTrue(z.createJSON().toString().equals(database.getExercise(x.getId())));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+
 
     @Override
     public void setUp() throws Exception {
@@ -76,10 +68,7 @@ public class ExerciseTest extends TestCase{
         exercises = Exercise.restGetAll();
 
         assertNotNull(exercises);
-        database = new DatabaseAdapterTest().getDatabase();
-        assertNotNull(database);
-
-    }
+        }
 
     @Override
     public void tearDown() throws Exception {

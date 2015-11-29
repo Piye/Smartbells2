@@ -2,6 +2,7 @@ package teameleven.smartbells2;
 
 import android.app.Application;
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.test.ApplicationTestCase;
 import android.test.ServiceTestCase;
 
@@ -10,6 +11,8 @@ import junit.framework.TestSuite;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>

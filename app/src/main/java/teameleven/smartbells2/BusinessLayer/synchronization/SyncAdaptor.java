@@ -116,6 +116,11 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                         e.printStackTrace();
                     }
                 }
+                try {
+                    database.clearUpdateTable();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 if (syncCount == 15) {
                     //recreates database every 15 synchronization cycles
                     Log.d("Syncing", " - SmartBells recreating Database");
@@ -161,15 +166,15 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         try {
             switch (table) {
                 case (0)://exercises
-                    return database.getExercise(id);
+                    return database.getExercise(id).toString();
                 case (1)://set groups
-                    return database.getSet_Group(id);
+                    return database.getSet_Group(id).toString();
                 case (2)://routines
-                    return database.getRoutine(id);
+                    return database.getExercise(id).toString();
                 case (3)://workout session
-                    return database.getWorkoutSession(id);
+                    return database.getWorkoutSession(id).toString();
                 case (4)://workout set group
-                    return database.getWorkoutSetGroup(id);
+                    return database.getWorkoutSetGroup(id).toString();
             }
         } catch (SQLException e) {
             e.printStackTrace();

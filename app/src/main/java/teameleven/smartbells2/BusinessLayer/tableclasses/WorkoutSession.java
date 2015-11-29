@@ -58,25 +58,27 @@ public class WorkoutSession {
      */
     public WorkoutSession(JSONObject workoutSession) {
         try {
-            if (workoutSession.has("workout_session")){
+            if (workoutSession.has("workout_session")) {
                 workoutSession = workoutSession.getJSONObject("workout_session");
             }
             id = workoutSession.getInt("id");
-            user_Id = (int) workoutSession.get("user_id");
-            name = (String) workoutSession.get("name");
+            user_Id = workoutSession.getInt("user_id");
+            name = workoutSession.getString("name");
             created_At = workoutSession.getString("created_at");
             updated_At = workoutSession.getString("updated_at");
 
-            JSONArray workoutSetGroups =
-                    workoutSession.getJSONArray("workout_set_groups");
-            WorkoutSetGroup sessionSetGroup;
-            for (int index = 0; index < workoutSetGroups.length(); index++){
-                sessionSetGroup= new WorkoutSetGroup(workoutSetGroups.getJSONObject(index));
-                setGroups.add(sessionSetGroup);
+            if (workoutSession.has("workout_set_groups")) {
+                JSONArray workoutSetGroups =
+                        workoutSession.getJSONArray("workout_set_groups");
+                WorkoutSetGroup sessionSetGroup;
+                for (int index = 0; index < workoutSetGroups.length(); index++) {
+                    sessionSetGroup = new WorkoutSetGroup(workoutSetGroups.getJSONObject(index));
+                    setGroups.add(sessionSetGroup);
+                }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
     }
     /**
      *
@@ -92,6 +94,11 @@ public class WorkoutSession {
         workoutSetGroup.getSet_group().setNumberOfSets(sets);
         workoutSetGroup.getSet_group().setRepsPerSet(reps);
         this.getSetGroups().add(workoutSetGroup);
+    }
+
+    public WorkoutSession(String name, int id) {
+        this.name = name;
+        this.id = id;
     }
 
     /**************************					Base Methods               ************************/
@@ -345,7 +352,8 @@ public class WorkoutSession {
     public static ArrayList<WorkoutSession> restGetAll(int userIDForSession) {
         try {;
             //Log.d("Exercise.restGetAll - ", RESTID);
-            AsyncTask result = new RESTCall().execute(RESTID, "GET");
+            AsyncTask result = new RESTCall().execute(RESTID + "?user_id=" + userIDForSession, "GET");
+            //AsyncTask result = new RESTCall().execute(RESTID, "GET");
             JSONObject json = (JSONObject) result.get();
 
             return restGetWorkoutSessions(json, userIDForSession);
@@ -363,10 +371,12 @@ public class WorkoutSession {
      */
     private static ArrayList<WorkoutSession> restGetWorkoutSessions(JSONObject json, int userIDForSession) {
         ArrayList<WorkoutSession> workoutSessions = new ArrayList<>();
+
         try{
             JSONArray jsonArray = json.getJSONArray("workout_sessions");
             for (int index = 0 ; index < jsonArray.length(); index ++){
                 JSONObject json2 = (jsonArray.getJSONObject(index));
+
                 if (json2.getInt("user_id") == userIDForSession){
                     workoutSessions.add(new WorkoutSession(json2));
                 }
@@ -377,4 +387,38 @@ public class WorkoutSession {
         }
         return null;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

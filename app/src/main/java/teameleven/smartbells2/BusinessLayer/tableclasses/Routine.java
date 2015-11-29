@@ -62,10 +62,18 @@ public class Routine {
 
 
     /***********************************Constructors **********************************************/
+
+    public Routine(){
+
+    }
     /**
-     * Default Constructor
+     *
+     * @param name
+     * @param id
      */
-    public Routine() {
+    public Routine(String name, int id) {
+        this.setName(name);
+        this.setRoutineId(id);
     }
 
 
@@ -79,16 +87,19 @@ public class Routine {
             //discarding outer JSON shell
 
             id = routine.getInt("id");
-            user_id = routine.getInt("user_id");
+            if (routine.has("user_id")) user_id = routine.getInt("user_id");
             name = routine.getString("name");
             created_At = routine.getString("created_at");
             updated_At = routine.getString("updated_at");
             is_Public = routine.getBoolean("is_public");
 
-            JSONArray setGroupArray = routine.getJSONArray("set_groups");
-            for (int x = 0; x < setGroupArray.length(); x++) {
-                SetGroup setGroup = new SetGroup(setGroupArray.getJSONObject(x));
-                setGroups.add(setGroup);
+            JSONArray setGroupArray;
+            if (routine.has("set_groups")){
+                setGroupArray = routine.getJSONArray("set_groups");
+                for (int x = 0; x < setGroupArray.length(); x++) {
+                    SetGroup setGroup = new SetGroup(setGroupArray.getJSONObject(x));
+                    setGroups.add(setGroup);
+                }
             }
             //Log.d("Routine Constructor - ", routine.toString(4));
 
@@ -106,7 +117,7 @@ public class Routine {
     public static ArrayList<Routine> restGetAll(int userIDForSession) {
         try {;
             //Log.d("Exercise.restGetAll - ", RESTID);
-            AsyncTask result = new RESTCall().execute(RESTID, "GET");
+            AsyncTask result = new RESTCall().execute(RESTID + "?user_id=" + userIDForSession, "GET");
             JSONObject json = (JSONObject) result.get();
 
             return restGetRoutines(json, userIDForSession);
@@ -126,6 +137,7 @@ public class Routine {
         ArrayList<Routine> routines = new ArrayList<>();
         try{
             JSONArray jsonArray = json.getJSONArray("routines");
+            Log.d("jsonarray length is ->", String.valueOf(jsonArray.length()));
             for (int index = 0 ; index < jsonArray.length(); index ++){
                 JSONObject json2 = (jsonArray.getJSONObject(index));
                 if (json2.getInt("user_id") == userIDForSession ||json2.getBoolean("is_public")){
@@ -229,7 +241,7 @@ public class Routine {
      * Set the Routine Id
      * @param id : Routine Id
      */
-    public void setRoutineID(int id) {
+    public void setRoutineId(int id) {
         this.id = id;
     }
 

@@ -1,11 +1,17 @@
 package teameleven.smartbells2.dashboardfragmenttabs;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,7 +34,7 @@ public class Workouts_Fragment extends ListFragment {
     {
         //Tells main activity ADD button what type of item to add (WORKOUT)
         //Refer to ONCLICK- SmartBellsMainActivity
-        //SmartBellsMainActivity.dashboardTab.setCheckTabPage(0);
+        SmartBellsMainActivity.dashboardTab.setCheckTabPage(0);
 
 
         DatabaseAdapter db = new DatabaseAdapter(getActivity());
@@ -73,4 +79,44 @@ public class Workouts_Fragment extends ListFragment {
         super.onStart();
         getListView();
     }
+
+    /**
+     * Override the view when the list item clicked
+     * @param lv ListView of Routine name
+     * @param view View
+     * @param position postion of the item
+     * @param id Id of the clicked item
+     */
+    @Override
+    public void onListItemClick(ListView lv, View view, int position, long id) {
+        final int pos = position;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
+            }
+        });
+        builder.setPositiveButton("View", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+
+                //Do something
+                Toast.makeText(getActivity(), "View", Toast.LENGTH_LONG).show();
+            }
+
+        });
+
+        Dialog mydialog = builder.setView(new View(getActivity())).create();
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.copyFrom(mydialog.getWindow().getAttributes());
+        params.width = 600;
+        params.height = 250;
+        mydialog.show();
+        mydialog.getWindow().setAttributes(params);
+
+    }
+
 }

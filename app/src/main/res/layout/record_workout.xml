@@ -71,21 +71,21 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Resistance:"
-                android:id="@+id/resistanceTextViewCustom"
+                android:text="Resistance Level:"
+                android:id="@+id/resistanceTextView"
                 android:layout_weight="1"/>
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
+                android:gravity="center"
                 android:id="@+id/editResistanceText"
                 android:layout_weight="1" />
-
         </LinearLayout>
 
         <!-- SETS -->
@@ -93,21 +93,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Sets"
                 android:id="@+id/setsTextViewCustom"
-                android:layout_margin="1dp"
-                android:layout_weight=".2"
+                android:layout_weight="1"
                 />
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
                 android:id="@+id/editSetsTextCustom"
-                android:layout_weight=".1"
+                android:gravity="center"
+                android:layout_weight="1"
                 android:numeric="integer" />
         </LinearLayout>
 
@@ -122,15 +122,15 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Reps Per Set"
                 android:id="@+id/repsTextViewCustom"
-                android:layout_margin="1dp"
-                android:layout_weight="1.1"/>
-
+                android:layout_weight=".5"
+                />
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="5"
                 android:id="@+id/editRepsTextCustom"
+                android:gravity="center"
                 android:layout_weight=".5"
                 android:numeric="integer" />
         </LinearLayout>

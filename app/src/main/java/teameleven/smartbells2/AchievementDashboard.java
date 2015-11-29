@@ -33,6 +33,12 @@ public class AchievementDashboard extends Fragment {
      */
     private FloatingActionButton fab;
 
+    private Achievement_Fragment achievement_Fragment;
+    private Records_Fragment records_Fragment;
+
+    private android.support.v4.app.FragmentManager fragManager;
+    private android.support.v4.app.FragmentTransaction fragTransaction;
+
     /**
      * Create the view and setup the tab host to view
      * @param inflater LayoutInflater
@@ -63,12 +69,12 @@ public class AchievementDashboard extends Fragment {
             @Override
             public void onTabChanged(String tabId) {
 
-                android.support.v4.app.FragmentManager fragManager = getActivity().getSupportFragmentManager();
+                fragManager = getActivity().getSupportFragmentManager();
 
-                Achievement_Fragment achievement_Fragment = (Achievement_Fragment) fragManager.findFragmentByTag("achievements");
-                Records_Fragment records_Fragment = (Records_Fragment) fragManager.findFragmentByTag("records");
+                achievement_Fragment = (Achievement_Fragment) fragManager.findFragmentByTag("achievements");
+                records_Fragment = (Records_Fragment) fragManager.findFragmentByTag("records");
 
-                android.support.v4.app.FragmentTransaction fragTransaction = fragManager.beginTransaction();
+                fragTransaction = fragManager.beginTransaction();
 
                 //Detach Achievement_Fragment if it exists
                 if (achievement_Fragment != null) {
@@ -154,4 +160,6 @@ public class AchievementDashboard extends Fragment {
         //Use for debugging - Want to make sure variable is changing with tab clicks.
         System.err.print(checkTabPage);
     }
+
+
 }

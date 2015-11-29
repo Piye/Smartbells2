@@ -26,11 +26,12 @@ public class Workouts_Fragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        //Tells main activity ADD button what type of item to add (WORKOUT)
+
+        //Tells main FAB button what type of item to add (WORKOUT)
         //Refer to ONCLICK- SmartBellsMainActivity
-        //SmartBellsMainActivity.dashboardTab.setCheckTabPage(0);
+        SmartBellsMainActivity.dashboardTab.setCheckTabPage(0);
 
-
+/*
         DatabaseAdapter db = new DatabaseAdapter(getActivity());
         try {
             db.openLocalDatabase();
@@ -45,9 +46,9 @@ public class Workouts_Fragment extends ListFragment {
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, listOfWorkouts);
         //setListAdapter(adapter);
 
-        /**
+        *//**
          * Select Workouts of userId
-         */
+         *//*
         ArrayList<String> listOfWorkouts = db.getMyWorkoutsAsStrings(db.getUserIDForSession());
 
         if (listOfWorkouts != null ){
@@ -58,9 +59,10 @@ public class Workouts_Fragment extends ListFragment {
             setListAdapter(adapter);
         }else{
             System.out.println("listOfWorkouts null ");
+
         }
         //close the database
-        db.closeLocalDatabase();
+        db.closeLocalDatabase();*/
 
 
         return super.onCreateView(inflater, container, savedInstanceState);

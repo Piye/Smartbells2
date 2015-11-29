@@ -51,6 +51,7 @@ public class Exercises_Fragment extends ListFragment {
          * Change adapter type to handle objects instead of strings later
          * Set the adapter to show in application
          */
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 getActivity().getBaseContext(), android.R.layout.simple_list_item_1, listOfExercises);
         setListAdapter(adapter);
@@ -62,10 +63,10 @@ public class Exercises_Fragment extends ListFragment {
     }
 
     //run list code on tab select
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        getListView();
-    }
+//    @Override
+//    public void onStart()
+//    {
+//        super.onStart();
+//        getListView();
+//    }
 }

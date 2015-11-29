@@ -24,6 +24,9 @@ import teameleven.smartbells2.create.CreateCustomSession;
 import teameleven.smartbells2.create.CreateExercise;
 import teameleven.smartbells2.create.CreateRoutine;
 import teameleven.smartbells2.create.CreateWorkout;
+import teameleven.smartbells2.dashboardfragmenttabs.Achievement_Fragment;
+import teameleven.smartbells2.dashboardfragmenttabs.New_Records_Fragment;
+import teameleven.smartbells2.dashboardfragmenttabs.Records_Fragment;
 
 /**
  * This class is the Main Actibities of the SmartBells
@@ -159,11 +162,11 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //show the fab
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        //show the fab
+//    }
 
     @Override
     public void onResume() {
@@ -252,8 +255,11 @@ public class SmartBellsMainActivity extends AppCompatActivity
         } else if (id == R.id.nav_beginworkout) {
             fragment = new BeginWorkout();
         } else if (id == R.id.nav_achievements) {
-            fragment = new AchievementDashboard();
-        } else if (id == R.id.nav_about) {
+            fragment = new Achievement_Fragment();
+        } else if (id == R.id.nav_records){
+            fragment = new New_Records_Fragment();
+        }
+        else if (id == R.id.nav_about) {
             fragment = new About();
         } else if (id == R.id.nav_profile) {
             //View and edit profile

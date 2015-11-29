@@ -303,6 +303,7 @@ public class DatabaseAdapter{
         return cursor.getString(token);
     }
     public int getUserIDForSession(){
+
         String[] columns = new String[]{SESSION_USER_ID};
         Cursor cursor = database.query(SESSION_TABLE, columns, null, null, null, null, null);
         int token = cursor.getColumnIndex(SESSION_USER_ID);

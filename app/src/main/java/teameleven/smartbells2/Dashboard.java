@@ -40,7 +40,7 @@ public class Dashboard extends Fragment {
      * @param savedInstanceState Bundle
      * @return view for dashborad of smartbells main
      */
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         /**
          * View for the first main page of dashboard
          */
@@ -97,7 +97,10 @@ public class Dashboard extends Fragment {
                 if (tabId.equalsIgnoreCase("workouts")) {
                     setCheckTabPage(0);
                     if (workout_Fragment == null) {
-                        fragTransaction.add(R.id.realtabcontent, new Workouts_Fragment(), "workouts");
+                        if(savedInstanceState != null) {
+                            fragTransaction.add(R.id.realtabcontent, new Workouts_Fragment(), "workouts");
+                            return;
+                        }
                     } else {
                         fragTransaction.attach(workout_Fragment);
                     }
@@ -107,7 +110,10 @@ public class Dashboard extends Fragment {
                 if (tabId.equalsIgnoreCase("routines")) {
                     setCheckTabPage(1);
                     if (routine_Fragment == null) {
-                        fragTransaction.add(R.id.realtabcontent, new Routines_Fragment(), "routines");
+                        if(savedInstanceState != null) {
+                            fragTransaction.add(R.id.realtabcontent, new Routines_Fragment(), "routines");
+                            return;
+                        }
                     } else {
                         fragTransaction.attach(routine_Fragment);
                     }
@@ -117,7 +123,10 @@ public class Dashboard extends Fragment {
                 if (tabId.equalsIgnoreCase("exercises")) {
                     setCheckTabPage(2);
                     if (exercises_Fragment == null) {
-                        fragTransaction.add(R.id.realtabcontent, new Exercises_Fragment(), "exercises");
+                        if(savedInstanceState != null) {
+                            fragTransaction.add(R.id.realtabcontent, new Exercises_Fragment(), "exercises");
+                            return;
+                        }
                     } else {
                         fragTransaction.attach(exercises_Fragment);
                     }

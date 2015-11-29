@@ -15,6 +15,10 @@
             android:icon="@drawable/ic_chicken"
             android:title="Achievements" />
         <item
+            android:id="@+id/nav_records"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="Records" />
+        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_bunny"
             android:title="About" />

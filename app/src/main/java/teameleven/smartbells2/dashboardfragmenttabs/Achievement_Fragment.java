@@ -5,10 +5,8 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import teameleven.smartbells2.AchievementDashboard;
-import teameleven.smartbells2.SmartBellsMainActivity;
 
 /**
  * Created by Jordan Medwid on 10/18/2015.
@@ -36,6 +34,7 @@ public class Achievement_Fragment extends ListFragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
+            /*
             //Tells main activity ADD button what type of item to add (ACHIEVEMENTS)
             SmartBellsMainActivity.dashboardTab.setCheckTabPage(2);
 
@@ -45,14 +44,16 @@ public class Achievement_Fragment extends ListFragment {
                                         getActivity().getBaseContext(),
                                         android.R.layout.simple_list_item_1, listOfAchievements);
             setListAdapter(adapter);
+            */
             return super.onCreateView(inflater, container, savedInstanceState);
         }
 
         //run list code on tab select
-        @Override
+        // @Override
         public void onStart()
         {
                 super.onStart();
                 getListView();
         }
+
 }

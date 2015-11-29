@@ -80,13 +80,11 @@ public class Exercise {
                 is_Public = false;
             }
             if (!exercise.isNull("user_id")) {
-                Log.d("setting user id  -  ", String.valueOf(exercise.getInt("user_id")));
                 user_Id = exercise.getInt("user_id");
-                Log.d("user_id set to ", String.valueOf(user_Id));
             }else{
                 user_Id = 0;
             }
-            Log.d("Constructor, Exercise - ", toString());
+            //Log.d("Constructor, Exercise - ", toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

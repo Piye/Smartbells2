@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -88,8 +89,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
             }
             //convert json response to string
             result = new JSONObject(json);
-
-            Log.d(TAG + " POST Result", result.toString(4));//todo remove
+            //Log.d(TAG + " POST Result", result.toString(4));//todo remove
             //close reader
             br.close();
 
@@ -116,8 +116,12 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
      * @param modifier - URL to the specific object or objects in question
      * @return - the string, or all of the strings if multiple strings are found.
      */
-    private JSONObject getObject(String modifier) {
-        HttpURLConnection connection = openConnection(modifier);
+    private JSONObject getObject(String modifier, String page) {
+        if (page == null){
+            page = "";
+        }
+
+        HttpURLConnection connection = openConnection(modifier + page);
 
         if (connection == null) {
             return null;
@@ -140,7 +144,21 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
                 json += output;
             }
             result = new JSONObject(json);
-            Log.d("RESTCALL Response!!!", result.toString(4));
+
+/*
+        if (result.has("meta")) {
+            if (!result.getJSONObject("meta").isNull("next_page")) {
+                int temp = result.getJSONObject("meta").getInt("current_page") + 1;
+                if (temp < 3) {
+                    page = "?page=" + temp;
+                    JSONArray array = result.getJSONArray("workout_sessions").put(this.getObject(modifier, page).getJSONArray("workout_sessions"));
+                    result.remove("workout_sessions");
+                    result.put("workout_sessions", array);
+                }
+            }
+        }
+*/
+            //Log.d("RESTCALL Response!!!", result.toString(4));
         } catch (ProtocolException e) {
             Log.d(TAG, "Protocol Exception, GET method");
             e.printStackTrace();
@@ -289,7 +307,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
         JSONObject result;
         if (params[1] == "GET") {
             Log.d(TAG, "CALLING GET METHOD NOW...........");
-            result = getObject(params[0]);
+            result = getObject(params[0], null);
         } else if (params[1] == "POST") {
             Log.d(TAG, "CALLING POST METHOD NOW...........");
             result = postObject(params[0], params[2], params[3]);

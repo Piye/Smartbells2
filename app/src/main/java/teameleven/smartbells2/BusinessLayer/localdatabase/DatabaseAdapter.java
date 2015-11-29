@@ -84,7 +84,7 @@ public class DatabaseAdapter{
                     SESSION_USER_ID     + " integer);";
     private static final String CREATE_ROUTINE_TABLE =
             "CREATE TABLE if not exists " + ROUTINE_TABLE + " (" +
-                    PK_ROUTINE_ID       + " integer PRIMARY KEY autoincrement," +
+                    PK_ROUTINE_ID       + " integer PRIMARY KEY," +
                     ROUTINE_USER_ID     + "," +
                     ROUTINE_NAME        + "," +
                     ROUTINE_IS_PUBLIC   + "," +
@@ -133,7 +133,7 @@ public class DatabaseAdapter{
             "Create table if not exists " + UPDATE_TABLE + " (" +
                     UPDATE_ID               + " integer," +
                     UPDATE_TABLE_IDENTIFIER + " integer," +
-                    UPDATE_TYPE + " integer );";
+                    UPDATE_TYPE             + " integer );";
     private final Context context;
     private DatabaseHelper databaseHelper;
     private SQLiteDatabase database;
@@ -146,11 +146,17 @@ public class DatabaseAdapter{
         databaseHelper = new DatabaseHelper(context);
         database = databaseHelper.getWritableDatabase();
 
+
         //insertTESTRoutines();
 
         return this;
     }
 
+    public DatabaseAdapter createLocalDatabase() throws  SQLException{
+        databaseHelper = new DatabaseHelper(context);
+        database = databaseHelper.getReadableDatabase();
+        return this;
+    }
     //Close database
     public void closeLocalDatabase() {
         if (databaseHelper != null ) {
@@ -235,7 +241,9 @@ public class DatabaseAdapter{
                              */
                             return database.delete(UPDATE_TABLE, UPDATE_ID + " = ?", new String[]{String.valueOf(id_num)});
                         }
-                    }else throw new SQLException("Create Statement on non-unique key");
+                    }else {
+                        throw new SQLException("Create Statement on non-unique key");
+                    }
                 }
             }
         }
@@ -243,10 +251,14 @@ public class DatabaseAdapter{
         initialValues.put(UPDATE_ID, id_num);
         initialValues.put(UPDATE_TABLE_IDENTIFIER, tableNum);
         initialValues.put(UPDATE_TYPE, transactionType);
-
+        Log.d("insert table record insert - ", id_num  +" " + tableNum + " " + transactionType);
         return database.insert(UPDATE_TABLE, null, initialValues);
     }
 
+    public void clearUpdateTable() throws SQLException {
+        database.delete(UPDATE_TABLE, null, null);
+        if (this.readUpdateRecord().size() != 0) throw new SQLException("update table not cleared");
+    }
     /**
      * reads the update table, and returns an integer representation of the results.
      * This seemed the most lightweight way to accomplish this.
@@ -263,7 +275,7 @@ public class DatabaseAdapter{
         }
         ArrayList<int[]> result = new ArrayList<>();
         for (int index = 0; index < myCursor.getCount(); index++) {
-            result.add(new int[3]);
+            result.add(new int[myCursor.getColumnCount()]);
             for (int i = 0; i < myCursor.getColumnCount(); i++) {
                 result.get(index)[i] = myCursor.getInt(i);
             }
@@ -337,17 +349,18 @@ public class DatabaseAdapter{
         database.endTransaction();
     }
 
-    public void insertRoutine(Routine routine, boolean sync) {
+    public long insertRoutine(Routine routine, boolean sync) {
 
-        Log.d("DatabaseAdaptor.insertRoutine", routine.toString());
-        String setgroupid = "";
         for (SetGroup setGroup: routine.getSetGroups()){
             insertSetGroup(setGroup, sync);
         }
-        Log.d("DatabaseAdaptor.insertRoutine", setgroupid);
-        Log.d("DatabaseAdaptor.insertRoutine", String.valueOf
-                (insertRoutine(routine.getName(),
-                        routine.getIsPublic(), routine.getCreated_At(), routine.getUpdated_At())));
+
+        return insertRoutine(routine.getRoutineId(),
+                routine.getName(),
+                routine.getIsPublic(),
+                routine.getCreated_At(),
+                routine.getUpdated_At(),
+                sync);
     }
 
     /**
@@ -367,14 +380,16 @@ public class DatabaseAdapter{
     }
 
     //Insert Routine
-    public long insertRoutine(String routineName,
+    public long insertRoutine(long routineId,
+                              String routineName,
                               Boolean routineIsPublic,
                               String createDate,
-                              String updateDate ) {
+                              String updateDate,
+                              boolean sync) {
 
         //This class is used to store a set of values that the ContentResolver can process.
         ContentValues initialValues = new ContentValues();
-
+        if (routineId > -1) initialValues.put(PK_ROUTINE_ID, routineId);
         initialValues.put(ROUTINE_NAME, routineName);
         initialValues.put(ROUTINE_IS_PUBLIC, routineIsPublic);
         initialValues.put(ROUTINE_CREATED_AT, createDate);
@@ -382,22 +397,24 @@ public class DatabaseAdapter{
 
         //insert
         long result = database.insert(ROUTINE_TABLE, null, initialValues);
-        try {
-            insertUpdateRecord(result, ROUTINE_TABLE, 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                insertUpdateRecord(result, ROUTINE_TABLE, 0);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
         }
 
     //Delete Routine
-    public long deleteRoutine(String routineId, boolean sync) {
+    public long deleteRoutine(long routineId, boolean sync) {
 
         //Delete row from routine table
         long v = database.delete(ROUTINE_TABLE, PK_ROUTINE_ID + "=" + routineId, null);
         if (sync) {
             try {
-                insertUpdateRecord(Long.valueOf(routineId), ROUTINE_TABLE, 2);
+                insertUpdateRecord(routineId, ROUTINE_TABLE, 2);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -447,16 +464,22 @@ public class DatabaseAdapter{
      *Select All Public Routines
      */
     //Select All Routines
-    public Cursor selectAllRoutines() {
-        Cursor myCursor = database.query(ROUTINE_TABLE, new String[]{PK_ROUTINE_ID,
-                        ROUTINE_NAME, ROUTINE_IS_PUBLIC,
-                        ROUTINE_CREATED_AT, ROUTINE_UPDATED_AT},
+    public ArrayList<Routine> selectAllRoutines() {
+        Cursor myCursor = database.query(ROUTINE_TABLE, new String[]{ROUTINE_NAME, PK_ROUTINE_ID},
                 null, null, null, null, null, null);
 
         if (myCursor != null) {
             myCursor.moveToFirst();
         }
-        return myCursor;
+        ArrayList<Routine> routines = new ArrayList<>();
+        Routine routine;
+
+        for(myCursor.moveToFirst(); !myCursor.isAfterLast();myCursor.moveToNext()){
+            routine= new Routine(myCursor.getString(0), myCursor.getInt(1));
+            routines.add(routine);
+        }
+
+        return routines;
     }
 
     //Reference: http://stackoverflow.com/questions/9466380/
@@ -499,25 +522,25 @@ public class DatabaseAdapter{
 
     public void loadAllWorkoutSessions(ArrayList<WorkoutSession> workoutSessions) {
         database.beginTransaction();
-        for (WorkoutSession i : workoutSessions){
+        for (WorkoutSession session : workoutSessions){
             ContentValues initialValues = new ContentValues();
-            initialValues.put(PK_WORKOUTSESSION_ID, i.getId());
-            initialValues.put(FK_USER_ID, i.getUser_Id());
-            initialValues.put(SESSION_NAME, i.getName());
-            initialValues.put(SESSION_CREATED_AT, i.getCreated_At());
-            initialValues.put(SESSION_UPDATED_AT, i.getUpdated_At());
+            initialValues.put(PK_WORKOUTSESSION_ID, session.getId());
+            initialValues.put(FK_USER_ID, session.getUser_Id());
+            initialValues.put(SESSION_NAME, session.getName());
+            initialValues.put(SESSION_CREATED_AT, session.getCreated_At());
+            initialValues.put(SESSION_UPDATED_AT, session.getUpdated_At());
 
             //database insert
             database.insertWithOnConflict
                     (WORKOUTSESSION_TABLE, null, initialValues,
                             SQLiteDatabase.CONFLICT_IGNORE);
-            for (WorkoutSetGroup y : i.getSetGroups()){
+            for (WorkoutSetGroup wSetGroup : session.getSetGroups()){
                 ContentValues initialValuesSetGroup = new ContentValues();
-                SetGroup x = y.getSet_group();
+                SetGroup setGroup = wSetGroup.getSet_group();
 
-                initialValuesSetGroup.put(PK_WORKOUTSETGROUP_ID, y.getWorkoutSessionId());
-                initialValuesSetGroup.put(FK_WORKOUTSESSION_ID, i.getId());
-                initialValuesSetGroup.put(FK_WSG_EXERCISE_ID, x.getExerciseId());
+                initialValuesSetGroup.put(PK_WORKOUTSETGROUP_ID, wSetGroup.getWorkoutSessionId());
+                initialValuesSetGroup.put(FK_WORKOUTSESSION_ID, session.getId());
+                initialValuesSetGroup.put(FK_WSG_EXERCISE_ID, setGroup.getExerciseId());
 
                 //database insert
                 database.insertWithOnConflict
@@ -583,21 +606,30 @@ public class DatabaseAdapter{
     }
     /**********************************************************************************************/
 
-    public void insertWorkoutSession(WorkoutSession session, boolean sync) {
+    public long insertWorkoutSession(WorkoutSession session, boolean sync) {
         for (WorkoutSetGroup setgroup: session.getSetGroups())
-            insertSetGroup(setgroup.getSet_group(), sync);//todo check whether this works
-        insertWorkoutSession(session.getUser_Id(), session.getName(), null, null, null);
+            insertSetGroup(setgroup.getSet_group(), sync);
+        return insertWorkoutSession(
+                session.getId(),
+                session.getUser_Id(),
+                session.getName(),
+                session.getCreated_At(),
+                session.getCreated_At(),
+                sync);
+
     }
 
     //Insert Workout Session
-    public long insertWorkoutSession(int userId,
+    public long insertWorkoutSession(int sessionId,
+                                     int userId,
                                      String sessionName,
-                                     String setGroupId,
                                      String createdAt,
-                                     String updatedAt) {
+                                     String updatedAt,
+                                     boolean sync) {
 
         ContentValues initialValues = new ContentValues();
 
+        if (sessionId > -1) initialValues.put(PK_WORKOUTSESSION_ID, sessionId);
         initialValues.put(FK_USER_ID, userId);
         initialValues.put(SESSION_NAME, sessionName);
         initialValues.put(SESSION_CREATED_AT, createdAt);
@@ -606,16 +638,18 @@ public class DatabaseAdapter{
         //insert
         long result;
         result = database.insert(WORKOUTSESSION_TABLE, null, initialValues);
-        try {
-            result = insertUpdateRecord(result, WORKOUTSESSION_TABLE, 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (sync) {
+            try {
+                result = insertUpdateRecord(result, WORKOUTSESSION_TABLE, 0);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
 
     //Delete Workout Session
-    public long deleteWorkoutSession(String workoutsessionid, boolean sync) {
+    public long deleteWorkoutSession(long workoutsessionid, boolean sync) {
 
         //Delete row
         long v = database.delete(WORKOUTSESSION_TABLE, PK_WORKOUTSESSION_ID
@@ -631,18 +665,47 @@ public class DatabaseAdapter{
     }
 
     //Select All workout Sessions
-    public Cursor selectAllWorkoutSessions() {
-        Cursor myCursor = database.query(WORKOUTSESSION_TABLE, new String[]{PK_WORKOUTSESSION_ID,
-                        FK_USER_ID, SESSION_NAME, SESSION_CREATED_AT,
-                        SESSION_UPDATED_AT},
+    public ArrayList<WorkoutSession> selectAllWorkoutSessions() {
+        Cursor myCursor = database.query(WORKOUTSESSION_TABLE, new String[]{SESSION_NAME, PK_WORKOUTSESSION_ID},
                 null, null, null, null, null, null);
 
-        if (myCursor != null) {
+        if (myCursor != null){
             myCursor.moveToFirst();
         }
-        return myCursor;
+        ArrayList<WorkoutSession> sessions = new ArrayList<>();
+        WorkoutSession session;
+
+        for(myCursor.moveToFirst(); !myCursor.isAfterLast();myCursor.moveToNext()){
+            session= new WorkoutSession(myCursor.getString(0), myCursor.getInt(1));
+            sessions.add(session);
+        }
+
+        return sessions;
+    }
+/*
+
+//Select All Routines
+public ArrayList<Routine> selectAllRoutines() {
+    Cursor myCursor = database.query(ROUTINE_TABLE, new String[]{ROUTINE_NAME, PK_ROUTINE_ID},
+            null, null, null, null, null, null);
+
+    if (myCursor != null) {
+        myCursor.moveToFirst();
+    }
+    ArrayList<Routine> routines = new ArrayList<>();
+    Routine routine;
+
+    for(myCursor.moveToFirst(); !myCursor.isAfterLast();myCursor.moveToNext()){
+        routine= new Routine(myCursor.getString(0), myCursor.getInt(1));
+        routines.add(routine);
     }
 
+    return routines;
+}
+
+
+
+ */
     /**********************************WORKOUT SETGROUP TABLE **************************************/
     /**
      *
@@ -734,8 +797,8 @@ public class DatabaseAdapter{
     }
     /**********************************SETGROUP TABLE**********************************************/
 
-    public void insertSetGroup(SetGroup set_group, boolean sync) {
-        insertSetGroup(
+    public long insertSetGroup(SetGroup set_group, boolean sync) {
+        return insertSetGroup(
                 set_group.getExercise().getId(),
                 set_group.getNumberOfSets(),
                 set_group.getRepsPerSet(),
@@ -858,12 +921,11 @@ public class DatabaseAdapter{
     }
 
     /**
-     *
-     * @param exercise
+     *  @param exercise
      * @param sync
      */
-    public void insertExercise(Exercise exercise, boolean sync){
-        insertExercise(
+    public long insertExercise(Exercise exercise, boolean sync){
+        return insertExercise(
                 exercise.getId(),
                 exercise.getName(),
                 String.valueOf(exercise.getIncrease_Per_Session()),
@@ -895,8 +957,9 @@ public class DatabaseAdapter{
         //Log.d("DatabaseAdaptor.insertExercise(name) - ", exerciseName);
         //Log.d("DatabaseAdaptor.insertExercise(increase) - ", increasePerSession);
         ContentValues initialValues = new ContentValues();
-        initialValues.put(PK_EXERCISE_ID, exerciseID);
+
         initialValues.put(EXERCISE_NAME, exerciseName);
+        if (exerciseID >= 0) initialValues.put(PK_EXERCISE_ID, exerciseID);
         initialValues.put(INCREASE_PER_SESSION, increasePerSession);
         initialValues.put(EXERCISE_CREATED_AT, createdAt);
         initialValues.put(EXERCISE_UPDATED_AT, updatedAt);
@@ -933,14 +996,14 @@ public class DatabaseAdapter{
         return initialValues;
     }
     //Delete Exercises
-    public long deleteExercise(String exerciseid, boolean sync) {
+    public long deleteExercise(long exerciseId, boolean sync) {
 
         //Delete row
         long v = database.delete(EXERCISE_TABLE, PK_EXERCISE_ID
-                + " = " + exerciseid, null);
+                + " = " + exerciseId, null);
         if (sync) {
             try {
-                insertUpdateRecord(Long.valueOf(exerciseid), EXERCISE_TABLE, 2);
+                insertUpdateRecord(Long.valueOf(exerciseId), EXERCISE_TABLE, 2);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -969,7 +1032,7 @@ public class DatabaseAdapter{
             exercise= new Exercise(cursor.getString(0), cursor.getInt(1));
             exercises.add(exercise);
         }
-        Log.d("DatabaseAdaptor.getExercises - ", exercises.toString());
+        //Log.d("DatabaseAdaptor.getExercises - ", exercises.toString());
         return exercises;
     }
 
@@ -1018,15 +1081,15 @@ public class DatabaseAdapter{
         helper.onCreate(database);
     }
 
-    private String getObject(String table, String primary_key, int id) throws SQLException {
+    private JSONObject getObject(String table, String primary_key, long id) throws SQLException {
         Cursor query = database.query(table, null, primary_key + " =? ", new String[]{String.valueOf(id)}, null, null, null);
-        Log.d("number of records returned =================", String.valueOf(query.getCount()));
-        if (query.getCount() != 1) throw new SQLException("Improper Key");
+        //Log.d("number of records returned =================", String.valueOf(query.getCount()));
+        if (query.getCount() != 1) throw new SQLException("Improper Key, " + query.getCount() + " records returned");
         query.moveToFirst();
         JSONObject json = new JSONObject();
         for (int x = 0; x < query.getColumnCount(); x++){
             try {
-                Log.d(query.getColumnName(x), query.getString(x));
+                //Log.d("result from getObject ", query.getColumnName(x) + "  "+ query.getString(x));
                 if (query.getColumnName(x).equals(EXERCISE_IS_PUBLIC)) {
                     if (query.getInt(x) == 0){
                         json.put(query.getColumnName(x), false);
@@ -1040,36 +1103,37 @@ public class DatabaseAdapter{
                 e.printStackTrace();
             }
         }
-        Log.d("returning following Json Object", json.toString());
-        return json.toString();
+        //Log.d("returning following Json Object", json.toString(4));
+        return json;
     }
 
-    public String getExercise(int id) throws SQLException {
+    public JSONObject getExercise(long id) throws SQLException {
         //should return a json representation of the object in question
         return getObject(EXERCISE_TABLE, PK_EXERCISE_ID, id);
     }
 
-    public String getSet_Group(int id) throws SQLException {
+    public JSONObject getSet_Group(int id) throws SQLException {
         return getObject(SETGROUP_TABLE, PK_SETGROUP_ID, id);
     }
 
-    public String getRoutine(int id) throws SQLException {
+    public JSONObject getRoutine(long id) throws SQLException {
         return getObject(ROUTINE_TABLE, PK_ROUTINE_ID, id);
     }
 
-    public String getWorkoutSession(int id) throws SQLException {
+    public JSONObject getWorkoutSession(long id) throws SQLException {
         return getObject(WORKOUTSESSION_TABLE, PK_WORKOUTSESSION_ID, id);
     }
 
-    public String getWorkoutSetGroup(int id) throws SQLException {
+    public JSONObject getWorkoutSetGroup(int id) throws SQLException {
         return getObject(WORKOUTSETGROUP_TABLE, PK_WORKOUTSETGROUP_ID, id);
     }
 
-    public void insertWorkoutSetGroup(WorkoutSetGroup workoutSetGroup, boolean sync) {
+    public long insertWorkoutSetGroup(WorkoutSetGroup workoutSetGroup, boolean sync) {
         insertWorkoutSetGroup(
                 workoutSetGroup.getSet_group().getId(),
                 workoutSetGroup.getSet_group().getExerciseId(),
                 workoutSetGroup.getWorkoutSessionId(), sync);
+        return 0;
     }
 
     public boolean getDatabaseLoaded(){
@@ -1091,17 +1155,75 @@ public class DatabaseAdapter{
     public void deleteObject(int id_num, int tableID) {
             switch (tableID){
                 case(0)://exercises
-                    deleteExercise(String.valueOf(id_num), false);
+                    deleteExercise(id_num, false);
                 case(1)://set groups
                     deleteSetGroup(String.valueOf(id_num), false);
                 case(2)://routines
-                    deleteRoutine(String.valueOf(id_num), false);
+                    deleteRoutine(id_num, false);
                 case(3)://workout session
-                    deleteWorkoutSession(String.valueOf(id_num), false);
+                    deleteWorkoutSession(id_num, false);
                 case(4)://workout set group
                     deleteWorkoutSetGroup(String.valueOf(id_num), false);
             }
         }
+
+    /**
+     * Accepts old primary key, and changes any required fields, then returns new primary key if
+     * successful
+     * @param id primary key of old record
+     * @return primary key of new record, if changed (otherwise will match id parameter
+     */
+    public long updateExercise(long id, Exercise exercise, boolean sync) throws SQLException, JSONException {
+        long result;
+        this.deleteExercise(id, false);
+        result = this.insertExercise(exercise, false);
+
+        if (sync){
+            insertUpdateRecord(result, EXERCISE_TABLE, 1);
+        }
+        return result;
+    }
+
+    /**
+     *
+     * @param id
+     * @param routine
+     * @param sync
+     * @return
+     */
+    public long updateRoutine(long id, Routine routine, boolean sync) throws SQLException {
+        long result;
+        this.deleteRoutine(id, false);
+        result = this.insertRoutine(routine, false);
+
+        if (sync){
+            insertUpdateRecord(result, ROUTINE_TABLE, 1);
+        }
+        return result;
+
+    }
+
+    /**
+     *
+     * @param id
+     * @param session
+     * @param sync
+     * @return
+     */
+    public long updateWorkoutSession(long id, WorkoutSession session, boolean sync) throws SQLException {
+        long result;
+        Log.d("id is", String.valueOf(id));
+
+        //database.update(WORKOUTSESSION_TABLE, values, PK_WORKOUTSESSION_ID, new String[]{String.valueOf(id)});
+        this.deleteWorkoutSession(id, false);
+        Log.d("workoutsession insert in adapter ", session.toString());
+        result = this.insertWorkoutSession(session, false);
+
+        if (sync) {
+            insertUpdateRecord(result, WORKOUTSESSION_TABLE, 1);
+        }
+        return result;
+    }
 
     //********************************************************************************************//
     private static class DatabaseHelper extends SQLiteOpenHelper {

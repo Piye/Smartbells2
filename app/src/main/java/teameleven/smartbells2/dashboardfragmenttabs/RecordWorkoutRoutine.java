@@ -2,7 +2,6 @@ package teameleven.smartbells2.dashboardfragmenttabs;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,7 +10,6 @@ import android.widget.Toast;
 import java.sql.SQLException;
 
 import teameleven.smartbells2.R;
-import teameleven.smartbells2.BeginWorkout;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
@@ -71,7 +69,9 @@ public class RecordWorkoutRoutine extends AppCompatActivity {
                 e.printStackTrace();
             }
             //add new workout to the workoutsession in database
-            db.insertWorkoutSession(db.getUserIDForSession(), nameValue, null, null, null);
+            //the -1 is to signify a placeholder workout id number. it is replaced by an incrementer
+            //in the database
+            db.insertWorkoutSession(-1 ,db.getUserIDForSession(), nameValue, null, null, true);
             Toast.makeText(this, "Session Saved!", Toast.LENGTH_LONG).show();
             //close the database
             db.closeLocalDatabase();

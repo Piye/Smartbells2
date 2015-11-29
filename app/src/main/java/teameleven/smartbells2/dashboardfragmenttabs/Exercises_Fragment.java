@@ -51,7 +51,7 @@ public class Exercises_Fragment extends ListFragment {
         /**
          * List of Exercise from Database
          */
-        ArrayList<String> listOfExercises = (ArrayList<String>) db.getExercisesAsStrings();
+        ArrayList<String> listOfExercises = db.getExercisesAsStrings();
 
         /**
          * Change adapter type to handle objects instead of strings later
@@ -69,14 +69,12 @@ public class Exercises_Fragment extends ListFragment {
     }
 
     //run list code on tab select
-<<<<<<< HEAD
 //    @Override
 //    public void onStart()
 //    {
 //        super.onStart();
 //        getListView();
 //    }
-=======
     @Override
     public void onStart()
     {
@@ -119,5 +117,4 @@ public class Exercises_Fragment extends ListFragment {
         mydialog.getWindow().setAttributes(params);
 
     }
->>>>>>> origin/master
 }

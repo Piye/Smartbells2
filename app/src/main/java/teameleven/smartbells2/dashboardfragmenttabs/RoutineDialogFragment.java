@@ -20,6 +20,7 @@ import java.util.ArrayList;
 //import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
 //import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.R;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
  * Created by Jordan on 11/20/2015.
@@ -30,6 +31,7 @@ public class RoutineDialogFragment extends DialogFragment implements View.OnClic
     private String exerciseName;
     private Button addButton, cancelButton;
     private EditText reps, sets;
+    private DatabaseAdapter database;
 
     Fragment fragment;
     FragmentTransaction transaction;
@@ -53,18 +55,18 @@ public class RoutineDialogFragment extends DialogFragment implements View.OnClic
             addListenerOnSpinnerExerciseSelection();
 
             //Open Database
-//            database = new teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter(getActivity());
-//            try {
-//                database.openLocalDatabase();
-//            } catch (java.sql.SQLException e) {
-//                e.printStackTrace();
-//            }
-//
-//            //Get list of Exercises from the database
-//            ArrayList<String> exerciseList = database.getExercisesAsStrings();
+            database = new DatabaseAdapter(getContext());
+            try {
+                database.openLocalDatabase();
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
 
-            //TODO: I CAN'T ACCESS THE DATABASE CLASS TO IMPORT THE EXERCISE LIST- Please fix
-            ArrayList<String> exerciseList = new ArrayList<String>();
+            //Get list of Exercises from the database
+            ArrayList<String> exerciseList = database.getExercisesAsStrings();
+//
+//            //TODO: I CAN'T ACCESS THE DATABASE CLASS TO IMPORT THE EXERCISE LIST- Please fix
+//            ArrayList<String> exerciseList = new ArrayList<String>();
             for(int i = 0; i < 10; i++) {
                 exerciseList.add("thing " + i);
             }

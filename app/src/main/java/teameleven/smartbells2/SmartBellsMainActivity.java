@@ -258,19 +258,25 @@ public class SmartBellsMainActivity extends AppCompatActivity
             fragmentShowing = 1;
             fragment = new BeginWorkout();
         } else if (id == R.id.nav_achievements) {
-<<<<<<< HEAD
+
+
+//start of github overwrite
             fragment = new Achievement_Fragment();
         } else if (id == R.id.nav_records){
             fragment = new New_Records_Fragment();
         }
         else if (id == R.id.nav_about) {
-=======
+/* github overwrite - leaving in case of error
             fragmentShowing = 2;
             fragment = new AchievementDashboard();
         } else if (id == R.id.nav_about) {
             //View about page
             fragmentShowing = 3;
->>>>>>> origin/master
+origin/master*/
+
+
+
+
             fragment = new About();
         } else if (id == R.id.nav_profile) {
             //View and edit profile

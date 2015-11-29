@@ -32,18 +32,16 @@ public class Workouts_Fragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-<<<<<<< HEAD
-=======
+
         //Tells main activity ADD button what type of item to add (WORKOUT)
         //Refer to ONCLICK- SmartBellsMainActivity
         SmartBellsMainActivity.dashboardTab.setCheckTabPage(0);
->>>>>>> origin/master
 
         //Tells main FAB button what type of item to add (WORKOUT)
         //Refer to ONCLICK- SmartBellsMainActivity
         SmartBellsMainActivity.dashboardTab.setCheckTabPage(0);
 
-/*
+
         DatabaseAdapter db = new DatabaseAdapter(getActivity());
         try {
             db.openLocalDatabase();
@@ -58,9 +56,9 @@ public class Workouts_Fragment extends ListFragment {
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, listOfWorkouts);
         //setListAdapter(adapter);
 
-        *//**
+        /**
          * Select Workouts of userId
-         *//*
+         */
         ArrayList<String> listOfWorkouts = db.getMyWorkoutsAsStrings(db.getUserIDForSession());
 
         if (listOfWorkouts != null ){
@@ -74,7 +72,7 @@ public class Workouts_Fragment extends ListFragment {
 
         }
         //close the database
-        db.closeLocalDatabase();*/
+        db.closeLocalDatabase();
 
 
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -116,14 +114,14 @@ public class Workouts_Fragment extends ListFragment {
 
         });
 
-        Dialog mydialog = builder.setView(new View(getActivity())).create();
+        Dialog myDialog = builder.setView(new View(getActivity())).create();
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-        params.copyFrom(mydialog.getWindow().getAttributes());
+        params.copyFrom(myDialog.getWindow().getAttributes());
         params.width = 600;
         params.height = 250;
-        mydialog.show();
-        mydialog.getWindow().setAttributes(params);
+        myDialog.show();
+        myDialog.getWindow().setAttributes(params);
 
     }
 

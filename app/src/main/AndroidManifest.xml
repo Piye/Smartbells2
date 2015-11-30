@@ -63,7 +63,7 @@
         <provider
             android:name="teameleven.smartbells2.businesslayer.synchronization.StubProvider"
             android:authorities="teameleven.smartbells2.businesslayer.synchronization.provider"
-            android:label=""
+            android:label="provider"
             android:exported="false"
             android:syncable="true"/>
         <!-- Content Provider -->

@@ -47,12 +47,12 @@ public class DatabaseAdapter{
     public static final String FK_WORKOUTSESSION_ID = "workout_session_id";
     //Set Group Table Columns
     public static final String PK_SETGROUP_ID = "id";
-    public static final String FK_EXERCISE_ID = "exercise_id";
+    public static final String FK_SG_EXERCISE_ID = "exercise_id";
     public static final String SETGROUP_REPS = "reps_per_set";
     public static final String SETGROUP_SETS = "number_of_sets";
     public static final String SETGROUP_CREATED_AT = "created_at";
     public static final String SETGROUP_UPDATED_AT  = "updated_at";
-    public static final String SETGROUP_ROUTINE_ID = "routine_id";
+    public static final String FK_SG_ROUTINE_ID = "routine_id";
     //Exercise Table Columns
     public static final String PK_EXERCISE_ID = "id";
     public static final String EXERCISE_NAME = "name";
@@ -102,12 +102,16 @@ public class DatabaseAdapter{
     private static final String CREATE_SETGROUP_TABLE =
             "CREATE TABLE if not exists " + SETGROUP_TABLE + " (" +
                     PK_SETGROUP_ID          + " integer PRIMARY KEY," +
-                    SETGROUP_ROUTINE_ID     + "," +
-                    FK_EXERCISE_ID          + "," +
+                    FK_SG_ROUTINE_ID        + "," +
+                    FK_SG_EXERCISE_ID       + "," +
                     SETGROUP_SETS           + "," +
                     SETGROUP_REPS           + "," +
                     SETGROUP_CREATED_AT     + "," +
                     SETGROUP_UPDATED_AT     + "," +
+                    " FOREIGN KEY (" + FK_SG_EXERCISE_ID + ") REFERENCES "
+                    + EXERCISE_TABLE + "(" + PK_EXERCISE_ID  + ")" +
+                    " FOREIGN KEY (" + FK_SG_ROUTINE_ID + ") REFERENCES "
+                    + ROUTINE_TABLE + "(" + PK_ROUTINE_ID + ")" +
                     " UNIQUE (" + PK_SETGROUP_ID + "));";
     private static final String CREATE_WORKOUTSETGROUP_TABLE =
             "CREATE TABLE if not exists " + WORKOUTSETGROUP_TABLE + " (" +
@@ -251,7 +255,6 @@ public class DatabaseAdapter{
         initialValues.put(UPDATE_ID, id_num);
         initialValues.put(UPDATE_TABLE_IDENTIFIER, tableNum);
         initialValues.put(UPDATE_TYPE, transactionType);
-        Log.d("insert table record insert - ", id_num  +" " + tableNum + " " + transactionType);
         return database.insert(UPDATE_TABLE, null, initialValues);
     }
 
@@ -284,6 +287,7 @@ public class DatabaseAdapter{
     }
     public boolean hasUpdates(){
         Cursor myCursor = database.query(UPDATE_TABLE, null, null, null, null, null, null);
+        Log.d("SmartBells Database Adapter ","checking for updates");
         if (myCursor.getCount() > 0){
             return true;
         }
@@ -413,6 +417,7 @@ public class DatabaseAdapter{
 
         //Delete row from routine table
         long v = database.delete(ROUTINE_TABLE, PK_ROUTINE_ID + "=" + routineId, null);
+
         if (sync) {
             try {
                 insertUpdateRecord(routineId, ROUTINE_TABLE, 2);
@@ -641,7 +646,7 @@ public class DatabaseAdapter{
         result = database.insert(WORKOUTSESSION_TABLE, null, initialValues);
         if (sync) {
             try {
-                result = insertUpdateRecord(result, WORKOUTSESSION_TABLE, 0);
+                insertUpdateRecord(result, WORKOUTSESSION_TABLE, 0);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -710,21 +715,21 @@ public ArrayList<Routine> selectAllRoutines() {
     /**********************************WORKOUT SETGROUP TABLE **************************************/
     /**
      *
-     * @param workoutSetGroupid
-     * @param exerciseid
-     * @param workoutsessionid
+     * @param workoutSetGroupId
+     * @param exerciseId
+     * @param workoutSessionId
      * @param sync
      * @return
      */
-    public long insertWorkoutSetGroup(int workoutSetGroupid,
-                                      int exerciseid,
-                                      int workoutsessionid,
+    public long insertWorkoutSetGroup(int workoutSetGroupId,
+                                      int exerciseId,
+                                      int workoutSessionId,
                                       boolean sync) {
 
         ContentValues initialValues = new ContentValues();
-        initialValues.put(PK_WORKOUTSETGROUP_ID, workoutSetGroupid);
-        initialValues.put(FK_EXERCISE_ID, exerciseid);
-        initialValues.put(FK_WORKOUTSESSION_ID, workoutsessionid);
+        if (workoutSetGroupId >= 0) initialValues.put(PK_WORKOUTSETGROUP_ID, workoutSetGroupId);
+        initialValues.put(FK_SG_EXERCISE_ID, exerciseId);
+        initialValues.put(FK_WORKOUTSESSION_ID, workoutSessionId);
 
 
         //insert
@@ -741,7 +746,7 @@ public ArrayList<Routine> selectAllRoutines() {
     /**********************************************************************************************/
 
     //Delete Workout Set Group
-    public long deleteWorkoutSetGroup(String workoutsetgroupid, boolean sync) {
+    public long deleteWorkoutSetGroup(int workoutsetgroupid, boolean sync) {
 
         //Delete row
         long v = database.delete(WORKOUTSETGROUP_TABLE, PK_WORKOUTSETGROUP_ID
@@ -757,19 +762,26 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     //Select All Set Groups
-    public Cursor selectAllWorkoutSetGroups() {
-        Cursor myCursor = database.query(WORKOUTSETGROUP_TABLE, new String[]{PK_WORKOUTSETGROUP_ID, FK_WSG_EXERCISE_ID},
+    public ArrayList<WorkoutSetGroup> selectAllWorkoutSetGroups() {
+        Cursor myCursor = database.query(WORKOUTSETGROUP_TABLE,
+                new String[]{PK_WORKOUTSETGROUP_ID, FK_WSG_EXERCISE_ID, FK_WORKOUTSESSION_ID},
                 null, null, null, null, null);
 
-        if (myCursor != null) {
-            myCursor.moveToFirst();
+        ArrayList<WorkoutSetGroup> workoutSetGroups = new ArrayList<>();
+        WorkoutSetGroup workoutSetGroup;
+
+        for(myCursor.moveToFirst(); !myCursor.isAfterLast();myCursor.moveToNext()) {
+            workoutSetGroup = new WorkoutSetGroup(  myCursor.getInt(0),
+                                                    myCursor.getInt(1),
+                                                    myCursor.getInt(2));
+            workoutSetGroups.add(workoutSetGroup);
         }
-        return myCursor;
+        return workoutSetGroups;
     }
 
 
     //Select All Set Groups By WorkoutSessioID - Cursor
-    public Cursor selectMyAllWorkoutSetGroups(int workoutSessionId) {
+    public Cursor selectWorkoutSetGroup(int workoutSessionId) {
         Cursor myCursor = database.query(WORKOUTSETGROUP_TABLE, null,
                 FK_WORKOUTSESSION_ID + "=" + workoutSessionId, null, null, null, null, null);
 
@@ -800,7 +812,9 @@ public ArrayList<Routine> selectAllRoutines() {
 
     public long insertSetGroup(SetGroup set_group, boolean sync) {
         return insertSetGroup(
+                set_group.getId(),
                 set_group.getExercise().getId(),
+                set_group.getRoutineId(),
                 set_group.getNumberOfSets(),
                 set_group.getRepsPerSet(),
                 set_group.getCreationDate(),
@@ -811,8 +825,8 @@ public ArrayList<Routine> selectAllRoutines() {
     private ContentValues setGroupAttributes(SetGroup setgroup){
         ContentValues initialValuesSetGroup = new ContentValues();
         initialValuesSetGroup.put(PK_SETGROUP_ID, setgroup.getId());
-        initialValuesSetGroup.put(SETGROUP_ROUTINE_ID, setgroup.getRoutineId());
-        initialValuesSetGroup.put(FK_EXERCISE_ID, setgroup.getExerciseId());
+        initialValuesSetGroup.put(FK_SG_ROUTINE_ID, setgroup.getRoutineId());
+        initialValuesSetGroup.put(FK_SG_EXERCISE_ID, setgroup.getExerciseId());
         initialValuesSetGroup.put(SETGROUP_SETS, setgroup.getNumberOfSets());
         initialValuesSetGroup.put(SETGROUP_REPS, setgroup.getRepsPerSet());
         initialValuesSetGroup.put(SETGROUP_CREATED_AT, setgroup.getCreationDate());
@@ -820,7 +834,9 @@ public ArrayList<Routine> selectAllRoutines() {
         return initialValuesSetGroup;
     }
     //Insert Set Group
-    public long insertSetGroup(int exerciseId,
+    public long insertSetGroup(int setGroupId,
+                               int exerciseId,
+                               int routineId,
                                int sets,
                                int reps,
                                String createdAt,
@@ -828,8 +844,9 @@ public ArrayList<Routine> selectAllRoutines() {
                                boolean sync) {
 
         ContentValues initialValues = new ContentValues();
-
-        initialValues.put(FK_EXERCISE_ID, exerciseId);
+        if (setGroupId >= 0) initialValues.put(PK_SETGROUP_ID, setGroupId);
+        initialValues.put(FK_SG_EXERCISE_ID, exerciseId);
+        if (routineId != 0) initialValues.put(FK_SG_ROUTINE_ID, routineId);
         initialValues.put(SETGROUP_SETS, sets);
         initialValues.put(SETGROUP_REPS, reps);
         initialValues.put(SETGROUP_CREATED_AT, createdAt);
@@ -849,7 +866,7 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     //Delete Set Groups
-    public long deleteSetGroup(String setgroupid, boolean sync) {
+    public long deleteSetGroup(long setgroupid, boolean sync) {
 
         //Delete row
         long v = database.delete(SETGROUP_TABLE, PK_SETGROUP_ID
@@ -865,27 +882,30 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     //Select All Set Groups
-    public Cursor selectAllSetGroups() {
+    public ArrayList<SetGroup> selectAllSetGroups() {
         Cursor myCursor = database.query(SETGROUP_TABLE, new String[]{PK_SETGROUP_ID,
-                        FK_EXERCISE_ID, SETGROUP_SETS, SETGROUP_REPS, SETGROUP_CREATED_AT,
-                        SETGROUP_UPDATED_AT},
+                        FK_SG_EXERCISE_ID, FK_SG_ROUTINE_ID, SETGROUP_REPS, SETGROUP_SETS},
                 null, null, null, null, null, null);
+        ArrayList<SetGroup> setGroups = new ArrayList<>();
+        SetGroup setGroup;
 
-        if (myCursor != null) {
-            myCursor.moveToFirst();
+        for(myCursor.moveToFirst(); !myCursor.isAfterLast();myCursor.moveToNext()) {
+            setGroup = new SetGroup(myCursor.getInt(0), myCursor.getInt(1), myCursor.getInt(2), myCursor.getInt(3), myCursor.getInt(4));
+            setGroups.add(setGroup);
         }
-        return myCursor;
+        return setGroups;
     }
+
     //Select UserId's Set Groups.
     // Get private Routines of specific user and return a ArrayList<string>
     public ArrayList<String> getMySetGroupIdsByWSG(String workoutSetGroupId) {
         SetGroup[]setGroups = new SetGroup[]{};
         Cursor cursor = database.query(SETGROUP_TABLE, new String[]{PK_SETGROUP_ID + "=" +workoutSetGroupId,
-                FK_EXERCISE_ID, SETGROUP_SETS, SETGROUP_REPS, SETGROUP_CREATED_AT,
+                FK_SG_EXERCISE_ID, SETGROUP_SETS, SETGROUP_REPS, SETGROUP_CREATED_AT,
                 SETGROUP_UPDATED_AT},null, null, null, null, null, null);
         //Results String Array
         ArrayList<String> result = new ArrayList<String>();
-        int id = cursor.getColumnIndex(FK_EXERCISE_ID);
+        int id = cursor.getColumnIndex(FK_SG_EXERCISE_ID);
 
         for(cursor.moveToFirst(); !cursor.isAfterLast();cursor.moveToNext()){
             result.add(cursor.getString(id));
@@ -1013,17 +1033,7 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     //Select All Exercises
-    public Cursor selectAllExercises() {
-        Cursor myCursor = database.query(SETGROUP_TABLE, null,
-                null, null, null, null, null);
-
-        if (myCursor != null) {
-            myCursor.moveToFirst();
-        }
-        return myCursor;
-    }
-
-    public ArrayList<Exercise> getExercises(){
+    public ArrayList<Exercise> selectAllExercises() {
         String[] columns = new String[]{EXERCISE_NAME, PK_EXERCISE_ID};
         Cursor cursor = database.query(EXERCISE_TABLE, columns, null, null, null, null, null);
         ArrayList<Exercise> exercises = new ArrayList<>();
@@ -1104,7 +1114,11 @@ public ArrayList<Routine> selectAllRoutines() {
                 e.printStackTrace();
             }
         }
-        //Log.d("returning following Json Object", json.toString(4));
+        try {
+            Log.d("returning following Json Object from get", json.toString(4));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return json;
     }
 
@@ -1113,7 +1127,7 @@ public ArrayList<Routine> selectAllRoutines() {
         return getObject(EXERCISE_TABLE, PK_EXERCISE_ID, id);
     }
 
-    public JSONObject getSet_Group(int id) throws SQLException {
+    public JSONObject getSetGroup(long id) throws SQLException {
         return getObject(SETGROUP_TABLE, PK_SETGROUP_ID, id);
     }
 
@@ -1125,17 +1139,33 @@ public ArrayList<Routine> selectAllRoutines() {
         return getObject(WORKOUTSESSION_TABLE, PK_WORKOUTSESSION_ID, id);
     }
 
-    public JSONObject getWorkoutSetGroup(int id) throws SQLException {
-        return getObject(WORKOUTSETGROUP_TABLE, PK_WORKOUTSETGROUP_ID, id);
+    public JSONObject getWorkoutSetGroup(long id) throws SQLException {
+        JSONObject workoutSetGroup;
+        workoutSetGroup = getObject(WORKOUTSETGROUP_TABLE, PK_WORKOUTSETGROUP_ID, id);
+        JSONObject setGroup = null;
+        try {
+            setGroup = getSetGroup(workoutSetGroup.getInt("id"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (setGroup == null){
+            throw new SQLException("Improper key, no matching set group");
+        }
+        try {
+            return  workoutSetGroup.put("set_group", setGroup);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        throw new SQLException("Improper key, no matching set group");
     }
 
     public long insertWorkoutSetGroup(WorkoutSetGroup workoutSetGroup, boolean sync) {
-        insertWorkoutSetGroup(
-                workoutSetGroup.getSet_group().getId(),
-                workoutSetGroup.getSet_group().getExerciseId(),
-                workoutSetGroup.getWorkoutSessionId(), sync);
-        return 0;
-    }
+        return insertWorkoutSetGroup(
+                workoutSetGroup.getSetGroupID(),
+                workoutSetGroup.getExerciseID(),
+                workoutSetGroup.getWorkoutSessionId(),
+                sync);
+        }
 
     public boolean getDatabaseLoaded(){
         Cursor query = database.rawQuery("select count(*) from " + EXERCISE_TABLE, null);
@@ -1158,13 +1188,13 @@ public ArrayList<Routine> selectAllRoutines() {
                 case(0)://exercises
                     deleteExercise(id_num, false);
                 case(1)://set groups
-                    deleteSetGroup(String.valueOf(id_num), false);
+                    deleteSetGroup(id_num, false);
                 case(2)://routines
                     deleteRoutine(id_num, false);
                 case(3)://workout session
                     deleteWorkoutSession(id_num, false);
                 case(4)://workout set group
-                    deleteWorkoutSetGroup(String.valueOf(id_num), false);
+                    deleteWorkoutSetGroup(id_num, false);
             }
         }
 
@@ -1213,15 +1243,37 @@ public ArrayList<Routine> selectAllRoutines() {
      */
     public long updateWorkoutSession(long id, WorkoutSession session, boolean sync) throws SQLException {
         long result;
-        Log.d("id is", String.valueOf(id));
-
-        //database.update(WORKOUTSESSION_TABLE, values, PK_WORKOUTSESSION_ID, new String[]{String.valueOf(id)});
         this.deleteWorkoutSession(id, false);
-        Log.d("workoutsession insert in adapter ", session.toString());
         result = this.insertWorkoutSession(session, false);
 
         if (sync) {
             insertUpdateRecord(result, WORKOUTSESSION_TABLE, 1);
+        }
+        return result;
+    }
+
+    public long updateSetGroup(long id, SetGroup setGroup, boolean sync) throws SQLException {
+        long result;
+
+        this.deleteSetGroup(id, false);
+        result = this.insertSetGroup(setGroup, false);
+
+        if (sync) {
+            insertUpdateRecord(result, SETGROUP_TABLE, 1);
+        }
+        return result;
+    }
+
+    public long updateWorkoutSetGroup(long id, WorkoutSetGroup createdWorkoutSetGroup, boolean sync)
+            throws SQLException {
+        long result;
+        Log.d("id is", String.valueOf(id));
+
+        this.deleteSetGroup(id, false);
+        result = this.insertWorkoutSetGroup(createdWorkoutSetGroup, false);
+
+        if (sync) {
+            insertUpdateRecord(result, WORKOUTSETGROUP_TABLE, 1);
         }
         return result;
     }

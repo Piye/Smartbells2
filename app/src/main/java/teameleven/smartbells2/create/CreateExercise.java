@@ -135,8 +135,6 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
                         Log.d("CreateExercise.onClick - ", exercise.toString());
                         database.insertExercise(exercise, true);//database
 
-                        //todo this is currently blocked while the data is being retrieved. we can work with
-                        //this later, however for the time being it is good enough for testing purposes.
                     } catch (Exception ex) {
                         Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_LONG).show();
                     }

@@ -1,6 +1,7 @@
 package teameleven.smartbells2;
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,12 @@ import teameleven.smartbells2.dashboardfragmenttabs.Records_Fragment;
  */
 public class SmartBellsMainActivity extends AppCompatActivity
                                     implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String AUTHORITY =
+            "teameleven.smartbells2.businesslayer.synchronization.provider";
+    /**
+     * Accoutn type of the smartbells
+     */
+    private static final String ACCOUNT_TYPE = "smart-bells-staging.herokuapp.com";
     /**
      * Dashboard of the tab menu
      */
@@ -282,7 +289,13 @@ origin/master*/
             //View and edit profile
             fragmentShowing = 4;
             fragment = new ViewProfile();
-        } else if (id == R.id.nav_logout) {
+        }else if (id == R.id.nav_requestsync){//this should be removed - temporarily here for testing
+            Bundle sync = new Bundle();
+            sync.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            ContentResolver.requestSync(LoginActivity.getAccount(), AUTHORITY, sync);
+
+        }
+        else if (id == R.id.nav_logout) {
             //Confirm logout
             new AlertDialog.Builder(this)
                     .setMessage("Are you sure you want to logout?")

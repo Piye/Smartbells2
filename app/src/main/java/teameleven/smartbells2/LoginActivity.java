@@ -63,7 +63,7 @@ public class LoginActivity extends Activity {
      * we'll keep it like this
      */
     private static final String AUTHORITY =
-            "teameleven.smartbells_prototype0001.businesslayer.synchronization.provider";
+            "teameleven.smartbells2.businesslayer.synchronization.provider";
     /**
      * Accoutn type of the smartbells
      */
@@ -72,10 +72,15 @@ public class LoginActivity extends Activity {
      * Default account
      */
     private static final String ACCOUNT = "DefaultAccount";
+
+    public static Account getAccount() {
+        return account;
+    }
+
     /**
      * Declaration of Account attribute
      */
-    Account account;
+    static Account account;
     /**
      * Declaration of SessionManager attribute
      */
@@ -148,7 +153,7 @@ public class LoginActivity extends Activity {
              * As it runs this on a background thread, in theory
              * this should occur as the loading screen is showing
              */
-            //account = CreateSyncAccount(this);
+            account = CreateSyncAccount(this);
             Bundle sync = new Bundle();
             sync.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
             sync.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
@@ -239,9 +244,11 @@ public class LoginActivity extends Activity {
 
                     String accessToken = json.getString("authentication_token");
                     int user_id = json.getInt("id");
-                    Log.d("LoginActivity.validate - token checking - ", user_id + "<-id token ->" +  accessToken);
+                    Log.d("LoginActivity.validate - token checking - ", user_id + "<-id token ->" + accessToken);
                     db.insertToken(accessToken, user_id);
-                    initialDatabaseSync(db);
+                    //initialDatabaseSync(db);
+                    db.updateDB();
+                    db.clearUpdateTable();
                 } catch (SQLException | JSONException e) {
                     e.printStackTrace();
                 }
@@ -253,38 +260,38 @@ public class LoginActivity extends Activity {
 
         return valid;
     }
-
-    /**
-     * Initialization of the database befor the sync- Load all tables to SQLite Database of the app
-     * @param db
-     */
-    private void initialDatabaseSync(DatabaseAdapter db) {
-        db.updateDB();
-        long x = System.currentTimeMillis();
-        long y;
-
-
-        ArrayList<Exercise> exercise = Exercise.restGetAll();
-        Log.d("LoginActivity.initialDatabaseSync - Exercise row count = ", String.valueOf(exercise.size()));
-        y = (System.currentTimeMillis() - x);
-        Log.d("time taken = ", String.format("%s milliseconds", y));
-        db.loadAllExercises(exercise);
-
-
-        ArrayList<Routine> routines = Routine.restGetAll(db.getUserIDForSession());
-        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
-        y = (System.currentTimeMillis() - x);
-        Log.d("time taken = ", String.format("%s milliseconds", y));
-        db.loadAllRoutines(routines);
-
-
-        ArrayList<WorkoutSession> workoutSessions = WorkoutSession.
-                restGetAll(db.getUserIDForSession());
-        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
-        y = (System.currentTimeMillis() - x);
-        Log.d("time taken = ", String.format("%s milliseconds", y));
-        db.loadAllWorkoutSessions(workoutSessions);
-    }
+//
+//    /**
+//     * Initialization of the database before the sync- Load all tables to SQLite Database of the app
+//     * @param db
+//     */
+//    private void initialDatabaseSync(DatabaseAdapter db) {
+//        db.updateDB();
+//        long x = System.currentTimeMillis();
+//        long y;
+//
+//
+//        ArrayList<Exercise> exercise = Exercise.restGetAll();
+//        Log.d("LoginActivity.initialDatabaseSync - Exercise row count = ", String.valueOf(exercise.size()));
+//        y = (System.currentTimeMillis() - x);
+//        Log.d("time taken = ", String.format("%s milliseconds", y));
+//        db.loadAllExercises(exercise);
+//
+//
+//        ArrayList<Routine> routines = Routine.restGetAll(db.getUserIDForSession());
+//        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
+//        y = (System.currentTimeMillis() - x);
+//        Log.d("time taken = ", String.format("%s milliseconds", y));
+//        db.loadAllRoutines(routines);
+//
+//
+//        ArrayList<WorkoutSession> workoutSessions = WorkoutSession.
+//                restGetAll(db.getUserIDForSession());
+//        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
+//        y = (System.currentTimeMillis() - x);
+//        Log.d("time taken = ", String.format("%s milliseconds", y));
+//        db.loadAllWorkoutSessions(workoutSessions);
+//    }
 
     /**
      * Create an account for sync

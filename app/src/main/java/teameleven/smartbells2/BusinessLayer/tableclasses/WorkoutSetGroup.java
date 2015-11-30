@@ -1,6 +1,8 @@
 
 package teameleven.smartbells2.businesslayer.tableclasses;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,14 +34,21 @@ public class WorkoutSetGroup {
      */
     public WorkoutSetGroup(JSONObject json) {
         try {
-            set_group.setId(json.getInt("id"));
-            set_group.setNumberOfSets(json.getInt("number_of_sets"));
-            set_group.setRepsPerSet(json.getInt("reps_per_set"));
-            set_group.setCreationDate(json.getString("created_at"));
-            set_group.setLastUpdated(json.getString("updated_at"));
-            set_group.setExerciseId(json.getInt("exercise_id"));
+            //Log.d("json result of constructor - ", json.toString(4));
+            this.setSetGroupID(json.getInt("id"));
             this.setWorkoutSessionId(json.getInt("workout_session_id"));
-            this.setResistance(json.getInt("resistance"));
+
+            if (json.has("set_group")){
+                json = json.getJSONObject("set_group");
+
+
+                this.setExerciseID(json.getInt("exercise_id"));
+                set_group.setNumberOfSets(json.getInt("number_of_sets"));
+                set_group.setRepsPerSet(json.getInt("reps_per_set"));
+                set_group.setCreationDate(json.getString("created_at"));
+                set_group.setLastUpdated(json.getString("updated_at"));
+                this.setResistance(json.getInt("resistance"));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -49,6 +58,12 @@ public class WorkoutSetGroup {
      * Default Constructor
      */
     public WorkoutSetGroup() {}
+
+    public WorkoutSetGroup(int id, int exerciseId, int sessionId) {
+        this.workoutSessionId = sessionId;
+        this.set_group.setId(id);
+        this.set_group.getExercise().setId(exerciseId);
+    }
 
     /**
      * Get the Resistance of WorkoutSetGroup
@@ -80,6 +95,19 @@ public class WorkoutSetGroup {
      */
     public void setSet_group(SetGroup set_group) {        this.set_group = set_group;    }
 
+    public int getSetGroupID(){
+        return this.getSet_group().getId();
+    }
+
+    public int getExerciseID(){
+        return this.getSet_group().getExercise().getId();
+    }
+    public void setSetGroupID(int id){
+        this.getSet_group().setId(id);
+    }
+    public void setExerciseID(int id){
+        this.getSet_group().getExercise().setId(id);
+    }
     /**
      * Get the WorkoutSessionID
      * @return WorkoutSessionID
@@ -136,8 +164,12 @@ public class WorkoutSetGroup {
 
     @Override
     public String toString() {
-
-        return "unimplemented";//todo implement
+        try {
+            return this.createJSON().toString(4);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "setgroupId = " + this.getSetGroupID();
     }
 
 }

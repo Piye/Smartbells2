@@ -58,6 +58,13 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onSyncCanceled() {
+        super.onSyncCanceled();
+        database.closeLocalDatabase();
+    }
+
     /**
      *
      * @param account
@@ -75,11 +82,11 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                 SyncResult syncResult) {
         Log.d("Syncing", "- SmartBells.OnPerformSync - checking for updates");
         if (extras.getBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED)) {
-            Log.d("Syncing", " - New User            - Recreating Database");
+            Log.d("SmartBells Syncing", " - New User            - Recreating Database");
             initialDatabaseSync();
             syncCount = 0;
         }else{
-            Log.d("Syncing", " - Old user, checking for updates! testing");
+            Log.d("SmartBells Syncing", " - Old user, checking for updates! testing");
             if (database.hasUpdates()) {
                 Log.d("Syncing", " - SmartBells has Updates");
                 //table name
@@ -92,13 +99,16 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                 //id of object to be changed
                 //update table records
                 ArrayList<int[]> updates = database.readUpdateRecord();
-
+                for (int[] x : updates) {
+                    Log.d("results from update table are ", x(x));
+                }
                 for (int[] x : updates) {
                     modifier = "/" + String.valueOf(x[0]);//sets the id of the object to be altered
                     tableID = setRestID(x[1]);//sets the table id
                     httpType = setHTTPType(x[2]);//sets the http call type
-                    if (x[2] == 0) {//if GET calltype, nullify modifier
+                    if (x[2] == 0) {//if insert (POST) calltype, nullify modifier
                         modifier = "";
+                        object = getChangedObject(x[0], x[1]);
                         database.deleteObject(x[0], x[1]);//delete old record -ensures no duplicates
                     } else if (x[2] == 1) {//if call type update, table class to be changed to
                         object = getChangedObject(x[0], x[1]);
@@ -106,11 +116,22 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                     }//if call type is delete, object remains null
 
                     //perform the RESTCall, based upon parameters from update table
+
+                    try {
+                        Log.d("output from RESTCALL is ", object);
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+
+
                     AsyncTask result = new RESTCall()
                             .execute(tableID + modifier, httpType, object, database.getTokenAsString());
                     try {
                         JSONObject json = (JSONObject) result.get();
-                        saveToDatabase(json, x[1]);
+                        if (json != null) {
+                            saveToDatabase(json, x[1]);
+                        }
+                        else Log.d("json is null for some reason", " have to solve this");
 
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
@@ -128,6 +149,9 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                     syncCount = 0;
                 }
                 syncCount++;
+            }
+            else{
+                Log.d("no updates ", " hopefully that's right");
             }
         }
     }
@@ -156,6 +180,22 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
             break;
         }
     }
+
+    /**
+     * for debugging, turns int[] into readable string
+     *
+     * @param y int[]
+     * @return string of int[] input
+     */
+    private String x(int[] y) {
+        String result = "";
+
+        for (int num : y) {
+            result += " " + num;
+        }
+        return result;
+    }
+
     /**
      *
      * @param id
@@ -166,9 +206,10 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
         try {
             switch (table) {
                 case (0)://exercises
+                    Log.d("attempting to retrieve exercise - ", String.valueOf(id) +" -  "+ table);
                     return database.getExercise(id).toString();
                 case (1)://set groups
-                    return database.getSet_Group(id).toString();
+                    return database.getSetGroup(id).toString();
                 case (2)://routines
                     return database.getExercise(id).toString();
                 case (3)://workout session

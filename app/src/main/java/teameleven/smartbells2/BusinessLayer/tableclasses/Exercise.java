@@ -57,6 +57,7 @@ public class Exercise {
      * Default constructor
      */
     public Exercise() {
+        id = -1;
     }
 
     /**

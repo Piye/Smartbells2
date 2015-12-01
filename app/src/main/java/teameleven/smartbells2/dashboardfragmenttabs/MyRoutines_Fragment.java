@@ -32,6 +32,7 @@ public class MyRoutines_Fragment extends ListFragment {
     public static final String ROUTINE_ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
     //Temporary string array to populate list
     private ArrayList<String> myroutines;
+    private ArrayList<String> myPrivateRoutines;
     private DatabaseAdapter db;
 
     /**
@@ -59,6 +60,15 @@ public class MyRoutines_Fragment extends ListFragment {
         }
         //Two ArrayLists for each ListView
         myroutines = db.getMyRoutinesAsStrings(db.getUserIDForSession());
+
+        // First I want to parse through all the routines.
+//
+//        db.selectMyRoutineById()
+//
+//        for(String routine: myroutines){
+//            if(myroutines.indexOf(db.getMyRoutinesAsStrings(routine.)))
+//
+//        }
 
         //close the database
         db.closeLocalDatabase();

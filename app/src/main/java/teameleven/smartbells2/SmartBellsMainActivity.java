@@ -25,6 +25,7 @@ import teameleven.smartbells2.businesslayer.SessionManager;
 import teameleven.smartbells2.create.CreateCustomSession;
 import teameleven.smartbells2.create.CreateExercise;
 import teameleven.smartbells2.create.CreateRoutine;
+import teameleven.smartbells2.create.CreateWorkout;
 import teameleven.smartbells2.dashboardfragmenttabs.Achievement_Fragment;
 import teameleven.smartbells2.dashboardfragmenttabs.New_Records_Fragment;
 
@@ -109,7 +110,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
                     Snackbar.make(view, "Add a workout!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
-                    /*
                     //hide the fab
                     fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
                             new AccelerateInterpolator(2)).start();
@@ -117,7 +117,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();
-                    */
                 }
 
                 //Load Create a Routine on FAB click while on Routine Tab
@@ -148,7 +147,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
                 if( dashboardTab.getCheckTabPage() == 4 ) {
                     fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
                             new AccelerateInterpolator(2)).start();
-                    fragment = new CreateRoutine();
+                    fragment = new CreateWorkout();
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();

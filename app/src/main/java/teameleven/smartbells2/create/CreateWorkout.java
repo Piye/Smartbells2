@@ -81,7 +81,7 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
 
         switch (v.getId()) {
             //Move to a new FRAGMENT for each button
-            case R.id.saveCreateWorkoutButton:
+            case R.id.saveCreateWorkoutButton:      //SAVING IS GOING TO JUST EXIT TO DASHBOARD AT THE MOMENT
                 //Pop set group dialog window
                 fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
                 fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();

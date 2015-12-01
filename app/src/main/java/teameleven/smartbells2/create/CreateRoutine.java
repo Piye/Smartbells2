@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,19 +16,16 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import teameleven.smartbells2.Dashboard;
+import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
 import teameleven.smartbells2.businesslayer.tableclasses.Routine;
-import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
-import teameleven.smartbells2.Dashboard;
-import teameleven.smartbells2.R;
-import teameleven.smartbells2.dashboardfragmenttabs.RoutineDialogFragment;
+import teameleven.smartbells2.RoutineDialogFragment;
 
 /**
  * CreateRoutine class makes a Routine of Exercises(Set Group)
@@ -123,6 +119,7 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
     private EditText mNumOfSets;
     private EditText mRepsPerSet;
     private ListView routineExercises;
+
     //@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -312,22 +309,23 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
                 break;
             case R.id.routineExerciseSaveButton:
                 //SAVE new Routine to databasepiyep
-//                if (validate()) {
-//                    SetGroup setGroup = new SetGroup(
-//                            database.getExerciseIdByName(exerciseName),
-//                            Integer.parseInt(addNumberOfSets()),
-//                            Integer.parseInt(addRepsPerSet()));
-//                    Routine routine = new Routine();
-//                    routine.getSetGroups().add(setGroup);
-//                    routine.setName(addRoutineName());
-//                    routine.setIs_Public(isPublic);
-//                    //Log.d("CreateRoutine.saveRoutine - ", routine.toString());
-//                    //database is called in restputroutine. both calls not necessary
-//                    database.insertRoutine(routine, true);
-//                    //routine.RestPutRoutine(database);//should not call rest here - data will be
-//                    //input into update table for later synchronizing
-//                    //Close the database
-//                    database.closeLocalDatabase();
+                //if (validate()) {
+                    //SetGroup setGroup = new SetGroup(
+                           //database.getExerciseIdByName(exerciseName),
+                            //Integer.parseInt(addNumberOfSets()),
+                            //Integer.parseInt(addRepsPerSet()
+                           // );
+                    Routine routine = new Routine();
+                    //routine.getSetGroups().add(setGroup);
+                    routine.setName(addRoutineName());
+                    routine.setIs_Public(isPublic);
+                    //Log.d("CreateRoutine.saveRoutine - ", routine.toString());
+                    //database is called in restputroutine. both calls not necessary
+                    database.insertRoutine(routine, true);
+                    //routine.RestPutRoutine(database);//should not call rest here - data will be
+                    //input into update table for later synchronizing
+                    //Close the database
+                    database.closeLocalDatabase();
 
                     //Back to menu
                     Toast.makeText(getActivity(), "routine " + routine.getName() + " created!!.", Toast.LENGTH_LONG).show();
@@ -338,7 +336,6 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
                     transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();
-
                     //TODO Add to routine list here??
                 break;
 

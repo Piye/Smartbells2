@@ -1,4 +1,4 @@
-package teameleven.smartbells2.dashboardfragmenttabs;
+package teameleven.smartbells2;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -17,10 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
-//import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
-//import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
-import teameleven.smartbells2.R;
+
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
+
+//import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
+//import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
 
 /**
  * Created by Jordan on 11/20/2015.

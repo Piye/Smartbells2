@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import teameleven.smartbells2.BeginWorkout;
+import teameleven.smartbells2.RecordWorkoutRoutine;
 import teameleven.smartbells2.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
@@ -44,7 +45,8 @@ public class MyRoutines_Fragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         //Tells main activity ADD button what type of item to add (ACHIEVEMENTS)
-        SmartBellsMainActivity.bw2.setCheckTabPage(4);
+        SmartBellsMainActivity.dashboardTab.setCheckTabPage(4);
+        //SmartBellsMainActivity.bw2.setCheckTabPage(4);
 
         //Open Database
         db = new DatabaseAdapter(getActivity());

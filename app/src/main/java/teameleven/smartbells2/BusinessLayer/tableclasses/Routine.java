@@ -117,7 +117,7 @@ public class Routine {
     public static ArrayList<Routine> restGetAll(int userIDForSession) {
         try {;
             //Log.d("Exercise.restGetAll - ", RESTID);
-            AsyncTask result = new RESTCall().execute(RESTID + "?user_id=" + userIDForSession, "GET");
+            AsyncTask result = new RESTCall().execute(RESTID  /*"?user_id=" userIDForSession */, "GET");
             JSONObject json = (JSONObject) result.get();
 
             return restGetRoutines(json, userIDForSession);

@@ -82,7 +82,6 @@ public class Dashboard extends Fragment {
                     fragTransaction.detach(workout_Fragment);
                 }
 
-
                 //Detach Routine_Fragment if it exists
                 if (routine_Fragment != null) {
                     fragTransaction.detach(routine_Fragment);

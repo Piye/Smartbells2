@@ -64,7 +64,7 @@ public class BeginWorkout extends Fragment {
 
                 //If the current tab is on myroutines show only private routines
                 if (tabId.equalsIgnoreCase("myroutines")) {
-                    setCheckTabPage(1);
+                    setCheckTabPage(4);
                     if (myroutines_fragment == null) {
                         fragTransaction.add(R.id.realtabcontent, new MyRoutines_Fragment(), "myroutines");
                     } else {
@@ -74,7 +74,7 @@ public class BeginWorkout extends Fragment {
 
                 //If the current tab is on publicroutines show only public routines
                 if (tabId.equalsIgnoreCase("publicroutines")) {
-                    setCheckTabPage(2);
+                    setCheckTabPage(4);
                     if (publicroutines_fragment == null) {
                         fragTransaction.add(R.id.realtabcontent, new PublicRoutines_Fragment(), "publicroutines");
                     } else {
@@ -95,7 +95,7 @@ public class BeginWorkout extends Fragment {
         //Setting up builders for each tabs
 
         //Achievements Tab creation
-        dashboardTabHost.addTab(dashboardTabHost.newTabSpec("myroutines").setIndicator("My Routines"),MyRoutines_Fragment.class, null);
+        dashboardTabHost.addTab(dashboardTabHost.newTabSpec("myroutines").setIndicator("My Routines"), MyRoutines_Fragment.class, null);
 
         //Records Tab creation
         dashboardTabHost.addTab(dashboardTabHost.newTabSpec("publicroutines").setIndicator("Public Routines"), PublicRoutines_Fragment.class, null);
@@ -118,6 +118,10 @@ public class BeginWorkout extends Fragment {
     }
 
 
+    /**
+     * Get the tab page number
+     * @return a number of tab page
+     */
     public int getCheckBWTabPage() {
         return checkTabPage;
     }

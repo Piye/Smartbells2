@@ -1,22 +1,19 @@
 package teameleven.smartbells2.dashboardfragmenttabs;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import teameleven.smartbells2.Dashboard;
+import teameleven.smartbells2.RecordWorkoutRoutine;
 import teameleven.smartbells2.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
@@ -28,25 +25,19 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 public class Workouts_Fragment extends ListFragment {
 
     Dashboard dashboard;
+    public static final String ROUTINE_ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
+    private ArrayList<String> listOfWorkouts;
     //Temporary string array to populate list
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
-        //Tells main activity ADD button what type of item to add (WORKOUT)
-        //Refer to ONCLICK- SmartBellsMainActivity
-        SmartBellsMainActivity.dashboardTab.setCheckTabPage(0);
-
         //Tells main FAB button what type of item to add (WORKOUT)
         //Refer to ONCLICK- SmartBellsMainActivity
         SmartBellsMainActivity.dashboardTab.setCheckTabPage(0);
 
-
         DatabaseAdapter db = new DatabaseAdapter(getActivity());
         try {
             db.openLocalDatabase();
-            //insert more routines
-            //db.insertTESTRoutines();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,8 +50,7 @@ public class Workouts_Fragment extends ListFragment {
         /**
          * Select Workouts of userId
          */
-        ArrayList<String> listOfWorkouts = db.getMyWorkoutsAsStrings(db.getUserIDForSession());
-
+        listOfWorkouts = db.getMyWorkoutsAsStrings(db.getUserIDForSession());
         if (listOfWorkouts != null ){
             //Change adapter type to handle objects instead of strings later
             //Set the adapter to show in application
@@ -69,11 +59,9 @@ public class Workouts_Fragment extends ListFragment {
             setListAdapter(adapter);
         }else{
             System.out.println("listOfWorkouts null ");
-
         }
         //close the database
         db.closeLocalDatabase();
-
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -95,33 +83,13 @@ public class Workouts_Fragment extends ListFragment {
      */
     @Override
     public void onListItemClick(ListView lv, View view, int position, long id) {
-        final int pos = position;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+        Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
+        //When we start the new intent we want to pass the name of the Routine from the list
+        intent.putExtra(ROUTINE_ITEM_NAME, listOfWorkouts.get(position));
 
-            public void onClick(DialogInterface arg0, int arg1) {
-                Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
-            }
-        });
-        builder.setPositiveButton("View", new DialogInterface.OnClickListener() {
+        startActivity(intent);
 
-            public void onClick(DialogInterface arg0, int arg1) {
-
-                //Do something
-                Toast.makeText(getActivity(), "View", Toast.LENGTH_LONG).show();
-            }
-
-        });
-
-        Dialog myDialog = builder.setView(new View(getActivity())).create();
-
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-        params.copyFrom(myDialog.getWindow().getAttributes());
-        params.width = 600;
-        params.height = 250;
-        myDialog.show();
-        myDialog.getWindow().setAttributes(params);
 
     }
 

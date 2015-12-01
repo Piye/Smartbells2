@@ -1,4 +1,4 @@
-package teameleven.smartbells2.dashboardfragmenttabs;
+package teameleven.smartbells2;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +9,8 @@ import android.widget.Toast;
 
 import java.sql.SQLException;
 
-import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.dashboardfragmenttabs.MyRoutines_Fragment;
 
 /**
  * Created by Jare on 2015-11-03.

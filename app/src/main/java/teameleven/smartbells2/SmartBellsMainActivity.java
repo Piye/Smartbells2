@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -24,10 +25,8 @@ import teameleven.smartbells2.businesslayer.SessionManager;
 import teameleven.smartbells2.create.CreateCustomSession;
 import teameleven.smartbells2.create.CreateExercise;
 import teameleven.smartbells2.create.CreateRoutine;
-import teameleven.smartbells2.create.CreateWorkout;
 import teameleven.smartbells2.dashboardfragmenttabs.Achievement_Fragment;
 import teameleven.smartbells2.dashboardfragmenttabs.New_Records_Fragment;
-import teameleven.smartbells2.dashboardfragmenttabs.Records_Fragment;
 
 /**
  * This class is the Main Actibities of the SmartBells
@@ -107,18 +106,18 @@ public class SmartBellsMainActivity extends AppCompatActivity
                 //Load Create a Workout on FAB click while on Workout Tab
                 if(dashboardTab.getCheckTabPage() == 0) {
                     //Snackbar for debugging
-                    //Snackbar.make(view, "Add a workout!", Snackbar.LENGTH_LONG)
-                            //.setAction("Action", null).show();
+                    Snackbar.make(view, "Add a workout!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
 
+                    /*
                     //hide the fab
                     fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
-                                                            new AccelerateInterpolator(2)).start();
-
+                            new AccelerateInterpolator(2)).start();
                     fragment = new CreateWorkout();
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();
-
+                    */
                 }
 
                 //Load Create a Routine on FAB click while on Routine Tab
@@ -146,7 +145,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
                 /* BEGIN WORKOUT FRAGMENT TAB SELECTED */
 
                 //This might go all together? Will keep if we decide to add a new tab type.
-                if( bw2.getCheckBWTabPage() == 4) {
+                if( bw2.getCheckBWTabPage() == 4 ) {
                     fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
                             new AccelerateInterpolator(2)).start();
                     fragment = new CreateCustomSession();

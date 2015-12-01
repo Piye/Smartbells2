@@ -24,7 +24,7 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
     /**
      * Cancel button
      */
-    private Button cancelButton;
+    //private Button cancelButton;
     /***
      * save button
      */
@@ -60,6 +60,7 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
         //Set text to actually retrieve the Workout id's Name from DB
         workoutName.setText("Get_From_Database_Name");
         //Button
+        Button cancelButton;
         cancelButton = (Button) view.findViewById(R.id.cancelCreateWorkoutButton);
         saveButton = (Button) view.findViewById(R.id.saveCreateWorkoutButton);
 

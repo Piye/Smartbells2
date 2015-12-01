@@ -64,7 +64,7 @@
             android:text="Private"
             android:id="@+id/privateTextView"
             android:layout_margin="2dp"
-            android:onClick="saveRoutine"/>
+            />
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -73,7 +73,7 @@
             android:id="@+id/publicTextView"
             android:layout_margin="2dp"
             android:checked="true"
-            android:onClick="cancelCreatRoutine"/>
+            />
         </RadioGroup>
     </LinearLayout>
     <!-- SET GROUPS TITLE -->

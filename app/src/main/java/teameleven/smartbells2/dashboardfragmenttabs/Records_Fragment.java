@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import teameleven.smartbells2.Dashboard;
 import teameleven.smartbells2.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
@@ -48,7 +47,7 @@ public class Records_Fragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         //Tells main activity ADD button what type of item to add (RECORD)
-        //SmartBellsMainActivity.dashboardTab.setCheckTabPage(3);
+        SmartBellsMainActivity.dashboardTab.setCheckTabPage(1);
 
         //Change adapter type to handle objects instead of strings later
         //Set the adapter to show in application

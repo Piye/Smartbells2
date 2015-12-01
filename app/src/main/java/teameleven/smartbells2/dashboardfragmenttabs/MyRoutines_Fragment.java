@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import teameleven.smartbells2.BeginWorkout;
 import teameleven.smartbells2.RecordWorkoutRoutine;
 import teameleven.smartbells2.SmartBellsMainActivity;
-import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
 
 /**
  * This class shows the list of user's routines
@@ -31,8 +31,9 @@ public class MyRoutines_Fragment extends ListFragment {
     BeginWorkout dashboard;
     public static final String ROUTINE_ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
     //Temporary string array to populate list
-    private ArrayList<String> myroutines;
-    private ArrayList<String> myPrivateRoutines;
+    private ArrayList<Routine> myroutines;
+    private ArrayList<Routine> myPrivateRoutines;
+    private ArrayList<String> myPrivateRoutinesList;
     private DatabaseAdapter db;
 
     /**
@@ -58,24 +59,32 @@ public class MyRoutines_Fragment extends ListFragment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //Two ArrayLists for each ListView
-        myroutines = db.getMyRoutinesAsStrings(db.getUserIDForSession());
+        /*
+        * myroutine<Routine> will hold a list of all routines.
+        * any routine whose is private will be added to myPrivateRoutines<Routine> <--
+         * myPrivateRoutineList<String> will hold the name reference to each private routine.
+        * */
 
-        // First I want to parse through all the routines.
-//
-//        db.selectMyRoutineById()
-//
-//        for(String routine: myroutines){
-//            if(myroutines.indexOf(db.getMyRoutinesAsStrings(routine.)))
-//
-//        }
+        //TODO Potential fix for the Private list view
+//       myPrivateRoutinesList = db.getRoutinesAsStrings(); <<-- previous list
+        myroutines = db.selectAllRoutines(); //getMyRoutinesAsStrings(db.getUserIDForSession());
 
+        for(Routine routine: myroutines){
+            if(myroutines.getIsPublic() == False){
+               myPrivateRoutines.add(routine);
+            }
+        }
+
+        for (Routine privateRoutine: myPrivateRoutines){
+            myPrivateRoutinesList.add(privateRoutine.getName());
+        }
+        //todo The Above code should sort private/public routines
         //close the database
         db.closeLocalDatabase();
 
         //Change adapter type to handle objects instead of strings later
         //Set the adapter to show in application
-        ArrayAdapter<String> mylist = new ArrayAdapter<String>(getActivity().getBaseContext(),  android.R.layout.simple_list_item_1, myroutines);
+        ArrayAdapter<String> mylist = new ArrayAdapter<String>(getActivity().getBaseContext(),  android.R.layout.simple_list_item_1, myPrivateRoutinesList);
         setListAdapter(mylist);
 
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -106,7 +115,7 @@ public class MyRoutines_Fragment extends ListFragment {
                 //Start an intent when a list item is clicked
                 Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
                 //When we start the new intent we want to pass the name of the Routine from the list
-                intent.putExtra(ROUTINE_ITEM_NAME, myroutines.get(pos));
+                intent.putExtra(ROUTINE_ITEM_NAME, myroutines.get(pos).getName());
                 startActivity(intent);
             }
 

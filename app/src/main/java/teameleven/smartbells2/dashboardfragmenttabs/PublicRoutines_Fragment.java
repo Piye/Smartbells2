@@ -20,12 +20,17 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 /**
  * Created by Jare on 2015-11-19.
  */
+
+
 public class PublicRoutines_Fragment extends ListFragment {
 
     BeginWorkout dashboard;
     public static final String ROUTINE_ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
     private ArrayList<String> publicroutines;
     private DatabaseAdapter db;
+    private ArrayList<Routine> myroutines;
+    private ArrayList<Routine> myPrivateRoutines;
+    private ArrayList<String> myPublicRoutinesList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -49,9 +54,28 @@ public class PublicRoutines_Fragment extends ListFragment {
         //close the database
         db.closeLocalDatabase();
 
+                /*
+        * myroutine<Routine> will hold a list of all routines.
+        * any routine whose is private will be added to myPrivateRoutines<Routine> <--
+         * myPrivateRoutineList<String> will hold the name reference to each private routine.
+        * */
+
+        //Todo Below should sort public from private routines
+        myroutines = db.selectAllRoutines(); //getMyRoutinesAsStrings(db.getUserIDForSession());
+
+        for(Routine routine: myroutines){
+            if(myroutines.getIsPublic() == True){
+                myPrivateRoutines.add(routine);
+            }
+        }
+
+        for (Routine privateRoutine: myPrivateRoutines){
+        myPublicRoutinesList.add(privateRoutine.getName());
+    }
+    //todo The above should sort the public from the private
         //Change adapter type to handle objects instead of strings later
         //Set the adapter to show in application
-        ArrayAdapter<String> publist = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, publicroutines);
+        ArrayAdapter<String> publist = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, myPublicRoutinesList);
         setListAdapter(publist);
 
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -71,7 +95,7 @@ public class PublicRoutines_Fragment extends ListFragment {
 
         Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
         //When we start the new intent we want to pass the name of the Routine from the list
-        intent.putExtra(ROUTINE_ITEM_NAME, publicroutines.get(position));
+        intent.putExtra(ROUTINE_ITEM_NAME, myroutines.get(position).getName());
 
 //        Pull Ispublic, reps, sets from DB, pass to proper view area, below is not how to implement. Just a reference for myself - Jordan
 //        intent.putExtra(ROUTINE_ISPUBLIC, list.get(position));

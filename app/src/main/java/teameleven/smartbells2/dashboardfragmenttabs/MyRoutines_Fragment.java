@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import teameleven.smartbells2.BeginWorkout;
 import teameleven.smartbells2.RecordWorkoutRoutine;
 import teameleven.smartbells2.SmartBellsMainActivity;
-import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 
 /**
  * This class shows the list of user's routines
@@ -67,24 +68,15 @@ public class MyRoutines_Fragment extends ListFragment {
 
         //TODO Potential fix for the Private list view
 //       myPrivateRoutinesList = db.getRoutinesAsStrings(); <<-- previous list
-        myroutines = db.selectAllRoutines(); //getMyRoutinesAsStrings(db.getUserIDForSession());
+        myPrivateRoutinesList = db.getMyRoutinesAsStrings(db.getUserIDForSession());
 
-        for(Routine routine: myroutines){
-            if(myroutines.getIsPublic() == False){
-               myPrivateRoutines.add(routine);
-            }
-        }
-
-        for (Routine privateRoutine: myPrivateRoutines){
-            myPrivateRoutinesList.add(privateRoutine.getName());
-        }
-        //todo The Above code should sort private/public routines
         //close the database
         db.closeLocalDatabase();
 
         //Change adapter type to handle objects instead of strings later
         //Set the adapter to show in application
-        ArrayAdapter<String> mylist = new ArrayAdapter<String>(getActivity().getBaseContext(),  android.R.layout.simple_list_item_1, myPrivateRoutinesList);
+        ArrayAdapter<String> mylist = new ArrayAdapter<String>(getActivity().getBaseContext(),
+                                      android.R.layout.simple_list_item_1, myPrivateRoutinesList);
         setListAdapter(mylist);
 
         return super.onCreateView(inflater, container, savedInstanceState);

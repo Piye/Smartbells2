@@ -27,7 +27,7 @@ public class BeginWorkout extends Fragment {
     private FloatingActionButton fab;
 
     //Create the view and setup the tab host to view
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.tab_beginworkout_dashboard, container, false);
 
@@ -66,7 +66,10 @@ public class BeginWorkout extends Fragment {
                 if (tabId.equalsIgnoreCase("myroutines")) {
                     setCheckTabPage(4);
                     if (myroutines_fragment == null) {
-                        fragTransaction.add(R.id.realtabcontent, new MyRoutines_Fragment(), "myroutines");
+                        if (savedInstanceState != null) {
+                            fragTransaction.add(R.id.realtabcontent, new MyRoutines_Fragment(), "myroutines");
+                            return;
+                        }
                     } else {
                         fragTransaction.attach(myroutines_fragment);
                     }
@@ -76,7 +79,10 @@ public class BeginWorkout extends Fragment {
                 if (tabId.equalsIgnoreCase("publicroutines")) {
                     setCheckTabPage(4);
                     if (publicroutines_fragment == null) {
-                        fragTransaction.add(R.id.realtabcontent, new PublicRoutines_Fragment(), "publicroutines");
+                        if (savedInstanceState != null) {
+                            fragTransaction.add(R.id.realtabcontent, new PublicRoutines_Fragment(), "publicroutines");
+                            return;
+                        }
                     } else {
                         fragTransaction.attach(publicroutines_fragment);
                     }

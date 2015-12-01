@@ -145,10 +145,10 @@ public class SmartBellsMainActivity extends AppCompatActivity
                 /* BEGIN WORKOUT FRAGMENT TAB SELECTED */
 
                 //This might go all together? Will keep if we decide to add a new tab type.
-                if( bw2.getCheckBWTabPage() == 4 ) {
+                if( dashboardTab.getCheckTabPage() == 4 ) {
                     fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
                             new AccelerateInterpolator(2)).start();
-                    fragment = new CreateCustomSession();
+                    fragment = new CreateRoutine();
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
                     transaction.commit();
@@ -272,6 +272,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
             fragment = new Dashboard();
         } else if (id == R.id.nav_beginworkout) {
             fragmentShowing = 1;
+            dashboardTab.setCheckTabPage(4);
             fragment = new BeginWorkout();
         } else if (id == R.id.nav_achievements) {
 

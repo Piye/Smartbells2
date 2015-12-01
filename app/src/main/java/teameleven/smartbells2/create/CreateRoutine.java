@@ -163,10 +163,6 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
                 dialog.show(fm, "SetGroupCreator");
             }
         });
-        //Spinner
-//        exerciseSpinner = (Spinner) view.findViewById(R.id.exerciseSpinner);
-//        addListenerOnSpinnerExerciseSelection();
-
         //Open Database
         database = new DatabaseAdapter(getActivity());
         try {
@@ -174,14 +170,6 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
-/*
-
-i need some way of gathering the set groups i create. what are my ways of doing this?
-
-1. create a dummy routine, just to get an id, set all the setgroups to this id, then update the routine with the remaining values (name, etc)
-2. create a dummy table to hold set groups
-3. return from the dialog a setgroup object. then fill in the remaining routine data, then add it all together. Voila (best result imo)
- */
         //ArrayList<String> exerciseList = database.getExercisesAsStrings();
 
         adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, exerciseName);

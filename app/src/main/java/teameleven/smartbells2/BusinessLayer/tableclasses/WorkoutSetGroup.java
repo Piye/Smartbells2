@@ -53,7 +53,9 @@ public class WorkoutSetGroup {
             e.printStackTrace();
         }
     }
-
+    public WorkoutSetGroup(SetGroup setGroup){
+        this.set_group = setGroup;
+    }
     /**
      * Default Constructor
      */

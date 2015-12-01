@@ -613,16 +613,19 @@ public class DatabaseAdapter{
     /**********************************************************************************************/
 
     public long insertWorkoutSession(WorkoutSession session, boolean sync) {
-        for (WorkoutSetGroup setgroup: session.getSetGroups())
-            insertSetGroup(setgroup.getSet_group(), sync);
-        return insertWorkoutSession(
+        long result;
+        result = insertWorkoutSession(
                 session.getId(),
                 session.getUser_Id(),
                 session.getName(),
                 session.getCreated_At(),
                 session.getCreated_At(),
                 sync);
-
+        for (WorkoutSetGroup setgroup: session.getSetGroups()) {
+            setgroup.setWorkoutSessionId((int) result);
+            insertSetGroup(setgroup.getSet_group(), sync);
+        }
+        return result;
     }
 
     //Insert Workout Session
@@ -1070,12 +1073,13 @@ public ArrayList<Routine> selectAllRoutines() {
     public int getExerciseIdByName(String name){
         String[] columns = new String[]{EXERCISE_NAME, PK_EXERCISE_ID};
         Cursor cursor = database.query
-                (EXERCISE_TABLE, null,
+                (EXERCISE_TABLE, columns,
                 EXERCISE_NAME + " like \"%" + name + "%\"",
                 null, null, null, null);
 
         cursor.moveToFirst();
-        int exerciseId = cursor.getInt(0);
+        int exerciseId = cursor.getInt(
+                cursor.getColumnIndex(PK_EXERCISE_ID));
 
         return exerciseId;
     }
@@ -1276,6 +1280,18 @@ public ArrayList<Routine> selectAllRoutines() {
             insertUpdateRecord(result, WORKOUTSETGROUP_TABLE, 1);
         }
         return result;
+    }
+
+    public long getRoutineIDByName(String routineName) {
+        String[] columns = new String[]{ROUTINE_NAME, PK_ROUTINE_ID};
+        Cursor cursor = database.query
+                (ROUTINE_TABLE, columns,
+                        ROUTINE_NAME + " like \"%" + routineName + "%\"",
+                        null, null, null, null);
+
+        cursor.moveToFirst();
+        int routineId = cursor.getInt(cursor.getColumnIndex(PK_ROUTINE_ID));
+        return routineId;
     }
 
     //********************************************************************************************//

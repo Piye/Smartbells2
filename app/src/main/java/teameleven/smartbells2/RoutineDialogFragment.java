@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -22,8 +23,6 @@ import java.util.ArrayList;
 
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
-import teameleven.smartbells2.create.CreateRoutine;
-import teameleven.smartbells2.create.OnFinishSetGroupDialog;
 
 //import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
 //import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
@@ -97,16 +96,12 @@ public class RoutineDialogFragment extends DialogFragment implements View.OnClic
 
                     //Log.d("setGroup is -", setGroup.toString());
 
-                    Intent intent = new Intent();
+                    Intent intent = new Intent("DialogResult");
                     intent.putExtra("setGroup", setGroup.toString());
 
                     Log.d("setgroups in CreateRoutine", setGroup.toString());
+                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
 
-                    OnFinishSetGroupDialog fragment = (OnFinishSetGroupDialog) getFragmentManager().findFragmentById(R.id.content_main);
-                    if (fragment == null){
-                        Log.d("Activity is null apparently... goddamit", " bejabhfljkdhadhffasdf");
-                    }
-                    fragment.onFinishEditDialog(setGroup.toString());
                     //getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
                     dismiss();
 

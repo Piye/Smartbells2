@@ -56,11 +56,11 @@ public class SetGroup {
         try {
             exerciseId = setGroup.getInt("exercise_id");
             if (setGroup.has("routine_id")) routineId = setGroup.getInt("routine_id");
-            id = setGroup.getInt("id");
+            if (setGroup.has("id")) id = setGroup.getInt("id");
             numOfSets = setGroup.getInt("number_of_sets");
             repsPerSet = setGroup.getInt("reps_per_set");
-            creationDate = setGroup.getString("created_at");
-            lastUpdated = setGroup.getString("updated_at");
+            if (setGroup.has("created_at"))creationDate = setGroup.getString("created_at");
+            if (setGroup.has("updated_at"))lastUpdated = setGroup.getString("updated_at");
         } catch (JSONException e) {
             e.printStackTrace();
         }

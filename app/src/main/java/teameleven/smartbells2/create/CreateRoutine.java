@@ -1,10 +1,15 @@
 package teameleven.smartbells2.create;
 
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +27,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import teameleven.smartbells2.Dashboard;
@@ -40,7 +46,7 @@ import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
  * Update   by WonKyoung On 2015-11-05
  * updated: Oct 8th, 2015 : added methods to interact with Exercise and Routine for Routine saving and creation.
  */
-public class CreateRoutine extends Fragment implements View.OnClickListener, OnFinishSetGroupDialog {
+public class CreateRoutine extends Fragment implements View.OnClickListener {
     /**
      * DatabaseAdapter for query
      */
@@ -57,10 +63,6 @@ public class CreateRoutine extends Fragment implements View.OnClickListener, OnF
      * Boolean where it is public or not
      */
     private Boolean isPublic = false;
-    /**
-     * Exercise name
-     */
-    private String exerciseName;// exerciseId is used as the key of calling JSon
     /**
      * Exercise id
      */
@@ -80,7 +82,7 @@ public class CreateRoutine extends Fragment implements View.OnClickListener, OnF
     /**
      * List of excercises(Exercise attribute)
      */
-    private ArrayList<Exercise> exercises = new ArrayList<>();
+    ArrayList<String> exerciseName = new ArrayList<>();
     private ArrayList<SetGroup> setGroups = new ArrayList<>();
     /**
      * List of string exercise
@@ -119,22 +121,27 @@ public class CreateRoutine extends Fragment implements View.OnClickListener, OnF
     private FloatingActionButton fab;
     /**
      * onCreate - Create view of input screen for creating  set group
+     *
      * @param savedInstanceState
      */
     private EditText mRoutineName;
     private EditText mNumOfSets;
     private EditText mRepsPerSet;
     private ListView routineSetGroups;
+    private BroadcastReceiver localBroadcastReceiver;
+    private ArrayAdapter adapter;
 
-    protected void setSetGroup(SetGroup setGroup){
+    protected void addSetGroup(SetGroup setGroup) {
         this.setGroups.add(setGroup);
     }
 
     //@Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
-        Log.d("fragment name is ", " this ->" + this.getTag() + " and id is ->" + this.getId());
 
+        localBroadcastReceiver = new LocalBroadcastReceiver();
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
+                .registerReceiver(localBroadcastReceiver, new IntentFilter("DialogResult"));
         //Main view
         View view = inflater.inflate(R.layout.create_routine, container, false);
         //Save Button
@@ -152,9 +159,7 @@ public class CreateRoutine extends Fragment implements View.OnClickListener, OnF
                 FragmentManager fm = getActivity().getFragmentManager();
 //                CustomDialogFragment dialog = new CustomDialogFragment();
                 RoutineDialogFragment dialog = new RoutineDialogFragment();
-                dialog.setTargetFragment(fm.findFragmentById(R.id.content_main), 12345);
 
-                //CreateRoutine.this.startActivityForResult(new Intent(), 12345);
                 dialog.show(fm, "SetGroupCreator");
             }
         });
@@ -175,12 +180,11 @@ i need some way of gathering the set groups i create. what are my ways of doing 
 
 1. create a dummy routine, just to get an id, set all the setgroups to this id, then update the routine with the remaining values (name, etc)
 2. create a dummy table to hold set groups
-3. return from the dialog a
+3. return from the dialog a setgroup object. then fill in the remaining routine data, then add it all together. Voila (best result imo)
  */
-        //Todo: Need to pull exercises ONLY RELATED to current routine ID.
-        //Todo: When saved, or clicked, RoutineID_PK shows related Exercise_FK.
-        ArrayList<String> exerciseList = database.getExercisesAsStrings();
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, exerciseList);
+        //ArrayList<String> exerciseList = database.getExercisesAsStrings();
+
+        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, exerciseName);
         routineSetGroups.setAdapter(adapter);
 
         return view;
@@ -188,6 +192,7 @@ i need some way of gathering the set groups i create. what are my ways of doing 
 
     /**
      * Add Routine Name
+     *
      * @return Routine name
      */
     public String addRoutineName() {
@@ -199,6 +204,7 @@ i need some way of gathering the set groups i create. what are my ways of doing 
 
     /**
      * Return the boolean when a radio button clicked(Public or not(Private))
+     *
      * @return isPublic
      */
     public Boolean addListenerOnRadioButton() {
@@ -215,11 +221,11 @@ i need some way of gathering the set groups i create. what are my ways of doing 
                 //if (selectedId == publicRoutine.getId()) {
                 if (publicRoutine.isChecked()) {
                     isPublic = true;
-                }else if(privateRoutine.isChecked()){
+                } else if (privateRoutine.isChecked()) {
                     isPublic = false;
                 }
                 //Toast.makeText(CreateRoutine.this,
-                        //publicButton.getText(), Toast.LENGTH_SHORT).show();
+                //publicButton.getText(), Toast.LENGTH_SHORT).show();
             }
         });
         return isPublic;
@@ -227,6 +233,7 @@ i need some way of gathering the set groups i create. what are my ways of doing 
 
     /**
      * Create a routine with set group and cancel
+     *
      * @param v View
      */
     @Override
@@ -248,35 +255,35 @@ i need some way of gathering the set groups i create. what are my ways of doing 
             case R.id.routineExerciseSaveButton:
                 //SAVE new Routine to databasepiyep
                 //if (validate()) {
-                    //SetGroup setGroup = new SetGroup(
-                           //database.getExerciseIdByName(exerciseName),
-                            //Integer.parseInt(addNumberOfSets()),
-                            //Integer.parseInt(addRepsPerSet()
-                           // );
-                    Routine routine = new Routine();
-                    //routine.getSetGroups().add(setGroup);
-                    routine.setName(addRoutineName());
-                    routine.setIs_Public(isPublic);
-                    //Log.d("CreateRoutine.saveRoutine - ", routine.toString());
-                    //database is called in restputroutine. both calls not necessary
-                    database.insertRoutine(routine, true);
-                    //routine.RestPutRoutine(database);//should not call rest here - data will be
-                    //input into update table for later synchronizing
-                    //Close the database
-                    database.closeLocalDatabase();
+                //SetGroup setGroup = new SetGroup(
+                //database.getExerciseIdByName(exerciseName),
+                //Integer.parseInt(addNumberOfSets()),
+                //Integer.parseInt(addRepsPerSet()
+                // );
+                Routine routine = new Routine();
+                //routine.getSetGroups().add(setGroup);
+                routine.setName(addRoutineName());
+                routine.setIs_Public(isPublic);
+                routine.setSetGroups(setGroups);
+                Log.d("CreateRoutine.saveRoutine - ", routine.toString());
+                //database is called in restputroutine. both calls not necessary
+                database.insertRoutine(routine, true);
+                //routine.RestPutRoutine(database);//should not call rest here - data will be
+                //input into update table for later synchronizing
+                //Close the database
+                database.closeLocalDatabase();
 
-                    //Back to menu
-                    Toast.makeText(getActivity(), "routine " + routine.getName() + " created!!.", Toast.LENGTH_LONG).show();
+                //Back to menu
+                Toast.makeText(getActivity(), "routine " + routine.getName() + " created!!.", Toast.LENGTH_LONG).show();
 
-                    fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-                    fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-                    fragment = new Dashboard();
-                    transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.content_main, fragment);
-                    transaction.commit();
-                    //TODO Add to routine list here??
+                fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+                fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                fragment = new Dashboard();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_main, fragment);
+                transaction.commit();
+                //TODO Add to routine list here??
                 break;
-
 
 
             case R.id.routineExerciseCancelButton:
@@ -293,19 +300,49 @@ i need some way of gathering the set groups i create. what are my ways of doing 
         }
     }
 
-    @Override
-    public void onFinishEditDialog(String s) {
+    private void refreshAdapter(int id) {
         try {
-            setGroups.add(new SetGroup(new JSONObject(s)));
-        } catch (JSONException e) {
+            exerciseName.add(new Exercise(database.getExercise(id)).getName());
+        } catch (SQLException e) {
             e.printStackTrace();
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    private class LocalBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null || intent.getAction() == null) {
+                return;
+            }
+            if (intent.getAction().equals("DialogResult")) {
+                try {
+                    SetGroup setGroup = new SetGroup(new JSONObject(intent.getStringExtra("setGroup")));
+                    setGroups.add(setGroup);
+                    refreshAdapter(setGroup.getExerciseId());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
 
 /**
  * Text view fields of sets and reps
+ *
  * @param view of set groups
+ * <p/>
+ * Return ther exercise name from the input page
+ * @return Exercise Name
+ * <p/>
+ * Return a number of sets of exercise
+ * @return a number of sets
+ * <p/>
+ * Get a number of reps per set
+ * @return A number of reps
  */
 //    public void setGroups(View view) {
 //        //Set the Number of Exercise Groups you want to create in this routine

@@ -523,6 +523,14 @@ public class DatabaseAdapter{
 
         return result;
     }
+
+    /*
+     *  Get Routines for a Workout Session
+     */
+    public ArrayList<String> getWorkoutRoutines(int sessionId) {
+        String[]columns = new String[]{ROUTINE_NAME};
+        return null;
+    }
     /******************************WORKOUTSESSION TABLE********************************************/
 
 

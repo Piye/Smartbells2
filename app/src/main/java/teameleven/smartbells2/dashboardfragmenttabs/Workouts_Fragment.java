@@ -2,6 +2,9 @@ package teameleven.smartbells2.dashboardfragmenttabs;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +15,9 @@ import android.widget.ListView;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import teameleven.smartbells2.Dashboard;
-import teameleven.smartbells2.RecordWorkoutRoutine;
 import teameleven.smartbells2.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.dashboard.workouts.ViewWorkout;
 
 /** Created by Jordan Medwid on 10/18/2015.
  * This class will handle an array of workout objects to show them to the user
@@ -24,10 +26,43 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 public class Workouts_Fragment extends ListFragment {
 
-    Dashboard dashboard;
-    public static final String ROUTINE_ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
+    /**
+     * List Values
+     */
+    public static final String WORKOUT_ITEM_ID = DatabaseAdapter.PK_WORKOUTSESSION_ID;
+    public static final String WORKOUT_ITEM_NAME = DatabaseAdapter.SESSION_NAME;
+    public static final String WORKOUT_ROUTINE_NAME = DatabaseAdapter.ROUTINE_NAME;
+    public static final String ROUTINE_EXERCISE_NAME = DatabaseAdapter.EXERCISE_NAME;
+    public static final String ROUTINE_EXERCISE_RESISTANCE = "None";
+    public static final String ROUTINE_EXERCISE_SETS = DatabaseAdapter.SETGROUP_SETS;
+    public static final String ROUTINE_EXERCISE_REPS = DatabaseAdapter.SETGROUP_REPS;
+
+    /**
+     *  Database
+     */
+    private DatabaseAdapter db;
+    /**
+     * ArrayList of workouts
+     */
     private ArrayList<String> listOfWorkouts;
-    //Temporary string array to populate list
+    /**
+     * ArrayList of Routines
+     */
+    private ArrayList<String> listOfRoutines;
+    /**
+     * FloatingActionButton
+     */
+    private FloatingActionButton fab;
+    /**
+     * Fragment
+     */
+    private Fragment fragment = null;
+    /**
+     * FragmentTransaction
+     */
+    private FragmentTransaction transaction;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -35,7 +70,7 @@ public class Workouts_Fragment extends ListFragment {
         //Refer to ONCLICK- SmartBellsMainActivity
         SmartBellsMainActivity.dashboardTab.setCheckTabPage(0);
 
-        DatabaseAdapter db = new DatabaseAdapter(getActivity());
+        db = new DatabaseAdapter(getActivity());
         try {
             db.openLocalDatabase();
         } catch (SQLException e) {
@@ -48,7 +83,7 @@ public class Workouts_Fragment extends ListFragment {
         //setListAdapter(adapter);
 
         /**
-         * Select Workouts of userId
+         * Select all Workouts of userId
          */
         listOfWorkouts = db.getMyWorkoutsAsStrings(db.getUserIDForSession());
         if (listOfWorkouts != null ){
@@ -60,6 +95,7 @@ public class Workouts_Fragment extends ListFragment {
         }else{
             System.out.println("listOfWorkouts null ");
         }
+
         //close the database
         db.closeLocalDatabase();
 
@@ -84,13 +120,31 @@ public class Workouts_Fragment extends ListFragment {
     @Override
     public void onListItemClick(ListView lv, View view, int position, long id) {
 
-        Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
+        //Start an intent when a list item is clicked
+        db = new DatabaseAdapter(getActivity());
+        try {
+            db.openLocalDatabase();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Get Workouts
+        listOfRoutines = db.getWorkoutRoutines(Integer.parseInt(WORKOUT_ITEM_ID));
+
+        db.closeLocalDatabase();
+
+        Intent intent = new Intent(getActivity(), ViewWorkout.class);
         //When we start the new intent we want to pass the name of the Routine from the list
-        intent.putExtra(ROUTINE_ITEM_NAME, listOfWorkouts.get(position));
+        intent.putExtra(WORKOUT_ITEM_NAME, listOfWorkouts.get(position));
+        intent.putExtra(WORKOUT_ROUTINE_NAME, listOfWorkouts.get(position));
+        intent.putExtra(ROUTINE_EXERCISE_NAME, listOfWorkouts.get(position));
+        //Pull Ispublic, reps, sets from DB, pass to proper view area, below is not how to implement
+        //Just a reference for myself - Jordan
+        intent.putExtra(ROUTINE_EXERCISE_RESISTANCE, "resistance");
+        intent.putExtra(ROUTINE_EXERCISE_SETS, listOfWorkouts.get(position));
+        intent.putExtra(ROUTINE_EXERCISE_REPS, listOfWorkouts.get(position));
 
         startActivity(intent);
-
-
     }
 
 }

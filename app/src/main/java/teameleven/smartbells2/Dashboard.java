@@ -118,7 +118,7 @@ public class Dashboard extends Fragment {
                     }
                 }
 
-                //If the current tab is on achievements show only achieves
+                //If the current tab is on exercises show only exercises
                 if (tabId.equalsIgnoreCase("exercises")) {
                     setCheckTabPage(2);
                     if (exercises_Fragment == null) {

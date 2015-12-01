@@ -33,6 +33,7 @@
         <activity android:name=".LoginActivity" android:launchMode="singleTop"/>
         <activity android:name=".LoadingSplashScreen"/>
         <activity android:name=".RecordWorkoutRoutine"/>
+        <activity android:name=".dashboard.workouts.ViewWorkout"/>
 
 
 

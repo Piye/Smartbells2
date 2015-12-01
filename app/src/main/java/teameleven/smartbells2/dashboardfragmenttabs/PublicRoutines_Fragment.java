@@ -51,7 +51,8 @@ public class PublicRoutines_Fragment extends ListFragment {
 
         //Change adapter type to handle objects instead of strings later
         //Set the adapter to show in application
-        ArrayAdapter<String> publist = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, publicroutines);
+        ArrayAdapter<String> publist = new ArrayAdapter<String>(
+                getActivity().getBaseContext(), android.R.layout.simple_list_item_1, publicroutines);
         setListAdapter(publist);
 
         return super.onCreateView(inflater, container, savedInstanceState);

@@ -36,7 +36,7 @@ public class ViewWorkout extends AppCompatActivity {
         nameValue = getIntent().getStringExtra(Workouts_Fragment.WORKOUT_ITEM_NAME);
         routineNameValue = getIntent().getStringExtra(Workouts_Fragment.WORKOUT_ROUTINE_NAME);
         exerciseNameValue = getIntent().getStringExtra(Workouts_Fragment.ROUTINE_EXERCISE_NAME);
-        resistanceValue = getIntent().getStringExtra(Workouts_Fragment.ROUTINE_EXERCISE_RESISANCE);
+        resistanceValue = getIntent().getStringExtra(Workouts_Fragment.ROUTINE_EXERCISE_RESISTANCE);
         setsValue = getIntent().getStringExtra(Workouts_Fragment.ROUTINE_EXERCISE_SETS);
         repsValue = getIntent().getStringExtra(Workouts_Fragment.ROUTINE_EXERCISE_REPS);
 

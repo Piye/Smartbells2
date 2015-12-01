@@ -18,9 +18,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import teameleven.smartbells2.BeginWorkout;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.RecordWorkoutRoutine;
 import teameleven.smartbells2.SmartBellsMainActivity;
-import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.businesslayer.tableclasses.Routine;
+
 
 /**
  * This class shows the list of user's routines
@@ -70,8 +72,9 @@ public class MyRoutines_Fragment extends ListFragment {
         myroutines = db.selectAllRoutines(); //getMyRoutinesAsStrings(db.getUserIDForSession());
 
         for(Routine routine: myroutines){
-            if(myroutines.getIsPublic() == False){
+            if (routine.getIsPublic() == false) {
                myPrivateRoutines.add(routine);
+              
             }
         }
 

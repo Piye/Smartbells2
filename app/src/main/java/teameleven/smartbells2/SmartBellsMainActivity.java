@@ -173,7 +173,17 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
     }
 
-//    @Override
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+//        Fragment fragment;
+//        fragment = (Fragment) getFragmentManager().findFragmentByTag("routines");
+//        if (fragment != null){
+//            fragment.onActivityResult(requestCode, resultCode, data);
+//        }
+    }
+
+    //    @Override
 //    protected void onStart() {
 //        super.onStart();
 //        //show the fab

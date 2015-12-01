@@ -355,17 +355,17 @@ public class DatabaseAdapter{
     }
 
     public long insertRoutine(Routine routine, boolean sync) {
-
-        for (SetGroup setGroup: routine.getSetGroups()){
-            insertSetGroup(setGroup, sync);
-        }
-
-        return insertRoutine(routine.getRoutineId(),
+        long result = insertRoutine(routine.getRoutineId(),
                 routine.getName(),
                 routine.getIsPublic(),
                 routine.getCreated_At(),
                 routine.getUpdated_At(),
                 sync);
+        for (SetGroup setGroup: routine.getSetGroups()){
+            setGroup.setRoutineId((int) result);
+            insertSetGroup(setGroup, sync);
+        }
+        return result;
     }
 
     /**
@@ -844,9 +844,9 @@ public ArrayList<Routine> selectAllRoutines() {
                                boolean sync) {
 
         ContentValues initialValues = new ContentValues();
-        if (setGroupId >= 0) initialValues.put(PK_SETGROUP_ID, setGroupId);
+        if (setGroupId > 0) initialValues.put(PK_SETGROUP_ID, setGroupId);
         initialValues.put(FK_SG_EXERCISE_ID, exerciseId);
-        if (routineId != 0) initialValues.put(FK_SG_ROUTINE_ID, routineId);
+        if (routineId > 0) initialValues.put(FK_SG_ROUTINE_ID, routineId);
         initialValues.put(SETGROUP_SETS, sets);
         initialValues.put(SETGROUP_REPS, reps);
         initialValues.put(SETGROUP_CREATED_AT, createdAt);

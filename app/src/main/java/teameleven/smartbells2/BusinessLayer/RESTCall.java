@@ -89,7 +89,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
             }
             //convert json response to string
             result = new JSONObject(json);
-            //Log.d(TAG + " POST Result", result.toString(4));//todo remove
+            //Log.d(TAG + " POST Result", result.toString(4));
             //close reader
             br.close();
 
@@ -281,7 +281,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
         try {
             String newURL = baseURL + modifier;
             URL url = new URL(newURL);
-            Log.d(TAG, url.toString());//todo for debug purposes
+            Log.d(TAG, url.toString());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             return connection;
         } catch (MalformedURLException e) {
@@ -289,15 +289,13 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;//todo should throw exception here, instead of catching it below - regardless
+        return null;
     }
 
     @Override
     /**
      * accepts multiple parameters String parameters to define the REST Call.
      * Each parameter expects a certain value in a certain order.
-     * todo create class to format and statically call RESTCALL to ensure basic validation
-     * todo and error checking happens in UI Thread
      * param[0] should be the modifier to the URL for the specific object in question
      * param[1] should be the REST method parameter ("GET", "POST", "PUT", "DELETE")
      * param[2] should be the JSON Object that is expected by the API

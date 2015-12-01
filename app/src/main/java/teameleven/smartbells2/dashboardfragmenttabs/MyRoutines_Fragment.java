@@ -74,7 +74,7 @@ public class MyRoutines_Fragment extends ListFragment {
         for(Routine routine: myroutines){
             if (routine.getIsPublic() == false) {
                myPrivateRoutines.add(routine);
-              
+
             }
         }
 

@@ -16,6 +16,7 @@ import teameleven.smartbells2.BeginWorkout;
 import teameleven.smartbells2.RecordWorkoutRoutine;
 import teameleven.smartbells2.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
+import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 
 /**
  * Created by Jare on 2015-11-19.
@@ -64,7 +65,7 @@ public class PublicRoutines_Fragment extends ListFragment {
         myroutines = db.selectAllRoutines(); //getMyRoutinesAsStrings(db.getUserIDForSession());
 
         for(Routine routine: myroutines){
-            if(myroutines.getIsPublic() == True){
+            if(routine.getIsPublic() == true){
                 myPrivateRoutines.add(routine);
             }
         }

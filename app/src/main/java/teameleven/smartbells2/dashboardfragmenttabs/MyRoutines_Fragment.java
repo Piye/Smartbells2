@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import teameleven.smartbells2.BeginWorkout;
+import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.RecordWorkoutRoutine;
 import teameleven.smartbells2.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
@@ -69,6 +70,19 @@ public class MyRoutines_Fragment extends ListFragment {
         //TODO Potential fix for the Private list view
 //       myPrivateRoutinesList = db.getRoutinesAsStrings(); <<-- previous list
         myPrivateRoutinesList = db.getMyRoutinesAsStrings(db.getUserIDForSession());
+
+
+//        for(Routine routine: myroutines){
+//            if (routine.getIsPublic() == false) {
+//               myPrivateRoutines.add(routine);
+//
+//            }
+//        }
+//
+//        for (Routine privateRoutine: myPrivateRoutines){
+//            myPrivateRoutinesList.add(privateRoutine.getName());
+//        }
+//        //todo The Above code should sort private/public routines
 
         //close the database
         db.closeLocalDatabase();

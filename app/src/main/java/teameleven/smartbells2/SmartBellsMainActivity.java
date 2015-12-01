@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -22,7 +21,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
 import teameleven.smartbells2.businesslayer.SessionManager;
-import teameleven.smartbells2.create.CreateCustomSession;
 import teameleven.smartbells2.create.CreateExercise;
 import teameleven.smartbells2.create.CreateRoutine;
 import teameleven.smartbells2.create.CreateWorkout;
@@ -106,13 +104,9 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
                 //Load Create a Workout on FAB click while on Workout Tab
                 if(dashboardTab.getCheckTabPage() == 0) {
-                    //Snackbar for debugging
-                    Snackbar.make(view, "Add a workout!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-
                     //hide the fab
                     fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
-                            new AccelerateInterpolator(2)).start();
+                                                            new AccelerateInterpolator(2)).start();
                     fragment = new CreateWorkout();
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);
@@ -134,7 +128,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
                 if(dashboardTab.getCheckTabPage() == 2) {
                     //hide the fab
                     fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
-                            new AccelerateInterpolator(2)).start();
+                                                            new AccelerateInterpolator(2)).start();
                     fragment = new CreateExercise();
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_main, fragment);

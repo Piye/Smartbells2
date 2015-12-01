@@ -88,30 +88,23 @@ public class Exercises_Fragment extends ListFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-
             public void onClick(DialogInterface arg0, int arg1) {
                 Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+                                        //DELETE EXERCISE
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
             }
-        });
-        builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface arg0, int arg1) {
-
-                Toast.makeText(getActivity(), "Edit", Toast.LENGTH_LONG).show();
-                //Start an intent to edit Exercise
-                //Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
-                //When we start the new intent we want to pass the name of the Routine from the list
-                //intent.putExtra(EXERCISE_NAME, listOfExercises.get(pos));
-                //startActivity(intent);
-            }
-
         });
 
         Dialog mydialog = builder.setView(new View(getActivity())).create();
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.copyFrom(mydialog.getWindow().getAttributes());
-        params.width = 600;
+        params.width = 450;
         params.height = 250;
         mydialog.show();
         mydialog.getWindow().setAttributes(params);

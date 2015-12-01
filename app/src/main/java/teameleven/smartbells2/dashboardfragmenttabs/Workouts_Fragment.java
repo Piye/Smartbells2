@@ -25,7 +25,7 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 public class Workouts_Fragment extends ListFragment {
 
     Dashboard dashboard;
-    public static final String ROUTINE_ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
+    public static final String SESSION_ITEM_NAME = DatabaseAdapter.SESSION_NAME;
     private ArrayList<String> listOfWorkouts;
     //Temporary string array to populate list
     @Override
@@ -86,9 +86,11 @@ public class Workouts_Fragment extends ListFragment {
 
         Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
         //When we start the new intent we want to pass the name of the Routine from the list
-        intent.putExtra(ROUTINE_ITEM_NAME, listOfWorkouts.get(position));
+        intent.putExtra(SESSION_ITEM_NAME, listOfWorkouts.get(position));
 
         startActivity(intent);
+
+
 
 
     }

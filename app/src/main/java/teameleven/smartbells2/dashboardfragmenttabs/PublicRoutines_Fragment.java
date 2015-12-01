@@ -98,7 +98,7 @@ public class PublicRoutines_Fragment extends ListFragment {
 
         Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
         //When we start the new intent we want to pass the name of the Routine from the list
-        intent.putExtra(ROUTINE_ITEM_NAME, myroutines.get(position).getName());
+        intent.putExtra(ROUTINE_ITEM_NAME, myPublicRoutinesList.get(position));
 
 //        Pull Ispublic, reps, sets from DB, pass to proper view area, below is not how to implement. Just a reference for myself - Jordan
 //        intent.putExtra(ROUTINE_ISPUBLIC, list.get(position));

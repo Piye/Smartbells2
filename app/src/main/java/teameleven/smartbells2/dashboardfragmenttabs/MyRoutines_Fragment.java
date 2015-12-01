@@ -18,7 +18,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import teameleven.smartbells2.BeginWorkout;
-import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.RecordWorkoutRoutine;
 import teameleven.smartbells2.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
@@ -109,36 +108,35 @@ public class MyRoutines_Fragment extends ListFragment {
         final int pos = position;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface arg0, int arg1) {
-                Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
-            }
-        });
         builder.setPositiveButton("Record", new DialogInterface.OnClickListener() {
-
             public void onClick(DialogInterface arg0, int arg1) {
                 //Start an intent when a list item is clicked
                 Intent intent = new Intent(getActivity(), RecordWorkoutRoutine.class);
                 //When we start the new intent we want to pass the name of the Routine from the list
-                intent.putExtra(ROUTINE_ITEM_NAME, myroutines.get(pos).getName());
+                intent.putExtra(ROUTINE_ITEM_NAME, myPrivateRoutinesList.get(pos));
                 startActivity(intent);
             }
 
+        });
+        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+
+                Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
+            }
         });
 
         Dialog mydialog = builder.setView(new View(getActivity())).create();
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.copyFrom(mydialog.getWindow().getAttributes());
-        params.width = 600;
+        params.width = 630;
         params.height = 250;
         mydialog.show();
         mydialog.getWindow().setAttributes(params);
 
-//        Pull Ispublic, reps, sets from DB, pass to proper view area, below is not how to implement. Just a reference for myself - Jordan
-//        intent.putExtra(ROUTINE_ISPUBLIC, list.get(position));
-//        intent.putExtra(ROUTINE_REPS, list.get(position));
-//        intent.putExtra(ROUTINE_SETS, list.get(position));
+//      Pull Ispublic, reps, sets from DB, pass to proper view area, below is not how to implement. Just a reference for myself - Jordan
+//      intent.putExtra(ROUTINE_ISPUBLIC, list.get(position));
+//      intent.putExtra(ROUTINE_REPS, list.get(position));
+//      intent.putExtra(ROUTINE_SETS, list.get(position));
     }
 }

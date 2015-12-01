@@ -104,7 +104,7 @@ public class Exercises_Fragment extends ListFragment {
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.copyFrom(mydialog.getWindow().getAttributes());
-        params.width = 450;
+        params.width = 400;
         params.height = 250;
         mydialog.show();
         mydialog.getWindow().setAttributes(params);

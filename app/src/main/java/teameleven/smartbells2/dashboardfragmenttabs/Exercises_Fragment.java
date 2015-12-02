@@ -24,6 +24,7 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
  * This class shows the list of Exercise
  * Created by Jare on 2015-11-17.
  * Updated by Brian McMahon
+ * Updated by Jordan Medwid
  */
 public class Exercises_Fragment extends ListFragment {
     /**
@@ -71,13 +72,7 @@ public class Exercises_Fragment extends ListFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    //run list code on tab select
-//    @Override
-//    public void onStart()
-//    {
-//        super.onStart();
-//        getListView();
-//    }
+    //Load view on exercise Tab selected.
     @Override
     public void onStart()
     {
@@ -85,6 +80,14 @@ public class Exercises_Fragment extends ListFragment {
         getListView();
     }
 
+    /***
+     *
+     * @param lv
+     * @param view
+     * @param position
+     * @param id
+     * Method displays buttons to [edit/delete] items from the exercise list.
+     */
     @Override
     public void onListItemClick(ListView lv, View view, int position, long id) {
         final int pos = position;

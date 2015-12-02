@@ -68,22 +68,9 @@ public class MyRoutines_Fragment extends ListFragment {
          * myPrivateRoutineList<String> will hold the name reference to each private routine.
         * */
 
-        //TODO Potential fix for the Private list view
-//       myPrivateRoutinesList = db.getRoutinesAsStrings(); <<-- previous list
+
         myPrivateRoutinesList = db.getMyRoutinesAsStrings(db.getUserIDForSession());
 
-
-//        for(Routine routine: myroutines){
-//            if (routine.getIsPublic() == false) {
-//               myPrivateRoutines.add(routine);
-//
-//            }
-//        }
-//
-//        for (Routine privateRoutine: myPrivateRoutines){
-//            myPrivateRoutinesList.add(privateRoutine.getName());
-//        }
-       //todo The Above code should sort private/public routines
 
         //close the database
         db.closeLocalDatabase();
@@ -105,6 +92,14 @@ public class MyRoutines_Fragment extends ListFragment {
         getListView();
     }
 
+    /***
+     *
+     * @param lv
+     * @param view
+     * @param position
+     * @param id
+     * This method will allow a routine to be deleted
+     */
     @Override
     public void onListItemClick(ListView lv, View view, int position, long id) {
         final int pos = position;
@@ -148,9 +143,5 @@ public class MyRoutines_Fragment extends ListFragment {
         mydialog.show();
         mydialog.getWindow().setAttributes(params);
 
-//      Pull Ispublic, reps, sets from DB, pass to proper view area, below is not how to implement. Just a reference for myself - Jordan
-//      intent.putExtra(ROUTINE_ISPUBLIC, list.get(position));
-//      intent.putExtra(ROUTINE_REPS, list.get(position));
-//      intent.putExtra(ROUTINE_SETS, list.get(position));
     }
 }

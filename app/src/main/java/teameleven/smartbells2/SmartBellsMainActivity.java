@@ -30,6 +30,8 @@ import teameleven.smartbells2.dashboardfragmenttabs.New_Records_Fragment;
 /**
  * This class is the Main Actibities of the SmartBells
  * Updated by Brian McMahon
+ *            Jarret Holden
+ *            Jordan Medwid
  */
 public class SmartBellsMainActivity extends AppCompatActivity
                                     implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,10 +45,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
      * Dashboard of the tab menu
      */
     public static Dashboard dashboardTab = new Dashboard();
-    /**
-     * Display the beginworkout seperated pages to Private and public routine page
-     */
-    //public static BeginWorkout2 bw2 = new BeginWorkout2();
     /**
      * Dispaly the beginworkout page at once
      */
@@ -170,18 +168,9 @@ public class SmartBellsMainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        Fragment fragment;
-//        fragment = (Fragment) getFragmentManager().findFragmentByTag("routines");
-//        if (fragment != null){
-//            fragment.onActivityResult(requestCode, resultCode, data);
-//        }
     }
 
-    //    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        //show the fab
-//    }
+
 
     @Override
     public void onResume() {

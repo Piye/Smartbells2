@@ -23,7 +23,7 @@ import teameleven.smartbells2.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
- * Created by Jordan Medwid on 10/18/2015.
+ * Created by Jordan Medwid Medwid on 10/18/2015.
  * Updated by Brian McMahon
  * This class will handle an array of routine objects to show them to the user
  * This class will be edited to accept JSON objects retrieved from a server- *Sprint 2
@@ -144,12 +144,6 @@ public class Routines_Fragment extends ListFragment {
         params.height = 250;
         mydialog.show();
         mydialog.getWindow().setAttributes(params);
-
-//        Pull Ispublic, reps, sets from DB, pass to proper view area, below is not how to implement. Just a reference for myself - Jordan
-//        intent.putExtra(ROUTINE_ISPUBLIC, list.get(position));
-//        intent.putExtra(ROUTINE_REPS, list.get(position));
-//        intent.putExtra(ROUTINE_SETS, list.get(position));
-
 
     }
 

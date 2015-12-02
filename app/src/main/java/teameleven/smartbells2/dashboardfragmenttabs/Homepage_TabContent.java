@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TabHost.TabContentFactory;
 
 /**
- * Created by Jordan on 10/18/2015.
+ * Created by Jordan Medwid on 10/18/2015.
  * This class will render individual tabs
  */
 public class Homepage_TabContent implements TabContentFactory {

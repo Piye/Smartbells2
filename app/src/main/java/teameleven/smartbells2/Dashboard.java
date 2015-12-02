@@ -17,6 +17,8 @@ import teameleven.smartbells2.dashboardfragmenttabs.Routines_Fragment;
 import teameleven.smartbells2.dashboardfragmenttabs.Workouts_Fragment;
 
 /**
+ * Created by: Jarret Holden
+ *             Jordan Medwid
  * This class treats the dashboard page that is the fisr page of the smartbells after login.
  */
 public class Dashboard extends Fragment {

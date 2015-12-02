@@ -21,8 +21,6 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 public class Records_Fragment extends ListFragment {
 
-    //Temporary string array to populate list
-    //String[] listOfRecords = new String[] {"10 Reps, 3 sets", "1000 Miles, 10 seconds", "Crazy Marathon"};
     /**
      * List of workout ids
      */
@@ -51,15 +49,12 @@ public class Records_Fragment extends ListFragment {
 
         //Change adapter type to handle objects instead of strings later
         //Set the adapter to show in application
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, listOfRecords);
-        //setListAdapter(adapter);
-
 
         DatabaseAdapter db = new DatabaseAdapter(getActivity());
         try {
+            //open the database
             db.openLocalDatabase();
-            //insert more routines
-            //db.insertTESTRoutines();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

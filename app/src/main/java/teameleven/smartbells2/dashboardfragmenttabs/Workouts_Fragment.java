@@ -19,7 +19,6 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /** Created by Jordan Medwid on 10/18/2015.
  * This class will handle an array of workout objects to show them to the user
- * This class will be edited to accept JSON objects retrieved from a server- *Sprint 2
  */
 
 public class Workouts_Fragment extends ListFragment {

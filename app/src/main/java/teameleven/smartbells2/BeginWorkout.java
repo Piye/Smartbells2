@@ -17,6 +17,7 @@ import teameleven.smartbells2.dashboardfragmenttabs.PublicRoutines_Fragment;
 
 /**
  * Created by Jare on 2015-11-19.
+ * Updated by Jordan on 2015-11-29.
  */
 public class BeginWorkout extends Fragment {
 

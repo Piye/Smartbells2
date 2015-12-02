@@ -28,7 +28,7 @@ import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
 //import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
 
 /**
- * Created by Jordan on 11/20/2015.
+ * Created by Jordan Medwid on 11/20/2015.
  */
 public class RoutineDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -49,8 +49,6 @@ public class RoutineDialogFragment extends DialogFragment implements View.OnClic
 
         //Establish Root view
         final View rootView = getActivity().getLayoutInflater().inflate(R.layout.add_exercise_to_routine, new LinearLayout(getActivity()), false);
-
-//            getDialog().setTitle("Add Exercise");
 
         //Set up the buttons
         addButton = (Button) rootView.findViewById(R.id.addExerciseFromPrompt);

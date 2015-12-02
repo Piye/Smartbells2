@@ -7,35 +7,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.TextView;
 
 /**
- * Explanation about the team eleven
+ * About Page Fragment
  * Created by Jarret on 2015-11-10.
  */
 public class About extends Fragment {
-    /**
-     * View for inflater of the about_page
-     */
-    private TextView link;
     /**
      * FloatingActionButton
      */
     private FloatingActionButton fab;
 
+    /**
+     * onCreateView
+     * inflate the view layout
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Hide the FAB
+        //Hide the FAB button
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.animate().translationY(fab.getHeight() + 50).setInterpolator(
                 new AccelerateInterpolator(2)).start();
 
+        //Set the view
         View rootView = inflater.inflate(R.layout.about_page, container, false);
-
-        //link = (TextView) getActivity().findViewById(R.id.webAppLink);
-        //link.setMovementMethod(LinkMovementMethod.getInstance());
 
         return rootView;
     }

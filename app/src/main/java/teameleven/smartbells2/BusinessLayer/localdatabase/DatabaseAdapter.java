@@ -19,6 +19,7 @@ import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSetGroup;
 /**
  * This class is the Database Adapter that connects to JSON and SQLite3
  * Created by Jarret on 2015-10-24.
+ * Updated by Andrew Rabb
  */
 public class DatabaseAdapter{
     /**
@@ -307,12 +308,7 @@ public class DatabaseAdapter{
     public DatabaseAdapter openLocalDatabase() throws SQLException {
         databaseHelper = new DatabaseHelper(context);
         database = databaseHelper.getWritableDatabase();
-
-<<<<<<< HEAD
         //insertTESTRoutines();
-
-=======
->>>>>>> origin/master
         return this;
     }
 

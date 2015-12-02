@@ -15,8 +15,9 @@ import teameleven.smartbells2.dashboardfragmenttabs.Achievement_Fragment;
 import teameleven.smartbells2.dashboardfragmenttabs.Records_Fragment;
 
 /**
- * This class is the screen of AchievementDashboard
+ * This class is the screen for the AchievementDashboard
  * Created by Jarret on 2015-11-17.
+ * @Author Jordan Medwid
  */
 public class AchievementDashboard extends Fragment {
     /**

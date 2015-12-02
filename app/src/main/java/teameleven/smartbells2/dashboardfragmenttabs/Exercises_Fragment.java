@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -90,7 +89,7 @@ public class Exercises_Fragment extends ListFragment {
         final int pos = position;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setNegativeButton("Delete Exercise", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
                 DatabaseAdapter db = new DatabaseAdapter(getActivity());
                 try {

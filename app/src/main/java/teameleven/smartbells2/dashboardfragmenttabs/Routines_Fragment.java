@@ -120,7 +120,7 @@ public class Routines_Fragment extends ListFragment {
                     db.deleteRoutine(routineId, true);
                     adapter.notifyDataSetChanged();
                     db.closeLocalDatabase();
-                    Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Routine Deleted", Toast.LENGTH_LONG).show();
                 }
                 });
             builder.setPositiveButton("Record", new DialogInterface.OnClickListener() {

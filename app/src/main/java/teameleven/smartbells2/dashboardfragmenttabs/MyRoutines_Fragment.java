@@ -82,7 +82,7 @@ public class MyRoutines_Fragment extends ListFragment {
 //        for (Routine privateRoutine: myPrivateRoutines){
 //            myPrivateRoutinesList.add(privateRoutine.getName());
 //        }
-//        //todo The Above code should sort private/public routines
+       //todo The Above code should sort private/public routines
 
         //close the database
         db.closeLocalDatabase();

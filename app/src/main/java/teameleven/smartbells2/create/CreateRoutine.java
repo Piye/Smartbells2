@@ -270,7 +270,6 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
                 transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.content_main, fragment);
                 transaction.commit();
-                //TODO Add to routine list here??
                 break;
 
 

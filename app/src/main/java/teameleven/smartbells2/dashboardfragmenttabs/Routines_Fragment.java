@@ -75,7 +75,7 @@ public class Routines_Fragment extends ListFragment {
         /**
          * Specific routines of User
          */
-        list = db.getMyRoutinesAsStrings(db.getUserIDForSession());
+        list = db.getRoutinesAsStrings();
 
         /**
          * Set the adapter to show in application

@@ -36,6 +36,7 @@ public class MyRoutines_Fragment extends ListFragment {
     private ArrayList<Routine> myPrivateRoutines;
     private ArrayList<String> myPrivateRoutinesList;
     private DatabaseAdapter db;
+    private ArrayAdapter<String> adapter;
 
     /**
      * Display the page of user's routines
@@ -88,9 +89,9 @@ public class MyRoutines_Fragment extends ListFragment {
 
         //Change adapter type to handle objects instead of strings later
         //Set the adapter to show in application
-        ArrayAdapter<String> mylist = new ArrayAdapter<String>(getActivity().getBaseContext(),
+        adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
                                       android.R.layout.simple_list_item_1, myPrivateRoutinesList);
-        setListAdapter(mylist);
+        setListAdapter(adapter);
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -118,10 +119,22 @@ public class MyRoutines_Fragment extends ListFragment {
             }
 
         });
-        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Delete Routine", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
 
-                Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
+                DatabaseAdapter db = new DatabaseAdapter(getActivity());
+                try {
+                    db.openLocalDatabase();
+                    //insert more routines
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                long routineId = db.getRoutineIDByName(myPrivateRoutinesList.get(pos));
+                db.deleteRoutine(routineId, true);
+                adapter.notifyDataSetChanged();
+                db.closeLocalDatabase();
+
+                Toast.makeText(getActivity(), "Routine Deleted", Toast.LENGTH_LONG).show();
             }
         });
 

@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import teameleven.smartbells2.RecordWorkoutRoutine;
@@ -43,6 +44,7 @@ public class Routines_Fragment extends ListFragment {
      * List for display
      */
     public ArrayList<String> list;
+    private ArrayAdapter<String> adapter;
 
 
     /**
@@ -78,7 +80,7 @@ public class Routines_Fragment extends ListFragment {
         /**
          * Set the adapter to show in application
          */
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        adapter = new ArrayAdapter<String>(
                 getActivity().getBaseContext(), android.R.layout.simple_list_item_1, list);
         setListAdapter(adapter);
 
@@ -104,13 +106,24 @@ public class Routines_Fragment extends ListFragment {
         final int pos = position;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Delete Routine", new DialogInterface.OnClickListener() {
 
                 public void onClick(DialogInterface arg0, int arg1) {
+                    DatabaseAdapter db = new DatabaseAdapter(getActivity());
+                    try {
+                        db.openLocalDatabase();
+                        //insert more routines
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    long routineId = db.getRoutineIDByName(list.get(pos));
+                    db.deleteRoutine(routineId, true);
+                    adapter.notifyDataSetChanged();
+                    db.closeLocalDatabase();
                     Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
                 }
                 });
-            builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Record", new DialogInterface.OnClickListener() {
 
                 public void onClick(DialogInterface arg0, int arg1) {
                     //Start an intent when a list item is clicked

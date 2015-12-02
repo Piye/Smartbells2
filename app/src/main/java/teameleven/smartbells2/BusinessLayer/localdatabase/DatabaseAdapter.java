@@ -150,7 +150,6 @@ public class DatabaseAdapter{
         databaseHelper = new DatabaseHelper(context);
         database = databaseHelper.getWritableDatabase();
 
-
         //insertTESTRoutines();
 
         return this;

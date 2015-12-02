@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 /**
- * This class is a screen for opeing splash
- * Created by Jare on 2015-11-20.
+ * This class is a screen for opening splash
+ * Created by Jarret on 2015-11-20.
  */
 public class OpeningSplashScreen extends Activity {
     /**
@@ -19,7 +19,7 @@ public class OpeningSplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_opening_screen);
 
-        //Run splash screen on a seperate thread to avoid interupting the main program.
+        //Run splash screen on a separate thread to avoid interrupting the main program.
         Thread timedThread = new Thread(){
             public void run(){
                 try{

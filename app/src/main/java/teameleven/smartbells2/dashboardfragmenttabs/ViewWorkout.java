@@ -14,6 +14,7 @@ import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
+ * View Workout Class
  * Created by Jarret on 2015-11-30.
  */
 public class ViewWorkout extends AppCompatActivity {
@@ -79,16 +80,17 @@ public class ViewWorkout extends AppCompatActivity {
 
 
     public void recordWorkout(View view) {
-
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
     //                              RECORD THIS WORKOUT AGAIN
     //
     // /////////////////////////////////////////////////////////////////////////////////////////////
-
     }
 
+    /**
+     * Back to Dashboard button
+     * @param view
+     */
     public void goBack(View view) {
         ViewWorkout.this.finish();
     }

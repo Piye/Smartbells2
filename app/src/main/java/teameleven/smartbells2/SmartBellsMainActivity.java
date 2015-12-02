@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Toast;
 
 import teameleven.smartbells2.businesslayer.SessionManager;
 import teameleven.smartbells2.create.CreateExercise;
@@ -28,7 +27,7 @@ import teameleven.smartbells2.dashboardfragmenttabs.Achievement_Fragment;
 import teameleven.smartbells2.dashboardfragmenttabs.New_Records_Fragment;
 
 /**
- * This class is the Main Actibities of the SmartBells
+ * This class is the Main Activity of SmartBells
  * Updated by Brian McMahon
  *            Jarret Holden
  *            Jordan Medwid
@@ -38,7 +37,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
     private static final String AUTHORITY =
             "teameleven.smartbells2.businesslayer.synchronization.provider";
     /**
-     * Accoutn type of the smartbells
+     * Account type of the smartbells
      */
     private static final String ACCOUNT_TYPE = "smart-bells-staging.herokuapp.com";
     /**
@@ -46,7 +45,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
      */
     public static Dashboard dashboardTab = new Dashboard();
     /**
-     * Dispaly the beginworkout page at once
+     * Display the beginworkout page at once
      */
     public static BeginWorkout bw2 = new BeginWorkout();
     /**
@@ -260,19 +259,19 @@ public class SmartBellsMainActivity extends AppCompatActivity
         } else if (id == R.id.nav_achievements) {
 
 
-//start of github overwrite
+        //start of github overwrite
             fragment = new Achievement_Fragment();
         } else if (id == R.id.nav_records){
             fragment = new New_Records_Fragment();
         }
         else if (id == R.id.nav_about) {
-/* github overwrite - leaving in case of error
+        /* github overwrite - leaving in case of error
             fragmentShowing = 2;
             fragment = new AchievementDashboard();
         } else if (id == R.id.nav_about) {
             //View about page
             fragmentShowing = 3;
-origin/master*/
+        origin/master*/
 
 
 

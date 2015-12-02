@@ -120,7 +120,7 @@ public class MyRoutines_Fragment extends ListFragment {
             }
 
         });
-        builder.setNegativeButton("Delete Routine", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
 
                 DatabaseAdapter db = new DatabaseAdapter(getActivity());

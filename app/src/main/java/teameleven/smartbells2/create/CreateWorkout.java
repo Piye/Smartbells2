@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +13,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import teameleven.smartbells2.BeginWorkout;
 import teameleven.smartbells2.Dashboard;
 import teameleven.smartbells2.R;
+import teameleven.smartbells2.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
@@ -45,7 +45,6 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
      * FloatingActionButton
      */
     private FloatingActionButton fab;
-
     DatabaseAdapter database;
     /***
      * Textview for workout name
@@ -73,11 +72,18 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         }
 
-        //Main view
+        //Main view SmartBellsMainActivity.dashboardTab.setCheckTabPage(4)
         View view = inflater.inflate(R.layout.create_workout, container, false);
+        // SmartBellsMainActivity.dashboardTab.getCheckTabPage()== 4 : Display Private Routine
+        // dSmartBellsMainActivity.dashboardTab.getCheckTabPage()== 5 : Display Public Routine
+        if(SmartBellsMainActivity.dashboardTab.getCheckTabPage() == 4) {
+            routines = database.getMyRoutinesAsStrings(database.getUserIDForSession());
+        }else{
+            routines = database.getRoutinesAsStrings();
+        }//WON
+        System.out.println(" beginWorkout.getCheckTabPage()" +
+                             SmartBellsMainActivity.dashboardTab.getCheckTabPage());
 
-
-        routines = database.getMyRoutinesAsStrings(database.getUserIDForSession());
         routineList = (ListView) view.findViewById(R.id.createWorkoutRoutineList);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, routines);
         routineList.setAdapter(adapter);
@@ -175,8 +181,6 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
                 transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.content_main, fragment);
                 transaction.commit();
-                //Kill the fragment
-                //getFragmentManager().beginTransaction().remove(this).commit();
                 break;
         }
     }

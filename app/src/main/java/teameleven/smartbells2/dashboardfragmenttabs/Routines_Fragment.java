@@ -76,7 +76,7 @@ public class Routines_Fragment extends ListFragment {
         /**
          * Specific routines of User
          */
-        list = db.getMyRoutinesAsStrings(db.getUserIDForSession());
+        list = db.getRoutinesAsStrings();
 
         /**
          * Set the adapter to show in application
@@ -107,7 +107,7 @@ public class Routines_Fragment extends ListFragment {
         final int pos = position;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setNegativeButton("Delete Routine", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
 
                 public void onClick(DialogInterface arg0, int arg1) {
                     DatabaseAdapter db = new DatabaseAdapter(getActivity());
@@ -140,7 +140,7 @@ public class Routines_Fragment extends ListFragment {
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.copyFrom(mydialog.getWindow().getAttributes());
-        params.width = 600;
+        params.width = 630;
         params.height = 250;
         mydialog.show();
         mydialog.getWindow().setAttributes(params);

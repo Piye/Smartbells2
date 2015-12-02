@@ -86,7 +86,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
         //instantiate session
         session = new SessionManager(getApplicationContext());
-        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
         session.checkLogin();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

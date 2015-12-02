@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,14 +22,16 @@ import teameleven.smartbells2.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
- * This class shows the list of Excercise
+ * This class shows the list of Exercise
  * Created by Jare on 2015-11-17.
  */
 public class Exercises_Fragment extends ListFragment {
     /**
-     * Dashboard of Smartbells(Workout,Routine,Excercise)
+     * Dashboard of Smartbells(Workout,Routine,Exercise)
      */
     Dashboard dashboard;
+    ArrayList<String> listOfExercises;
+    ArrayAdapter<String> adapter;
     //Temporary string array to populate list
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -51,14 +54,14 @@ public class Exercises_Fragment extends ListFragment {
         /**
          * List of Exercise from Database
          */
-        ArrayList<String> listOfExercises = db.getExercisesAsStrings();
+        listOfExercises = db.getExercisesAsStrings();
 
         /**
          * Change adapter type to handle objects instead of strings later
          * Set the adapter to show in application
          */
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        adapter = new ArrayAdapter<String>(
                 getActivity().getBaseContext(), android.R.layout.simple_list_item_1, listOfExercises);
         setListAdapter(adapter);
 
@@ -87,16 +90,20 @@ public class Exercises_Fragment extends ListFragment {
         final int pos = position;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Delete Exercise", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
-                Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
-                                        //DELETE EXERCISE
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
+                DatabaseAdapter db = new DatabaseAdapter(getActivity());
+                try {
+                    db.openLocalDatabase();
+                    //insert more routines
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                int exerciseId = db.getExerciseIdByName(listOfExercises.get(pos));
+                db.deleteExercise(exerciseId, true);
+                adapter.notifyDataSetChanged();
+                db.closeLocalDatabase();
+                Toast.makeText(getActivity(), "Exercise Deleted", Toast.LENGTH_LONG).show();
             }
         });
 

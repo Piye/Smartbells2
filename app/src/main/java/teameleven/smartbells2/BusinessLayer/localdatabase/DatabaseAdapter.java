@@ -6,13 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
 import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
@@ -20,68 +17,195 @@ import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSession;
 import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSetGroup;
 
 /**
+ * This class is the Database Adapter that connects to JSON and SQLite3
  * Created by Jarret on 2015-10-24.
  */
 public class DatabaseAdapter{
-
+    /**
+     * TAG - Variable for debugging
+     */
     public static final String TAG = "databaseAdapter";
-    //Session Table
+    /**
+     * Variable for getting an access token from API of SingularityXL SmartBells JSON
+     */
     public static final String ACCESS_TOKEN = "token";
+    /**
+     * Variable for an id of an user who is using the system.
+     */
     public static final String SESSION_USER_ID = "user_id";
     //Routine Table Columns
+    /**
+     * Primary key - Routine id
+     */
     public static final String PK_ROUTINE_ID = "id";
+    /**
+     * User id of Routine
+     */
     public static final String ROUTINE_USER_ID = "user_id";
+    /**
+     * User name of Routine
+     */
     public static final String ROUTINE_NAME= "name";
+    /**
+     * Boolean whether a routine is public or not.
+     */
     public static final String ROUTINE_IS_PUBLIC = "is_public";
+    /**
+     * A date of creating a routine
+     */
     public static final String ROUTINE_CREATED_AT = "created_at";
+    /**
+     * A date of updating a routine
+     */
     public static final String ROUTINE_UPDATED_AT = "updated_at";
-    //Workout Session Table Columns
+    /**
+     * Primary Key - An id of Workoutseiion
+     */
     public static final String PK_WORKOUTSESSION_ID = "id";
+    /**
+     * User id of the WorkoutSession Table
+     */
     public static final String FK_USER_ID = "user_id";
+    /**
+     * Session Name of the WorkoutSession Table
+     */
     public static final String SESSION_NAME = "name";
+    /**
+     * A date of creating a workout session
+     */
     public static final String SESSION_CREATED_AT = "created_at";
+    /**
+     * A date of updating a workout session
+     */
     public static final String SESSION_UPDATED_AT = "updated_at";
     //Workout Set Group Table Columns
+    /**
+     * Primary Key - Id of the WorksetGroup
+     */
     public static final String PK_WORKOUTSETGROUP_ID = "id";
+    /**
+     * Id of Exercise
+     */
     public static final String FK_WSG_EXERCISE_ID = "exercise_id";
+    /**
+     * Id of WorkoutSession
+     */
     public static final String FK_WORKOUTSESSION_ID = "workout_session_id";
     //Set Group Table Columns
+    /**
+     * Primary Key - Id of a Setgroup
+     */
     public static final String PK_SETGROUP_ID = "id";
+    /**
+     * Id of the exercise table
+     */
     public static final String FK_SG_EXERCISE_ID = "exercise_id";
     public static final String SETGROUP_REPS = "reps_per_set";
+    /**
+     * A number of sets of a setGroup
+     */
     public static final String SETGROUP_SETS = "number_of_sets";
+    /**
+     * A date of creating a setgroup
+     */
     public static final String SETGROUP_CREATED_AT = "created_at";
+    /**
+     * A date of updating a setgroup
+     */
     public static final String SETGROUP_UPDATED_AT  = "updated_at";
+    /**
+     * Id of a routine in the Setgroup table
+     */
     public static final String FK_SG_ROUTINE_ID = "routine_id";
     //Exercise Table Columns
+    /**
+     * Primary key - Id of exercise
+     */
     public static final String PK_EXERCISE_ID = "id";
+    /**
+     * A name of exercise
+     */
     public static final String EXERCISE_NAME = "name";
+    /**
+     * A number of increase per a session
+     */
     public static final String INCREASE_PER_SESSION = "increase_per_session";
+    /**
+     * A date of creating a exercise record
+     */
     public static final String EXERCISE_CREATED_AT = "created_at";
+    /**
+     * A date of updating Exercise
+     */
     public static final String EXERCISE_UPDATED_AT = "updated_at";
+    /**
+     * Boolean whether an exercise is public or not
+     */
     public static final String EXERCISE_IS_PUBLIC = "is_public";
+    /**
+     * User id of Exercise
+     */
     public static final String EXERCISE_USER_ID = "user_id";
     //updateTable
+    /**
+     * User id who updated a exercise record
+     */
     private static final String UPDATE_ID = "update_id";
+    /**
+     * Table name for updating a table
+     */
     private static final String UPDATE_TABLE_IDENTIFIER = "Table_name";
+    /**
+     * Type of updating
+     */
     private static final String UPDATE_TYPE = "Update_Type";
     //Tables
+    /**
+     * It has name of "Session".
+     */
     protected static final String SESSION_TABLE = "Session";
+    /**
+     * It has name of "Routine".
+     */
     protected static final String ROUTINE_TABLE = "Routine";
+    /**
+     * It has name of "WorkoutSession".
+     */
     protected static final String WORKOUTSESSION_TABLE = "WorkoutSession";
+    /**
+     * It has name of "WorkoutSetGroup".
+     */
     protected static final String WORKOUTSETGROUP_TABLE = "WorkoutSetGroup";
+    /**
+     * It has name of "Setgroup".
+     */
     protected static final String SETGROUP_TABLE = "Setgroup";
+    /**
+     * It has name of "Exercise".
+     */
     protected static final String EXERCISE_TABLE = "Exercise";
+    /**
+     * It has name of "UpdateTable".
+     */
     protected static final String UPDATE_TABLE = "UpdateTable";
+    /**
+     * A name of database
+     */
     private static final String DATABASE_NAME = "smartbellsdata";
+    /**
+     * The version of database
+     */
     private static final int DATABASE_VERSION = 14;
-    /*
-     * Create Tables
+    /**
+     * Final String to Create Table - SESSION_TABLE
      */
     private static final String CREATE_SESSION_TABLE =
             "CREATE TABLE if not exists " + SESSION_TABLE + " (" +
                     ACCESS_TOKEN        + "," +
                     SESSION_USER_ID     + " integer);";
+    /**
+     * Final String to Create Table - ROUTINE_TABLE
+     */
     private static final String CREATE_ROUTINE_TABLE =
             "CREATE TABLE if not exists " + ROUTINE_TABLE + " (" +
                     PK_ROUTINE_ID       + " integer PRIMARY KEY," +
@@ -91,6 +215,9 @@ public class DatabaseAdapter{
                     ROUTINE_CREATED_AT  + "," +
                     ROUTINE_UPDATED_AT  + "," +
                     " UNIQUE (" + PK_ROUTINE_ID + "));";
+    /**
+     * Final String to Create Table - WORKOUTSESSION_TABLE
+     */
     private static final String CREATE_WORKOUTSESSION_TABLE =
             "CREATE TABLE if not exists " + WORKOUTSESSION_TABLE + " (" +
                     PK_WORKOUTSESSION_ID    + " integer PRIMARY KEY," +
@@ -99,6 +226,9 @@ public class DatabaseAdapter{
                     SESSION_CREATED_AT      + "," +
                     SESSION_UPDATED_AT      + "," +
                     " UNIQUE (" + PK_WORKOUTSESSION_ID + "));";
+    /**
+     * Final String to Create Table - SETGROUP_TABLE
+     */
     private static final String CREATE_SETGROUP_TABLE =
             "CREATE TABLE if not exists " + SETGROUP_TABLE + " (" +
                     PK_SETGROUP_ID          + " integer PRIMARY KEY," +
@@ -113,6 +243,9 @@ public class DatabaseAdapter{
                     " FOREIGN KEY (" + FK_SG_ROUTINE_ID + ") REFERENCES "
                     + ROUTINE_TABLE + "(" + PK_ROUTINE_ID + ")" +
                     " UNIQUE (" + PK_SETGROUP_ID + "));";
+    /**
+     * Final String to Create Table - WORKOUTSETGROUP_TABLE
+     */
     private static final String CREATE_WORKOUTSETGROUP_TABLE =
             "CREATE TABLE if not exists " + WORKOUTSETGROUP_TABLE + " (" +
                     PK_WORKOUTSETGROUP_ID   + " integer PRIMARY KEY," +
@@ -123,6 +256,9 @@ public class DatabaseAdapter{
                     " FOREIGN KEY (" + FK_WORKOUTSESSION_ID + ") REFERENCES "
                     + WORKOUTSESSION_TABLE + "(" + PK_WORKOUTSESSION_ID + ")" +
                     "  UNIQUE (" + PK_WORKOUTSETGROUP_ID  +"));";
+    /**
+     * Final String to Create Table - EXERCISE_TABLE
+     */
     private static final String CREATE_EXERCISE_TABLE =
             "CREATE TABLE if not exists " + EXERCISE_TABLE + " (" +
                     PK_EXERCISE_ID          + " integer PRIMARY KEY," +
@@ -133,35 +269,63 @@ public class DatabaseAdapter{
                     EXERCISE_IS_PUBLIC      + "," +
                     EXERCISE_USER_ID        + "," +
                     " UNIQUE (" + PK_EXERCISE_ID + "));";
+    /**
+     * Final String to Create Table - UPDATE_TABLE
+     */
     private static final String CREATE_UPDATE_TABLE =
             "Create table if not exists " + UPDATE_TABLE + " (" +
                     UPDATE_ID               + " integer," +
                     UPDATE_TABLE_IDENTIFIER + " integer," +
                     UPDATE_TYPE             + " integer );";
+    /**
+     * Context for Database adapter
+     */
     private final Context context;
+    /**
+     * Database Helper for using SQLiteOpenHelper
+     */
     private DatabaseHelper databaseHelper;
+    /**
+     * SQLiteDatabase of Android.
+     */
     private SQLiteDatabase database;
 
+    /**
+     * Constructor of DatabaseAdapter(this) with Context parameter
+     * @param context It is used for connecting SQLite3
+     */
     public DatabaseAdapter(Context context) { this.context = context; }
     //********************************************************************************************//
 
     //Open database
+
+    /**
+     * Open Database - Writable
+     * @return DatabaseAdapter
+     * @throws SQLException Throws exceptions of SQLite
+     */
     public DatabaseAdapter openLocalDatabase() throws SQLException {
         databaseHelper = new DatabaseHelper(context);
         database = databaseHelper.getWritableDatabase();
 
-
-        //insertTESTRoutines();
-
         return this;
     }
 
+    /**
+     * Create Local Database - Readable
+     * @return DatabaseAdapter
+     * @throws SQLException Throws exceptions of SQLite
+     */
     public DatabaseAdapter createLocalDatabase() throws  SQLException{
         databaseHelper = new DatabaseHelper(context);
         database = databaseHelper.getReadableDatabase();
         return this;
     }
     //Close database
+
+    /**
+     * Close the Database
+     */
     public void closeLocalDatabase() {
         if (databaseHelper != null ) {
             databaseHelper.close();
@@ -195,6 +359,10 @@ public class DatabaseAdapter{
         If in the future we add them, ensure that they hit this method.
         insertUpdateRecord(objectID, tableIdentifier, 1);
          */
+        /**
+         * Get A number of table as the name of tables
+         * 0= Exercise, 1 = Setgoup, 2 = Routine, 3= Workoutsession, 4= Workotsetgroup
+         */
         int tableNum = -1;
         switch(tableIdentifier){
             case(EXERCISE_TABLE):
@@ -213,11 +381,22 @@ public class DatabaseAdapter{
                 tableNum = 4;
                 break;
         }
+        /**
+         * Get an error of a prevous query statement( Id number )
+         */
         if (id_num == -1) throw new SQLException("previous statement failed");
+        /**
+         * Get an error of a prevous query statement( Table number )
+         */
         if (tableNum == -1) throw new SQLException("Improper table selection");
+        /**
+         * Chectk the transactionType : 0 = Select, 1 = Update, 2 = Delete
+         */
         if (transactionType <0 || transactionType > 2 )
             throw new SQLException("Improper transaction type, should be between 0 and 2");
-
+        /**
+         * Integer ArrayList for read and update records.
+         */
         ArrayList<int[]> records = readUpdateRecord();
 
         if (records.size() != 0){//testing for multiple entries on same record
@@ -258,6 +437,10 @@ public class DatabaseAdapter{
         return database.insert(UPDATE_TABLE, null, initialValues);
     }
 
+    /**
+     * Delete the update table for clearing
+     * @throws SQLException Throws exceptions of SQLite
+     */
     public void clearUpdateTable() throws SQLException {
         database.delete(UPDATE_TABLE, null, null);
         if (this.readUpdateRecord().size() != 0) throw new SQLException("update table not cleared");
@@ -285,9 +468,14 @@ public class DatabaseAdapter{
         }
         return result;
     }
+
+    /**
+     * Update the Update_Table
+     * @return boolean whether there are records what was updated or not
+     */
     public boolean hasUpdates(){
         Cursor myCursor = database.query(UPDATE_TABLE, null, null, null, null, null, null);
-        Log.d("SmartBells Database Adapter ","checking for updates");
+        Log.d("SmartBells Database Adapter ", "checking for updates");
         if (myCursor.getCount() > 0){
             return true;
         }
@@ -297,6 +485,13 @@ public class DatabaseAdapter{
 
     /*********************************SESSION TABLE***********************************************/
     //Insert Token
+
+    /**
+     * Insert an access totken into the SESSION_TABLE
+     * @param accessToken
+     * @param user_Id
+     * @return
+     */
     public long insertToken(String accessToken, int user_Id) {
 
         ContentValues initialValues = new ContentValues();
@@ -310,7 +505,10 @@ public class DatabaseAdapter{
         return result;
     }
 
-    //get token
+    /**
+     * Get an access token from SESSION_TABLE
+     * @return cursor.getString(token)
+     */
     public String getTokenAsString() {
         String[] columns = new String[]{ACCESS_TOKEN};
         Cursor cursor = database.query(SESSION_TABLE, columns, null, null, null, null, null);
@@ -318,6 +516,11 @@ public class DatabaseAdapter{
         cursor.moveToLast();
         return cursor.getString(token);
     }
+
+    /**
+     * Get an user id for now session
+     * @return cursor.getInt(token)
+     */
     public int getUserIDForSession(){
 
         String[] columns = new String[]{SESSION_USER_ID};
@@ -328,7 +531,10 @@ public class DatabaseAdapter{
     }
 
     /*********************************ROUTINE TABLE***********************************************/
-
+    /**
+     * Load All Routines for syncing(SyncAdapter.java)
+     * @param routines
+     */
     public void loadAllRoutines(ArrayList<Routine> routines) {
         database.beginTransaction();
         for (Routine i : routines){
@@ -354,6 +560,12 @@ public class DatabaseAdapter{
         database.endTransaction();
     }
 
+    /**
+     * Insert a routine
+     * @param routine A routine(Routine.java)
+     * @param sync boolean whether it is sync or not
+     * @return
+     */
     public long insertRoutine(Routine routine, boolean sync) {
         long result = insertRoutine(routine.getRoutineId(),
                 routine.getName(),
@@ -369,9 +581,9 @@ public class DatabaseAdapter{
     }
 
     /**
-     *
-     * @param routine
-     * @return
+     * Put the routine attributes
+     * @param routine A routine(Routine.java)
+     * @return ContentValues
      */
     private ContentValues routineAttributes(Routine routine){
         ContentValues initialValues = new ContentValues();
@@ -385,6 +597,17 @@ public class DatabaseAdapter{
     }
 
     //Insert Routine
+
+    /**
+     * Insert a routine
+     * @param routineId An id of a routine
+     * @param routineName A name of a routine
+     * @param routineIsPublic Boolean whether is public or not
+     * @param createDate A date of creating a routine record
+     * @param updateDate A date of updating a routien record
+     * @param sync Boolean If It is used to sync or not.
+     * @return long result = database.insert(ROUTINE_TABLE, null, initialValues)
+     */
     public long insertRoutine(long routineId,
                               String routineName,
                               Boolean routineIsPublic,
@@ -413,6 +636,13 @@ public class DatabaseAdapter{
         }
 
     //Delete Routine
+
+    /**
+     * Delete a routine from routine table
+     * @param routineId Id of the routine
+     * @param sync boolean whether it is public routine or not
+     * @return long v = database.delete(ROUTINE_TABLE, PK_ROUTINE_ID + "=" + routineId, null)
+     */
     public long deleteRoutine(long routineId, boolean sync) {
 
         //Delete row from routine table
@@ -428,17 +658,14 @@ public class DatabaseAdapter{
         return v;
     }
 
-    // insert Values
-    /*public void insertTESTRoutines() {
-        insertRoutine("Routine1", false, (["bells", "today", "today"]));
-        insertRoutine("Routine2", true, ["bells", "1 week ago", "today"]);
-        insertRoutine("Routine3", false, ["punch", "2 days ago", "today"]);
-        insertRoutine("Routine4", true, ["kick", "today", "today"]);
-        insertRoutine("Routine5", false,["drops","yesterday","today"]);
-
-    }*/
-
     //Select routine by it's ID
+
+    /**
+     * Select Routine By Id
+     * @param id User id
+     * @return Cursor after query the select statment
+     * @throws android.database.SQLException
+     */
     public Cursor selectRoutineById(long id) throws android.database.SQLException {
         Cursor mCursor = null;
         Log.d(TAG, "id is " + id);
@@ -469,7 +696,6 @@ public class DatabaseAdapter{
     /**
      *Select All Public Routines
      */
-    //Select All Routines
     public ArrayList<Routine> selectAllRoutines() {
         Cursor myCursor = database.query(ROUTINE_TABLE, new String[]{ROUTINE_NAME, PK_ROUTINE_ID},
                 null, null, null, null, null, null);
@@ -491,6 +717,11 @@ public class DatabaseAdapter{
     //Reference: http://stackoverflow.com/questions/9466380/
     //           how-to-get-data-from-my-database-and-put-it-on-a-listview-that-is-clickable
     // Get all Routines and return a string
+
+    /**
+     * Get routine name
+     * @return Arraylist of routine names
+     */
     public ArrayList<String> getRoutinesAsStrings() {
         String[]columns = new String[]{ROUTINE_NAME};
         Cursor cursor = database.query(ROUTINE_TABLE, columns, null, null, null, null, null);
@@ -508,6 +739,12 @@ public class DatabaseAdapter{
     //Reference: http://stackoverflow.com/questions/9466380/
     //           how-to-get-data-from-my-database-and-put-it-on-a-listview-that-is-clickable
     // Get private Routines of specific user and return a string
+
+    /**
+     * Get Routine names arraylist
+     * @param userId user id
+     * @return ArrayList of Routine names
+     */
     public ArrayList<String> getMyRoutinesAsStrings(int userId) {
         String[]columns = new String[]{ROUTINE_NAME};
         Cursor cursor = database.query(ROUTINE_TABLE, null, ROUTINE_USER_ID + "=" + userId,
@@ -525,7 +762,10 @@ public class DatabaseAdapter{
     }
     /******************************WORKOUTSESSION TABLE********************************************/
 
-
+    /**
+     * Load All WouroutSessions to SQLite
+     * @param workoutSessions
+     */
     public void loadAllWorkoutSessions(ArrayList<WorkoutSession> workoutSessions) {
         database.beginTransaction();
         for (WorkoutSession session : workoutSessions){
@@ -559,7 +799,11 @@ public class DatabaseAdapter{
         database.endTransaction();
     }
 
-
+    /**
+     * Get WorkoutSession's name arraylist
+     * @return Arraylist of SESSION_NAME
+     *         result.add(cursor.getString(exname))
+     */
     public ArrayList<String> getWorkoutSessionsAsStrings() {
         String[] columns = new String[]{SESSION_NAME};
         Cursor cursor = database.query(WORKOUTSESSION_TABLE, columns, null, null, null, null, null);
@@ -576,6 +820,12 @@ public class DatabaseAdapter{
     }
 
     // Get private WorkoutSessions of specific user and return a string
+
+    /**
+     * Get private Workout name arraylist with user id
+     * @param userId User Id
+     * @return Arraylist of Session names
+     */
     public ArrayList<String> getMyWorkoutsAsStrings(int userId) {
         String[]columns = new String[]{SESSION_NAME};
         Cursor cursor = database.query(WORKOUTSESSION_TABLE, null, FK_USER_ID + "=" + userId,
@@ -594,6 +844,12 @@ public class DatabaseAdapter{
     }
 
     // Get private WorkoutSessions of specific user and return a string
+
+    /**
+     * Get private workout ids Arraylist
+     * @param userId User id
+     * @return Arraylist of the WorkoutSession Id
+     */
     public ArrayList<String> getMyWorkoutIds(int userId) {
         String[]columns = new String[]{PK_WORKOUTSESSION_ID};
         Cursor cursor = database.query(WORKOUTSESSION_TABLE, null, FK_USER_ID + "=" + userId,
@@ -611,7 +867,12 @@ public class DatabaseAdapter{
         return result;
     }
     /**********************************************************************************************/
-
+    /**
+     * Insert a WorkoutSession record and sync
+     * @param session A Workoutsession Record
+     * @param sync boolean whether it is sync or not
+     * @return long result of inserting workoutsession
+     */
     public long insertWorkoutSession(WorkoutSession session, boolean sync) {
         long result;
         result = insertWorkoutSession(
@@ -629,6 +890,17 @@ public class DatabaseAdapter{
     }
 
     //Insert Workout Session
+
+    /**
+     * Insert a workoutsession record
+     * @param sessionId Session Id
+     * @param userId User id
+     * @param sessionName Session Name
+     * @param createdAt A date of creating a record
+     * @param updatedAt A date of updating a record
+     * @param sync boolean it is sync or not
+     * @return long result after inserting a record
+     */
     public long insertWorkoutSession(int sessionId,
                                      int userId,
                                      String sessionName,
@@ -658,6 +930,13 @@ public class DatabaseAdapter{
     }
 
     //Delete Workout Session
+
+    /**
+     * Delete a workoutsession record
+     * @param workoutsessionid WoukoutSession Id
+     * @param sync boolean it is sync or not
+     * @return
+     */
     public long deleteWorkoutSession(long workoutsessionid, boolean sync) {
 
         //Delete row
@@ -674,6 +953,11 @@ public class DatabaseAdapter{
     }
 
     //Select All workout Sessions
+
+    /**
+     * Select all workoutSessions
+     * @return Arraylist of all workoutsessions
+     */
     public ArrayList<WorkoutSession> selectAllWorkoutSessions() {
         Cursor myCursor = database.query(WORKOUTSESSION_TABLE, new String[]{SESSION_NAME, PK_WORKOUTSESSION_ID},
                 null, null, null, null, null, null);
@@ -691,38 +975,15 @@ public class DatabaseAdapter{
 
         return sessions;
     }
-/*
 
-//Select All Routines
-public ArrayList<Routine> selectAllRoutines() {
-    Cursor myCursor = database.query(ROUTINE_TABLE, new String[]{ROUTINE_NAME, PK_ROUTINE_ID},
-            null, null, null, null, null, null);
-
-    if (myCursor != null) {
-        myCursor.moveToFirst();
-    }
-    ArrayList<Routine> routines = new ArrayList<>();
-    Routine routine;
-
-    for(myCursor.moveToFirst(); !myCursor.isAfterLast();myCursor.moveToNext()){
-        routine= new Routine(myCursor.getString(0), myCursor.getInt(1));
-        routines.add(routine);
-    }
-
-    return routines;
-}
-
-
-
- */
     /**********************************WORKOUT SETGROUP TABLE **************************************/
     /**
-     *
-     * @param workoutSetGroupId
-     * @param exerciseId
-     * @param workoutSessionId
-     * @param sync
-     * @return
+     * Insert a WorkoutSetGroup record
+     * @param workoutSetGroupId WokoutSetGroup Id
+     * @param exerciseId Exercise Id
+     * @param workoutSessionId WorkoutSession Id
+     * @param sync boolean whether it is sync or not
+     * @return long result
      */
     public long insertWorkoutSetGroup(int workoutSetGroupId,
                                       int exerciseId,
@@ -749,6 +1010,13 @@ public ArrayList<Routine> selectAllRoutines() {
     /**********************************************************************************************/
 
     //Delete Workout Set Group
+
+    /**
+     * Delete a WorkoutSetGroup record
+     * @param workoutsetgroupid WorkoutSetGroup Id
+     * @param sync boolean whether it is sync or not
+     * @return long v : a result of deleting a workoutsetgroup record
+     */
     public long deleteWorkoutSetGroup(int workoutsetgroupid, boolean sync) {
 
         //Delete row
@@ -765,6 +1033,11 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     //Select All Set Groups
+
+    /**
+     * Select All WorkoutSetGroup
+     * @return Arraylist of WorkoutSetGroup
+     */
     public ArrayList<WorkoutSetGroup> selectAllWorkoutSetGroups() {
         Cursor myCursor = database.query(WORKOUTSETGROUP_TABLE,
                 new String[]{PK_WORKOUTSETGROUP_ID, FK_WSG_EXERCISE_ID, FK_WORKOUTSESSION_ID},
@@ -784,6 +1057,12 @@ public ArrayList<Routine> selectAllRoutines() {
 
 
     //Select All Set Groups By WorkoutSessioID - Cursor
+
+    /**
+     * Select WorkoutSetGroup Records with WorkoutSession Id
+     * @param workoutSessionId WorkoutSession Id
+     * @return Cursor of query to select WORKOUTSETGROUP_TABLE
+     */
     public Cursor selectWorkoutSetGroup(int workoutSessionId) {
         Cursor myCursor = database.query(WORKOUTSETGROUP_TABLE, null,
                 FK_WORKOUTSESSION_ID + "=" + workoutSessionId, null, null, null, null, null);
@@ -795,6 +1074,12 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     // Get private WorkoutSessions of specific user and return a string - ArrayList
+
+    /**
+     * Get an Arraylist of WorkoutSession Ids with WorkoutSession Id
+     * @param workoutSessionId Workout Session Id
+     * @return ArrayList<String> of WorkoutSession IDs
+     */
     public ArrayList<String> getMyWorkoutSetGroupIds(String workoutSessionId) {
         String[]columns = new String[]{PK_WORKOUTSETGROUP_ID};
         Cursor cursor = database.query(WORKOUTSETGROUP_TABLE,null,
@@ -812,7 +1097,12 @@ public ArrayList<Routine> selectAllRoutines() {
         return result;
     }
     /**********************************SETGROUP TABLE**********************************************/
-
+    /**
+     * Insert a SetGroup record
+     * @param set_group SetGroup(SetGroup.java)
+     * @param sync boolean whether it is sync or not
+     * @return long result after inserting an record
+     */
     public long insertSetGroup(SetGroup set_group, boolean sync) {
         return insertSetGroup(
                 set_group.getId(),
@@ -825,6 +1115,11 @@ public ArrayList<Routine> selectAllRoutines() {
                 sync);
     }
 
+    /**
+     * Set Group Attributes for set values
+     * @param setgroup SetGroup
+     * @return ContentValues of SetGroup
+     */
     private ContentValues setGroupAttributes(SetGroup setgroup){
         ContentValues initialValuesSetGroup = new ContentValues();
         initialValuesSetGroup.put(PK_SETGROUP_ID, setgroup.getId());
@@ -837,6 +1132,19 @@ public ArrayList<Routine> selectAllRoutines() {
         return initialValuesSetGroup;
     }
     //Insert Set Group
+
+    /**
+     * Insert a setGroup record
+     * @param setGroupId SetGroup Id
+     * @param exerciseId Exercise Id
+     * @param routineId  Routine Id
+     * @param sets A number of sets of Exercise
+     * @param reps A number of reps of sets
+     * @param createdAt A date of creating a record
+     * @param updatedAt A date of updating a record
+     * @param sync boolean whether it is sysn or not
+     * @return long result of inserting a record
+     */
     public long insertSetGroup(int setGroupId,
                                int exerciseId,
                                int routineId,
@@ -869,6 +1177,13 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     //Delete Set Groups
+
+    /**
+     * Delete a setgroup record
+     * @param setgroupid SetGroup Id
+     * @param sync boolean it is sync or not
+     * @return long v : result of deleting
+     */
     public long deleteSetGroup(long setgroupid, boolean sync) {
 
         //Delete row
@@ -885,6 +1200,11 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     //Select All Set Groups
+
+    /**
+     * Select all SetGroup records
+     * @return ArrayList<SetGroup>
+     */
     public ArrayList<SetGroup> selectAllSetGroups() {
         Cursor myCursor = database.query(SETGROUP_TABLE, new String[]{PK_SETGROUP_ID,
                         FK_SG_EXERCISE_ID, FK_SG_ROUTINE_ID, SETGROUP_REPS, SETGROUP_SETS},
@@ -901,6 +1221,12 @@ public ArrayList<Routine> selectAllRoutines() {
 
     //Select UserId's Set Groups.
     // Get private Routines of specific user and return a ArrayList<string>
+
+    /**
+     * Get private Setgroups by WorkoutSetGroup Id
+     * @param workoutSetGroupId
+     * @return ArrayList of SetGroup Exercise Ids.
+     */
     public ArrayList<String> getMySetGroupIdsByWSG(String workoutSetGroupId) {
         SetGroup[]setGroups = new SetGroup[]{};
         Cursor cursor = database.query(SETGROUP_TABLE, new String[]{PK_SETGROUP_ID + "=" +workoutSetGroupId,
@@ -934,9 +1260,9 @@ public ArrayList<Routine> selectAllRoutines() {
 
     /**************************************EXERCISE TABLE******************************************/
     /**
-     *
-     * @param exercise
-     * @param sync
+     * Insert exercise records
+     * @param exercise Records of exercise
+     * @param sync boolean whether it is sync or not
      */
     public void insertExercise(ArrayList<Exercise> exercise, boolean sync) {
         for (Exercise x : exercise){
@@ -945,8 +1271,9 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     /**
-     *  @param exercise
-     * @param sync
+     * Insert an exercise record
+     *  @param exercise  An record of exercise
+     * @param sync boolean whether it is sync or not
      */
     public long insertExercise(Exercise exercise, boolean sync){
         return insertExercise(
@@ -960,15 +1287,15 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     /**
-     *
-     * @param exerciseName
-     * @param increasePerSession
-     * @param createdAt
-     * @param updatedAt
-     * @param is_Public
-     * @param user_ID
-     * @param sync
-     * @return
+     * Insert an exercise record with its values
+     * @param exerciseName Exercise Name
+     * @param increasePerSession A number of the IncreasePerSession
+     * @param createdAt A date of creating a record
+     * @param updatedAt A date of updating a record
+     * @param is_Public Boolean whether it is public or not
+     * @param user_ID User id
+     * @param sync Boolean whether it is sync or not
+     * @return long result after inserting a record
      */
     public long insertExercise(int exerciseID,
                                String exerciseName,
@@ -1004,9 +1331,9 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     /**
-     *
-     * @param exercise
-     * @return
+     * Set the exercise Attributes of the Exercise table
+     * @param exercise Exercise
+     * @return ContentValues of The Exercise values
      */
     private ContentValues exerciseAttributes(Exercise exercise){
         ContentValues initialValues = new ContentValues();
@@ -1020,6 +1347,13 @@ public ArrayList<Routine> selectAllRoutines() {
         return initialValues;
     }
     //Delete Exercises
+
+    /**
+     * Delete a exercise with its id
+     * @param exerciseId Exercise id
+     * @param sync boolean whether it is sync or not
+     * @return long result after deleting
+     */
     public long deleteExercise(long exerciseId, boolean sync) {
 
         //Delete row
@@ -1036,6 +1370,11 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     //Select All Exercises
+
+    /**
+     * Select All exercises
+     * @return ArrayList of all exercises
+     */
     public ArrayList<Exercise> selectAllExercises() {
         String[] columns = new String[]{EXERCISE_NAME, PK_EXERCISE_ID};
         Cursor cursor = database.query(EXERCISE_TABLE, columns, null, null, null, null, null);
@@ -1050,6 +1389,10 @@ public ArrayList<Routine> selectAllRoutines() {
         return exercises;
     }
 
+    /**
+     * Get list of name of Exercises
+     * @return Arraylist of Exercise Names
+     */
     public ArrayList<String> getExercisesAsStrings() {
         String[] columns = new String[]{EXERCISE_NAME};
         Cursor cursor = database.query(EXERCISE_TABLE, columns, null, null, null, null, null);
@@ -1066,9 +1409,9 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * Get An id of Exercises by An exercise name
+     * @param name Exercise name
+     * @return Exercise Id
      */
     public int getExerciseIdByName(String name){
         String[] columns = new String[]{EXERCISE_NAME, PK_EXERCISE_ID};
@@ -1084,6 +1427,9 @@ public ArrayList<Routine> selectAllRoutines() {
         return exerciseId;
     }
 
+    /**
+     * Update Database(All tables) of Smartbells(SQLite3)
+     */
     public void updateDB() {
         Log.d("DatabaseAdaptor.UpdateDB - ", "Clearing data from Database");
         database.execSQL("DROP TABLE IF EXISTS " + ROUTINE_TABLE);
@@ -1096,9 +1442,16 @@ public ArrayList<Routine> selectAllRoutines() {
         helper.onCreate(database);
     }
 
+    /**
+     * Get Object with the below parameter
+     * @param table Table name
+     * @param primary_key Primary Key of the table
+     * @param id Each table's id
+     * @return JSONObject
+     * @throws SQLException treats exception of SQL Query
+     */
     private JSONObject getObject(String table, String primary_key, long id) throws SQLException {
         Cursor query = database.query(table, null, primary_key + " =? ", new String[]{String.valueOf(id)}, null, null, null);
-        //Log.d("number of records returned =================", String.valueOf(query.getCount()));
         if (query.getCount() != 1) throw new SQLException("Improper Key, " + query.getCount() + " records returned");
         query.moveToFirst();
         JSONObject json = new JSONObject();
@@ -1126,23 +1479,49 @@ public ArrayList<Routine> selectAllRoutines() {
         return json;
     }
 
+    /**
+     * Get an exercise by its id
+     * @param id Exercise id
+     * @return JSONObject = A record of exercise
+     * @throws SQLException Exception of SQL
+     */
     public JSONObject getExercise(long id) throws SQLException {
         //should return a json representation of the object in question
         return getObject(EXERCISE_TABLE, PK_EXERCISE_ID, id);
     }
-
+    /**
+     * Get an SetGroup by its id
+     * @param id SetGroup id
+     * @return SetGroup = A record of SetGroup
+     * @throws SQLException Exception of SQL
+     */
     public JSONObject getSetGroup(long id) throws SQLException {
         return getObject(SETGROUP_TABLE, PK_SETGROUP_ID, id);
     }
-
+    /**
+     * Get an Routine record by its id
+     * @param id Routine id
+     * @return Routine = A record of Routine
+     * @throws SQLException Exception of SQL
+     */
     public JSONObject getRoutine(long id) throws SQLException {
         return getObject(ROUTINE_TABLE, PK_ROUTINE_ID, id);
     }
-
+    /**
+     * Get an WorkoutSession record by its id
+     * @param id WorkoutSession id
+     * @return WorkoutSession = A record of WorkoutSession
+     * @throws SQLException Exception of SQL
+     */
     public JSONObject getWorkoutSession(long id) throws SQLException {
         return getObject(WORKOUTSESSION_TABLE, PK_WORKOUTSESSION_ID, id);
     }
-
+    /**
+     * Get an WorkoutSetGroup record by its id
+     * @param id WorkoutSetGroup id
+     * @return WorkoutSetGroup = A record of WorkoutSetGroup
+     * @throws SQLException Exception of SQL
+     */
     public JSONObject getWorkoutSetGroup(long id) throws SQLException {
         JSONObject workoutSetGroup;
         workoutSetGroup = getObject(WORKOUTSETGROUP_TABLE, PK_WORKOUTSETGROUP_ID, id);
@@ -1162,7 +1541,11 @@ public ArrayList<Routine> selectAllRoutines() {
         }
         throw new SQLException("Improper key, no matching set group");
     }
-
+    /**
+     * Insert an WorkoutSetGroup record from the parameter
+     * @param workoutSetGroup WorkoutSetGroup
+     * @return long result of inserting
+     */
     public long insertWorkoutSetGroup(WorkoutSetGroup workoutSetGroup, boolean sync) {
         return insertWorkoutSetGroup(
                 workoutSetGroup.getSetGroupID(),
@@ -1171,6 +1554,10 @@ public ArrayList<Routine> selectAllRoutines() {
                 sync);
         }
 
+    /**
+     * Get a boolean of result of rawQuery of exercise table
+     * @return boolean whether there is any exercise record or not
+     */
     public boolean getDatabaseLoaded(){
         Cursor query = database.rawQuery("select count(*) from " + EXERCISE_TABLE, null);
         query.moveToFirst();
@@ -1183,9 +1570,9 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     /**
-     *
-     * @param id_num
-     * @param tableID
+     *Delete an Object by id and tableID(e.g. 0=Exercise,1=setGroups)
+     * @param id_num Id of a record
+     * @param tableID Id of a table
      */
     public void deleteObject(int id_num, int tableID) {
             switch (tableID){
@@ -1220,11 +1607,11 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     /**
-     *
-     * @param id
-     * @param routine
-     * @param sync
-     * @return
+     * Update a Routine record by paramater
+     * @param id Routine id
+     * @param routine Routins.java
+     * @param sync boolean it is sync or not
+     * @return long result after inserting a routine record
      */
     public long updateRoutine(long id, Routine routine, boolean sync) throws SQLException {
         long result;
@@ -1239,11 +1626,11 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     /**
-     *
-     * @param id
-     * @param session
-     * @param sync
-     * @return
+     * Update a workoutsession record by WorkoutSession
+     * @param id WorkoutSession id
+     * @param session WorkoutSession Attributes(WorkoutSession)
+     * @param sync boolean it is sync or not
+     * @return long result of deleting
      */
     public long updateWorkoutSession(long id, WorkoutSession session, boolean sync) throws SQLException {
         long result;
@@ -1256,6 +1643,14 @@ public ArrayList<Routine> selectAllRoutines() {
         return result;
     }
 
+    /**
+     * Update a SetGroup by the parameters
+     * @param id SetGroup ID
+     * @param setGroup SetGroup(java)
+     * @param sync whether it is sync or not
+     * @return long resulf of updating
+     * @throws SQLException Exception of SQL
+     */
     public long updateSetGroup(long id, SetGroup setGroup, boolean sync) throws SQLException {
         long result;
 
@@ -1268,6 +1663,14 @@ public ArrayList<Routine> selectAllRoutines() {
         return result;
     }
 
+    /**
+     * Update a WorkoutSetGroup record by the parameters
+     * @param id workoutSetGroup id
+     * @param createdWorkoutSetGroup WorkoutSetGroup.java
+     * @param sync whether it is sync or not
+     * @return  long result of inserting
+     * @throws SQLException Exception of SQL
+     */
     public long updateWorkoutSetGroup(long id, WorkoutSetGroup createdWorkoutSetGroup, boolean sync)
             throws SQLException {
         long result;
@@ -1282,6 +1685,11 @@ public ArrayList<Routine> selectAllRoutines() {
         return result;
     }
 
+    /**
+     * Get a routine id by its name
+     * @param routineName Routine Name
+     * @return long routineid
+     */
     public long getRoutineIDByName(String routineName) {
         String[] columns = new String[]{ROUTINE_NAME, PK_ROUTINE_ID};
         Cursor cursor = database.query
@@ -1295,6 +1703,10 @@ public ArrayList<Routine> selectAllRoutines() {
     }
 
     //********************************************************************************************//
+
+    /**
+     * DatabaseHelper to be used at connecting to Database extends SQLiteOpenHelper
+     */
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         DatabaseHelper(Context context) {

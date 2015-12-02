@@ -24,6 +24,7 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 /**
  * This class shows the list of Exercise
  * Created by Jare on 2015-11-17.
+ * Updated by Brian McMahon
  */
 public class Exercises_Fragment extends ListFragment {
     /**

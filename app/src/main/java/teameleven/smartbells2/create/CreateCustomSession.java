@@ -26,6 +26,7 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 /**
  * This class is the screen of creating custom session
  * Created by Jare on 2015-10-06.
+ * Updated by Brian McMahon
  */
 public class CreateCustomSession extends Fragment implements View.OnClickListener {
     //A number of Groups

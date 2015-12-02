@@ -22,6 +22,7 @@ import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
 
 /**
  * Created by Jarret on 2015-10-07.
+ * Updated by Brian McMahon
  * This Activity Handles the background functionality for creating a new Exercise. Its content is
  * presented in create_exercise.xml
  */

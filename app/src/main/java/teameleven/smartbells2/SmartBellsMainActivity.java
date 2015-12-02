@@ -29,6 +29,7 @@ import teameleven.smartbells2.dashboardfragmenttabs.New_Records_Fragment;
 
 /**
  * This class is the Main Actibities of the SmartBells
+ * Updated by Brian McMahon
  */
 public class SmartBellsMainActivity extends AppCompatActivity
                                     implements NavigationView.OnNavigationItemSelectedListener {

@@ -44,6 +44,7 @@ import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
  * Update   by WonKyoung on 2015-10-10
  * Update   by WonKyoung on 2015-10-25
  * Update   by WonKyoung On 2015-11-05
+ * Updated by Brian McMahon
  * updated: Oct 8th, 2015 : added methods to interact with Exercise and Routine for Routine saving and creation.
  */
 public class CreateRoutine extends Fragment implements View.OnClickListener {

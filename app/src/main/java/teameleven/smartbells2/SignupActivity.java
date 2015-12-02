@@ -118,8 +118,9 @@ public class SignupActivity extends Activity{
 
     }
 
-    //todo fix bug - returns to main on pressing back
-    //todo review below
+    /**
+     * Method to handle returning to the login screen on pressing the back button
+     */
     @Override
     public void onBackPressed(){
         Log.d("CDA", "onBackPressed Called");
@@ -135,7 +136,6 @@ public class SignupActivity extends Activity{
      * @return boolean after validating
      */
     public boolean validate(){
-        //TODO implement additional validation logic
         boolean valid = true;
         if(getUsername().isEmpty() || getUsername().length() < 6 || getUsername().length() > 10){
             mUserName.setError("Please enter a name containing between 6 and 10 characters");

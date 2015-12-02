@@ -34,8 +34,6 @@ import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSession;
  */
 public class LoginActivity extends Activity {
 
-//TODO implement progress dialogs
-//TODO implement new validation in signup for using existing user details.
     /**
      * Edit Test Field of User name
      */
@@ -131,7 +129,6 @@ public class LoginActivity extends Activity {
             mPassword.setText("");
         } else {
 
-            //temporary  //TODO ADD PROGRESS DIALOG
             Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
 
             //instantiate the storage session
@@ -139,13 +136,6 @@ public class LoginActivity extends Activity {
 
             session.createLoginSession(getUsername(), getPassword());
 
-            //Toast.makeText(getApplicationContext(), "User Login Status: " +
-            // session.isLoggedIn(), Toast.LENGTH_LONG).show();
-
-
-
-            //move to main activity
-            //Intent intent = new Intent(this, SmartBellsMainActivity.class);
 
             /*
              * this block of code runs the Synchronization setup.
@@ -168,7 +158,6 @@ public class LoginActivity extends Activity {
 
     }
 
-    //todo review below
 
     /**
      * When the app is closed, ask to the user to exit or not.
@@ -260,38 +249,7 @@ public class LoginActivity extends Activity {
 
         return valid;
     }
-//
-//    /**
-//     * Initialization of the database before the sync- Load all tables to SQLite Database of the app
-//     * @param db
-//     */
-//    private void initialDatabaseSync(DatabaseAdapter db) {
-//        db.updateDB();
-//        long x = System.currentTimeMillis();
-//        long y;
-//
-//
-//        ArrayList<Exercise> exercise = Exercise.restGetAll();
-//        Log.d("LoginActivity.initialDatabaseSync - Exercise row count = ", String.valueOf(exercise.size()));
-//        y = (System.currentTimeMillis() - x);
-//        Log.d("time taken = ", String.format("%s milliseconds", y));
-//        db.loadAllExercises(exercise);
-//
-//
-//        ArrayList<Routine> routines = Routine.restGetAll(db.getUserIDForSession());
-//        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
-//        y = (System.currentTimeMillis() - x);
-//        Log.d("time taken = ", String.format("%s milliseconds", y));
-//        db.loadAllRoutines(routines);
-//
-//
-//        ArrayList<WorkoutSession> workoutSessions = WorkoutSession.
-//                restGetAll(db.getUserIDForSession());
-//        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
-//        y = (System.currentTimeMillis() - x);
-//        Log.d("time taken = ", String.format("%s milliseconds", y));
-//        db.loadAllWorkoutSessions(workoutSessions);
-//    }
+
 
     /**
      * Create an account for sync

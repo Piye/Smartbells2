@@ -26,6 +26,7 @@ import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 /**
  * This class shows the list of user's routines
  * Created by Jare on 2015-11-19.
+ * Updated by Brian McMahon
  */
 public class MyRoutines_Fragment extends ListFragment {
 

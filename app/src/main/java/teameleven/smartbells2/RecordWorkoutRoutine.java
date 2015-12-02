@@ -14,6 +14,7 @@ import teameleven.smartbells2.dashboardfragmenttabs.MyRoutines_Fragment;
 
 /**
  * Created by Jare on 2015-11-03.
+ * Updated by Brian McMahon
  */
 public class RecordWorkoutRoutine extends AppCompatActivity {
 

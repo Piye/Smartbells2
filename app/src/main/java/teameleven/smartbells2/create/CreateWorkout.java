@@ -20,8 +20,10 @@ import android.widget.TextView;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import teameleven.smartbells2.BeginWorkout;
 import teameleven.smartbells2.Dashboard;
 import teameleven.smartbells2.R;
+import teameleven.smartbells2.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
@@ -45,7 +47,6 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
      * FloatingActionButton
      */
     private FloatingActionButton fab;
-
     DatabaseAdapter database;
     /***
      * Textview for workout name
@@ -73,16 +74,17 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         }
 
-        //Main view
+        //Main view SmartBellsMainActivity.dashboardTab.setCheckTabPage(4)
         View view = inflater.inflate(R.layout.create_workout, container, false);
-        Dashboard dashboard = new Dashboard();//updated won
-        // dashboard.getCheckTabPage()== 4 : Display Private Routine
-        // dashboard.getCheckTabPage()== 0 : Display Public Routine
-        if(dashboard.getCheckTabPage()== 5)//won
+        // SmartBellsMainActivity.dashboardTab.getCheckTabPage()== 4 : Display Private Routine
+        // dSmartBellsMainActivity.dashboardTab.getCheckTabPage()== 5 : Display Public Routine
+        if(SmartBellsMainActivity.dashboardTab.getCheckTabPage() == 4) {
             routines = database.getMyRoutinesAsStrings(database.getUserIDForSession());
-        else
+        }else{
             routines = database.getRoutinesAsStrings();
-
+        }//WON
+        System.out.println(" beginWorkout.getCheckTabPage()" +
+                             SmartBellsMainActivity.dashboardTab.getCheckTabPage());
 
         routineList = (ListView) view.findViewById(R.id.createWorkoutRoutineList);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, routines);

@@ -75,9 +75,15 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
 
         //Main view
         View view = inflater.inflate(R.layout.create_workout, container, false);
+        Dashboard dashboard = new Dashboard();//updated won
+        // dashboard.getCheckTabPage()== 4 : Display Private Routine
+        // dashboard.getCheckTabPage()== 0 : Display Public Routine
+        if(dashboard.getCheckTabPage()== 5)//won
+            routines = database.getMyRoutinesAsStrings(database.getUserIDForSession());
+        else
+            routines = database.getRoutinesAsStrings();
 
 
-        routines = database.getMyRoutinesAsStrings(database.getUserIDForSession());
         routineList = (ListView) view.findViewById(R.id.createWorkoutRoutineList);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, routines);
         routineList.setAdapter(adapter);

@@ -77,7 +77,7 @@ public class BeginWorkout extends Fragment {
 
                 //If the current tab is on publicroutines show only public routines
                 if (tabId.equalsIgnoreCase("publicroutines")) {
-                    setCheckTabPage(4);
+                    setCheckTabPage(5);
                     if (publicroutines_fragment == null) {
                         if (savedInstanceState != null) {
                             fragTransaction.add(R.id.realtabcontent, new PublicRoutines_Fragment(), "publicroutines");

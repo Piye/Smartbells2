@@ -47,7 +47,7 @@
         <!-- SERVICES   -->
         <!-- Authenticator Service -->
         <service
-            android:name="teameleven.smartbells2.businesslayer.synchronization.AuthenticatorService">
+            android:name=".businesslayer.synchronization.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
@@ -57,7 +57,7 @@
         </service>
 
         <!-- Sync Service - Synchronizes the program with the database -->
-        <service android:name="teameleven.smartbells2.businesslayer.synchronization.SyncService"
+        <service android:name=".businesslayer.synchronization.SyncService"
                  android:exported="true"
                  android:process=":sync">
             <intent-filter>
@@ -69,7 +69,7 @@
         <!-- SERVICES   -->
         <!-- Content Provider -->
         <provider
-            android:name="teameleven.smartbells2.businesslayer.synchronization.StubProvider"
+            android:name=".businesslayer.synchronization.StubProvider"
             android:authorities="teameleven.smartbells2.businesslayer.synchronization.provider"
             android:label="provider"
             android:exported="false"

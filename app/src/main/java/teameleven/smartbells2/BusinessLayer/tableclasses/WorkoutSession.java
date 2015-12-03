@@ -1,7 +1,6 @@
 package teameleven.smartbells2.businesslayer.tableclasses;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import teameleven.smartbells2.businesslayer.RESTCall;
-import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
  * Created by Andrew Rabb on 2015-10-23.

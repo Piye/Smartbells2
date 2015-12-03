@@ -1,7 +1,6 @@
 package teameleven.smartbells2.businesslayer.tableclasses;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import teameleven.smartbells2.businesslayer.RESTCall;
-import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
  * Base Exercise Class. Describes a Single Exercise, including the number of reps and sets in a basic performance of the exercise.

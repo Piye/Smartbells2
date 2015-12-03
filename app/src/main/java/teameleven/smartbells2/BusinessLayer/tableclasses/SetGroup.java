@@ -1,18 +1,10 @@
 package teameleven.smartbells2.businesslayer.tableclasses;
 
-import android.os.AsyncTask;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.ExecutionException;
-
-import teameleven.smartbells2.businesslayer.RESTCall;
-import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
-import teameleven.smartbells2.viewlayer.Authentication;
-
 /**
- * Base SetGroup Class that represents a number of numOfSets with a given number of repsPerSet
+ * Base SetGroup Class that represents a number of Sets with a given number of repsPerSet
  * Created by Brian McMahon on 22/10/2015.
  */
 public class SetGroup {
@@ -33,15 +25,17 @@ public class SetGroup {
     /**************************************
      * Constructors
      ********************************************/
+    /**
+     * default constructor
+     */
     public SetGroup() {
     }
 
     /**
      * Constructor for Creation of Objects for Insertion into JSON Object
-     *
-     * @param exerciseId
-     * @param num_of_sets
-     * @param reps_per_set
+     * @param exerciseId - exercise id of the set Group to be created
+     * @param num_of_sets - number of sets
+     * @param reps_per_set - number of reps
      */
     public SetGroup(int exerciseId, int num_of_sets, int reps_per_set) {
         this.exerciseId = exerciseId;
@@ -50,7 +44,8 @@ public class SetGroup {
     }
 
     /**
-     * @param setGroup
+     * SetGroup JSON Constructor
+     * @param setGroup - JSON setGroup
      */
     public SetGroup(JSONObject setGroup) {
         try {
@@ -67,11 +62,12 @@ public class SetGroup {
     }
 
     /**
-     * @param setGroupId
-     * @param exerciseId
-     * @param routineId
-     * @param reps
-     * @param sets
+     * Primitive Constructor
+     * @param setGroupId - setGroup ID
+     * @param exerciseId - Exercise ID
+     * @param routineId - Routine ID
+     * @param reps - number of reps
+     * @param sets - number of sets
      */
     public SetGroup(int setGroupId, int exerciseId, int routineId, int reps, int sets) {
         this.id = setGroupId;
@@ -82,57 +78,95 @@ public class SetGroup {
 
     }
 
+    /**
+     * returns the Exercise ID
+     * @return the exercise ID
+     */
     public int getExerciseId() {
         return exerciseId;
     }
 
+    /**
+     * sets the Exercise ID for the set Group
+     * @param exerciseId - exercise ID
+     */
     public void setExerciseId(int exerciseId) {
         this.exerciseId = exerciseId;
     }
 
-    /**************************************
-     * Base Methods
-     ********************************************/
-
+    /**
+     * returns the Routine ID
+     * @return routine ID
+     */
     public int getRoutineId() {
         return routineId;
     }
 
+    /**
+     * sets the Routine ID
+     * @param routineId - routine id to be set
+     */
     public void setRoutineId(int routineId) {
         this.routineId = routineId;
     }
 
+    /**
+     * sets the Exercise ID
+     */
     public void setExerciseId() {
         this.exerciseId = exercise.getId();
     }
 
+    /**
+     * returns the set group id
+     * @return the set group id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * sets the set group id
+     * @param id - set group id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * returns the creation date (String)
+     * @return creation Date, unformatted
+     */
     public String getCreationDate() {
         return creationDate;
     }
 
+    /**
+     * sets the creation date
+     * @param creationDate - creation date (should be retrieved from API)
+     */
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
 
+    /**
+     * returns the last updated date
+     * @return last updated date
+     */
     public String getLastUpdated() {
         return lastUpdated;
     }
 
+    /**
+     * sets the last updated date
+     * @param lastUpdated - last updated date (should be retrieved from API)
+     */
     public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
     /**
      * returns the exercise
-     *
      * @return the exercise
      */
     public Exercise getExercise() {
@@ -140,8 +174,7 @@ public class SetGroup {
     }
 
     /**
-     * numOfSets the Exercise
-     *
+     * Sets theExercise
      * @param exercise : the exercise being set
      */
     public void setExercise(Exercise exercise) {
@@ -150,7 +183,6 @@ public class SetGroup {
 
     /**
      * returns the number of numOfSets for the exercise
-     *
      * @return the number of numOfSets
      */
     public int getNumberOfSets() {
@@ -159,7 +191,6 @@ public class SetGroup {
 
     /**
      * numOfSets the number of numOfSets for an exercise
-     *
      * @param sets : the number of numOfSets
      */
     public void setNumberOfSets(int sets) {
@@ -168,19 +199,27 @@ public class SetGroup {
 
     /**
      * returns the number of repsPerSet in a set
-     *
      * @return the number of repsPerSet
      */
     public int getRepsPerSet() {
         return repsPerSet;
     }
 
+    /**
+     * sets number of reps in a set
+     * @param reps - reps per set
+     */
     public void setRepsPerSet(int reps) {
         this.repsPerSet = reps;
     }
 
     //create JSON parameters to pass to the post method
 
+    /**
+     * returns a String representation of the Object
+     * @return String setGroup (JSONObject.toString(4))
+     */
+    @Override
     public String toString(){
         try {
             return this.createJSON().toString(4);
@@ -191,8 +230,7 @@ public class SetGroup {
     }
     /**
      * Create JSON parameters to pass to the post method
-     *
-     * @return : setGroup
+     * @return : setGroup JsonObject
      */
     public JSONObject createJSON() {
         try {
@@ -207,44 +245,5 @@ public class SetGroup {
             je.printStackTrace();
         }
         return null;
-    }
-
-    /**************************************REST Methods********************************************/
-    /**
-     * Rest to create Set Group
-     *
-     * @param adapter : DatabaseAdapter to connect to Database
-     * @return
-     */
-    public String restCreateSetGroup(DatabaseAdapter adapter) {
-
-        String accessToken = Authentication.getAccessToken();
-        String result = "";
-        try {
-            String temp = "set_groups";
-            JSONObject temp1 = createJSON();
-            AsyncTask test = new RESTCall().execute(temp, "POST", temp1.toString(), accessToken);
-            result = test.get().toString();
-            return result;
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public void restUpdateExercise() {
-    }
-
-    public void restDeleteExercise() {
-    }
-
-    /*
-    * methods to make calls on the API
-    * */
-    public void restGetAllSetGroups() {
-
-    }
-
-    public void restGetExercise() {
     }
 }

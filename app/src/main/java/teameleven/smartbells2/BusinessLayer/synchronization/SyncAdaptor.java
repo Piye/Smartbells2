@@ -58,10 +58,11 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
      *
      * @param context            - Context of the Application, used to open the Database
      * @param autoInitialize     - AutoInitialize boolean
-     * @param allowParalellSyncs - backwards Compatibility variable
+     * @param allowParallelSync - backwards Compatibility variable
      */
-    public SyncAdaptor(Context context, boolean autoInitialize, boolean allowParalellSyncs) {
-        super(context, autoInitialize, allowParalellSyncs);
+    @SuppressWarnings("unused")
+    public SyncAdaptor(Context context, boolean autoInitialize, boolean allowParallelSync) {
+        super(context, autoInitialize, allowParallelSync);
         try {
             database = new DatabaseAdapter(context).openLocalDatabase();
         } catch (SQLException e) {
@@ -116,7 +117,7 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                     httpType = setHTTPType(UpdateRecord[2]);//sets the http call type
 
 
-                    //if insert (POST) calltype, nullify modifier
+                    //if insert (POST) callType, nullify modifier
                     if (UpdateRecord[2] == 0) {
                         modifier = "";
                         object = getChangedObject(UpdateRecord[0], UpdateRecord[1]);

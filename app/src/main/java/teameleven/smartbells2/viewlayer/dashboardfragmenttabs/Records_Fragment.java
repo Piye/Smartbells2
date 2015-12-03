@@ -85,7 +85,7 @@ public class Records_Fragment extends ListFragment {
                 listOfSetGroups = db.getMySetGroupIdsByWSG(workoutSetGroupId);
                 //can we get ExerciseID,sets,reps at once???
             }
-            //Select SetGrouops with WorkoutsSetGroupIds from SETGROUP_TABLE
+            //Select SetGroups with WorkoutsSetGroupIds from SETGROUP_TABLE
             //Set the adapter to show in application
             //iteratorSetGroup = iteratorSetGroupId.iterator();
             //while()

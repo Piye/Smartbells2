@@ -1,4 +1,4 @@
-package teameleven.smartbells2.viewlayer.dashboardfragmenttabs;
+package teameleven.smartbells2.viewlayer.unusedui;
 
 import android.content.Context;
 import android.view.View;

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import teameleven.smartbells2.viewlayer.AchievementDashboard;
 import teameleven.smartbells2.viewlayer.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
@@ -22,27 +21,6 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
  */
 public class New_Records_Fragment extends ListFragment {
 
-    /**
-     * AchievementDashboard
-     */
-    AchievementDashboard dashboard;
-    /**
-     * Database Adapter
-     */
-    private DatabaseAdapter db;
-
-    /**
-     * Variable for saving a list of the workouts name
-     */
-    private ArrayList<String> myWorkoutList;
-    /**
-     * Variable for count a list of the workouts name
-     */
-    private ArrayList<String> myCountedWorkoutList;
-    /**
-     * ArrayAdapter for saving the list of WorkoutSessions
-     */
-    private ArrayAdapter<String> adapter;
     /**
      * Previous WorkoutSession name
      */
@@ -59,7 +37,10 @@ public class New_Records_Fragment extends ListFragment {
         SmartBellsMainActivity.dashboardTab.setCheckTabPage(4);
 
         //Open Database
-        db = new DatabaseAdapter(getActivity());
+        /*
+      Database Adapter
+     */
+        DatabaseAdapter db = new DatabaseAdapter(getActivity());
         try {
             db.openLocalDatabase();
             //insert more routines
@@ -70,13 +51,16 @@ public class New_Records_Fragment extends ListFragment {
 
         //Get the list of WorkoutSession from the Database
 
-        myWorkoutList = db.getMyWorkoutsAsStrings(db.getUserIDForSession());
+        /*
+      Variable for saving a list of the workouts name
+     */
+        ArrayList<String> myWorkoutList = db.getMyWorkoutsAsStrings(db.getUserIDForSession());
 
         //close the database
         db.closeLocalDatabase();
 
 
-        //Sort the arraylist
+        //Sort the arrayList
         Collections.sort(myWorkoutList, new Comparator<String>() {
 
             @Override
@@ -87,7 +71,10 @@ public class New_Records_Fragment extends ListFragment {
         });
 
         //Count the WorkoutSession
-        myCountedWorkoutList = new ArrayList<String>();
+        /*
+      Variable for count a list of the workouts name
+     */
+        ArrayList<String> myCountedWorkoutList = new ArrayList<>();
         for(String s: myWorkoutList){
 
             if ((s.equals(previousWorkout)) || (counter==0)){
@@ -106,7 +93,10 @@ public class New_Records_Fragment extends ListFragment {
                 counter = 1;
             }
         }
-        adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+        /*
+      ArrayAdapter for saving the list of WorkoutSessions
+     */
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getBaseContext(),
                 android.R.layout.simple_list_item_1, myCountedWorkoutList);
         setListAdapter(adapter);
 

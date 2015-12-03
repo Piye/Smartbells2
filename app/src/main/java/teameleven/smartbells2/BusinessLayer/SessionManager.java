@@ -25,7 +25,7 @@ public class SessionManager {
     // Shared pref mode
     int PRIVATE_MODE = 0;
 
-    // Sharedpref file name
+    // Shared Pref file name
     public static final String PREF_NAME = "Login";
 
     // All Shared Preferences Keys

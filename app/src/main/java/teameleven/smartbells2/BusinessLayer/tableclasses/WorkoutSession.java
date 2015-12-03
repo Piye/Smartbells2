@@ -12,34 +12,37 @@ import java.util.concurrent.ExecutionException;
 import teameleven.smartbells2.businesslayer.RESTCall;
 
 /**
+ * Workout Session. Tracks attributes related to the Workout Session Table.
  * Created by Andrew Rabb on 2015-10-23.
  */
+@SuppressWarnings("unused")
 public class WorkoutSession {
 
     /****************************************Attributes********************************************/
+    @SuppressWarnings("SpellCheckingInspection")
     static final private String RESTID = "workout_sessions";
     /**
-     *
+     * ArrayList of  WorkoutSetGroups
      */
     private ArrayList<WorkoutSetGroup> setGroups = new ArrayList<>();
     /**
-     *
+     * Name of the Workout Session
      */
     private String name;
     /**
-     *
+     * Creation Date of the Workout Session (set by API)
      */
     private String created_At;
     /**
-     *
+     * Update Date of the Workout Session (set by API)
      */
     private String updated_At;
     /**
-     *
+     * id of the Workout Session
      */
     private int id;
     /**
-     *
+     * User ID of the Workout Session Creator (the user)
      */
     private int user_Id;
 
@@ -50,8 +53,8 @@ public class WorkoutSession {
      */
     public WorkoutSession() {}
     /**
-     *
-     * @param workoutSession
+     * Workout Session Constructor for JsonObjects
+     * @param workoutSession - WorkoutSession Json Object
      */
     public WorkoutSession(JSONObject workoutSession) {
         try {
@@ -78,6 +81,11 @@ public class WorkoutSession {
             }
     }
 
+    /**
+     * Constructor for Name and ID of Workout Session
+     * @param name - Name of Workout Session
+     * @param id - Id of Workout Session
+     */
     public WorkoutSession(String name, int id) {
         this.name = name;
         this.id = id;
@@ -85,91 +93,106 @@ public class WorkoutSession {
 
     /**************************					Base Methods               ************************/
     /**
-     * @return
+     * returns the Name of the Workout Session
+     * @return - workout Session Name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @param name
+     * sets the name of the Workout Session
+     * @param name - Name of the Workout Session
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * @return
+     * returns the Creation date of the Object (from API)
+     * @return - Creation Date (String)
      */
     public String getCreated_At() {
         return created_At;
     }
 
     /**
-     * @param created_At
+     * sets the creation date of the object (from API)
+     * @param created_At - creation Date (String)
      */
     public void setCreated_At(String created_At) {
         this.created_At = created_At;
     }
 
     /**
-     * @return
+     * returns the updated date of the Object (from API)
+     * @return - update date (String)
      */
     public String getUpdated_At() {
         return updated_At;
     }
 
     /**
-     * @param updated_At
+     * returns the updated at date (from API)
+     * @param updated_At - Updated at (String)
      */
     public void setUpdated_At(String updated_At) {
         this.updated_At = updated_At;
     }
 
     /**
-     * @return
+     * gets the Id of the WorkoutSession
+     * @return - Workout Session Id
      */
     public int getId() {
         return id;
     }
 
     /**
-     * @param id
+     * sets the Id of the Workout Session
+     * @param id - Workout Session Id
      */
     public void setId(int id) {
         this.id = id;
     }
 
     /**
-     * @return
+     * returns the User Id tied to this Workout Session
+     * @return User_ID
      */
     public int getUser_Id() {
         return user_Id;
     }
 
     /**
-     * @param user_Id
+     * Sets the User Id
+     * @param user_Id - User Id
      */
     public void setUser_Id(int user_Id) {
         this.user_Id = user_Id;
     }
 
     /**
-     *
-     * @return
+     * gets the Set Groups Array
+     * @return the group of Set Groups
      */
     public ArrayList<WorkoutSetGroup> getSetGroups() {
         return setGroups;
     }
 
     /**
-     *
-     * @param setGroups
+     * sets the Set Group Array
+     * @param setGroups - Set Group Array
      */
     public void setSetGroups(ArrayList<WorkoutSetGroup> setGroups) {
         this.setGroups = setGroups;
     }
 
+    /**
+     * returns a String Representation of the Workout Session
+     * @return Workout Session (JsonObject.toString(4))
+     */
+    @Override
     public String toString(){
         try {
             return this.createJSON().toString(4);
@@ -182,7 +205,7 @@ public class WorkoutSession {
 
     /**
      * Creates a JSON Object from the current Workout session Object
-     * capable JSON'ing all available data (skips null values if present)
+     * capable of changing all attributes to JSON (skips unnecessary null values if present)
      */
     public JSONObject createJSON() {
         JSONArray workoutSetGroup = new JSONArray();
@@ -211,10 +234,10 @@ public class WorkoutSession {
     /**
      * Get all records of the WorkoutSession by User id
      * @param userIDForSession : User id
-     * @return : List of Workoutsession of a user
+     * @return : List of WorkoutSession of a user
      */
     public static ArrayList<WorkoutSession> restGetAll(int userIDForSession) {
-        try {;
+        try {
             //Log.d("Exercise.restGetAll - ", RESTID);
             AsyncTask result = new RESTCall().execute(RESTID + "?user_id=" + userIDForSession, "GET");
             //AsyncTask result = new RESTCall().execute(RESTID, "GET");
@@ -251,38 +274,4 @@ public class WorkoutSession {
         }
         return null;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

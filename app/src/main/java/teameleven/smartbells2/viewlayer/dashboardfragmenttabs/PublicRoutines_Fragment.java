@@ -17,7 +17,7 @@ import teameleven.smartbells2.viewlayer.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
- * Created by Jare on 2015-11-19.
+ * Created by Jaret on 2015-11-19.
  * Updated by Brian McMahon
  */
 

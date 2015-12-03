@@ -9,6 +9,7 @@ import org.json.JSONObject;
  * created : October 4th, 2015
  * @author Andrew Rabb
  */
+@SuppressWarnings("unused")
 public class WorkoutSetGroup {
     /**************************
      * Attributes
@@ -75,7 +76,7 @@ public class WorkoutSetGroup {
 
     /**
      * Set the Resistance with parameter resistance
-     * @param resistance : Resistance of execercise set groups
+     * @param resistance : Resistance of exercise set groups
      */
     public void setResistance(int resistance) {
         this.resistance = resistance;
@@ -118,7 +119,7 @@ public class WorkoutSetGroup {
 
     /**
      * Set the WorkoutSession id
-     * @param workoutSessionId
+     * @param workoutSessionId - Workout Session ID
      */
     public void setWorkoutSessionId(int workoutSessionId){this.workoutSessionId = workoutSessionId;}
 
@@ -165,7 +166,7 @@ public class WorkoutSetGroup {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return "setgroupId = " + this.getSetGroupID();
+        return "setGroupId = " + this.getSetGroupID();
     }
 
 }

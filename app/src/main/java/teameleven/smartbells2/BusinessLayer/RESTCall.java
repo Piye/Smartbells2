@@ -23,7 +23,7 @@ import java.util.Objects;
  */
 public class RESTCall extends AsyncTask<String, Void, JSONObject> {
     /**
-     * baseURL : An address of the Smartbells API of the SingularityXL
+     * baseURL : An address of the Smart Bells API of the SingularityXL
      */
     private static final String baseURL = "https://smart-bells-staging.herokuapp.com/api/v1/";
     /**

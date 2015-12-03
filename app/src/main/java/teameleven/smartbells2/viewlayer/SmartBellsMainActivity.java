@@ -259,9 +259,6 @@ public class SmartBellsMainActivity extends AppCompatActivity
             fragmentShowing = 3;
         origin/master*/
 
-
-
-
             fragment = new About();
         } else if (id == R.id.nav_profile) {
             //View and edit profile

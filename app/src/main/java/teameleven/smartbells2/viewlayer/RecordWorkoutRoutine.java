@@ -14,7 +14,7 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.viewlayer.dashboardfragmenttabs.MyRoutines_Fragment;
 
 /**
- * Created by Jare on 2015-11-03.
+ * Created by Jaret on 2015-11-03.
  * Updated by Brian McMahon
  */
 public class RecordWorkoutRoutine extends AppCompatActivity {
@@ -29,11 +29,11 @@ public class RecordWorkoutRoutine extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.record_workout);
 
-        //Get the name value passed and set it to the textBiew value
+        //Get the name value passed and set it to the textView value
         //nameValue = getIntent().getStringExtra(BeginWorkout.ITEM_NAME);
         nameValue = getIntent().getStringExtra(MyRoutines_Fragment.ROUTINE_ITEM_NAME);
         TextView nameView = (TextView) findViewById(R.id.nameTextValue);
-        TextView mExercise = (TextView) findViewById(R.id.exerciseTextViewCustom);
+        //TextView mExercise = (TextView) findViewById(R.id.exerciseTextViewCustom);
         nameView.setText(nameValue);
         mResistance = (EditText) findViewById(R.id.editResistanceText);
         mSets = (EditText) findViewById(R.id.editSetsTextCustom);

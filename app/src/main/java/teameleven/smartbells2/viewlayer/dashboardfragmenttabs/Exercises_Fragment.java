@@ -16,7 +16,6 @@ import android.widget.Toast;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import teameleven.smartbells2.viewlayer.Dashboard;
 import teameleven.smartbells2.viewlayer.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
@@ -27,10 +26,6 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
  * Updated by Jordan Medwid
  */
 public class Exercises_Fragment extends ListFragment {
-    /**
-     * Dashboard of Smartbells(Workout,Routine,Exercise)
-     */
-    Dashboard dashboard;
     ArrayList<String> listOfExercises;
     ArrayAdapter<String> adapter;
     //Temporary string array to populate list
@@ -43,7 +38,7 @@ public class Exercises_Fragment extends ListFragment {
          */
         SmartBellsMainActivity.dashboardTab.setCheckTabPage(2);
         /**
-         * DB adaptoer
+         * DB adapter
          */
         DatabaseAdapter db = new DatabaseAdapter(getActivity());
         try {
@@ -62,7 +57,7 @@ public class Exercises_Fragment extends ListFragment {
          * Set the adapter to show in application
          */
 
-        adapter = new ArrayAdapter<String>(
+        adapter = new ArrayAdapter<>(
                 getActivity().getBaseContext(), android.R.layout.simple_list_item_1, listOfExercises);
         setListAdapter(adapter);
 
@@ -81,12 +76,11 @@ public class Exercises_Fragment extends ListFragment {
     }
 
     /***
-     *
-     * @param lv
-     * @param view
-     * @param position
-     * @param id
      * Method displays buttons to [edit/delete] items from the exercise list.
+     * @param lv - ListView
+     * @param view - View
+     * @param position - Position of List View
+     * @param id - id of item in List view
      */
     @Override
     public void onListItemClick(ListView lv, View view, int position, long id) {
@@ -110,14 +104,14 @@ public class Exercises_Fragment extends ListFragment {
             }
         });
 
-        Dialog mydialog = builder.setView(new View(getActivity())).create();
+        Dialog myDialog = builder.setView(new View(getActivity())).create();
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-        params.copyFrom(mydialog.getWindow().getAttributes());
+        params.copyFrom(myDialog.getWindow().getAttributes());
         params.width = 400;
         params.height = 250;
-        mydialog.show();
-        mydialog.getWindow().setAttributes(params);
+        myDialog.show();
+        myDialog.getWindow().setAttributes(params);
 
     }
 }

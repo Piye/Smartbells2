@@ -8,11 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import teameleven.smartbells2.viewlayer.Dashboard;
 import teameleven.smartbells2.viewlayer.RecordWorkoutRoutine;
 import teameleven.smartbells2.viewlayer.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
@@ -23,7 +20,6 @@ import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 public class Workouts_Fragment extends ListFragment {
 
-    Dashboard dashboard;
     public static final String SESSION_ITEM_NAME = DatabaseAdapter.SESSION_NAME;
     private ArrayList<String> listOfWorkouts;
     //Temporary string array to populate list
@@ -53,7 +49,7 @@ public class Workouts_Fragment extends ListFragment {
         if (listOfWorkouts != null ){
             //Change adapter type to handle objects instead of strings later
             //Set the adapter to show in application
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getBaseContext(),
                     android.R.layout.simple_list_item_1, listOfWorkouts);
             setListAdapter(adapter);
         }else{
@@ -61,7 +57,6 @@ public class Workouts_Fragment extends ListFragment {
         }
         //close the database
         db.closeLocalDatabase();
-
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -77,7 +72,7 @@ public class Workouts_Fragment extends ListFragment {
      * Override the view when the list item clicked
      * @param lv ListView of Routine name
      * @param view View
-     * @param position postion of the item
+     * @param position position of the item
      * @param id Id of the clicked item
      */
     @Override
@@ -88,10 +83,5 @@ public class Workouts_Fragment extends ListFragment {
         intent.putExtra(SESSION_ITEM_NAME, listOfWorkouts.get(position));
 
         startActivity(intent);
-
-
-
-
     }
-
 }

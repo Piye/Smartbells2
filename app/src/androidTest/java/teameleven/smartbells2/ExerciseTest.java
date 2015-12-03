@@ -38,7 +38,7 @@ public class ExerciseTest extends TestCase{
      * server bug gives us a null user_id at times, so method has been altered to account for that
      * server bug gives us a null is_public value at times. method has been altered to account
      * @param exercise - exercise
-     * @throws JSONException
+     * @throws JSONException exception
      */
     public void testJSON(Exercise exercise) throws JSONException {
 

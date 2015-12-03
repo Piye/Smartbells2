@@ -39,7 +39,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
      * @param requiredFeatures : Array of string of Require Features
      * @param options : Bundle
      * @return null
-     * @throws NetworkErrorException
+     * @throws NetworkErrorException : Network Error
      */
     @Override
     public Bundle addAccount(
@@ -71,7 +71,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
      * @param authTokenType : Authentication's type
      * @param options : Bundle of options
      * @return : null
-     * @throws NetworkErrorException
+     * @throws NetworkErrorException : Network Error
      */
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response,
@@ -97,7 +97,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
      * @param authTokenType : Authentication Token Type
      * @param options : Bundle of options
      * @return : null
-     * @throws NetworkErrorException
+     * @throws NetworkErrorException : Network Error
      */
     @Override
     public Bundle updateCredentials(AccountAuthenticatorResponse response,

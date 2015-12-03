@@ -38,6 +38,10 @@ public class ViewWorkout extends AppCompatActivity {
 
     private ListView routinelist;
 
+    /**
+     * OnCreate View Workout
+     * @param savedInstanceState - Bundle Saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +56,7 @@ public class ViewWorkout extends AppCompatActivity {
         //routinelist = (ListView) findViewById(R.id.)
 
         //Set values
-        nameView.setText(nameValue.toString());
+        nameView.setText(nameValue);
 
         //Get the list of routines in this workout
         database = new DatabaseAdapter(this);
@@ -78,7 +82,10 @@ public class ViewWorkout extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Record Workout
+     * @param view - current View
+     */
     public void recordWorkout(View view) {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -89,7 +96,7 @@ public class ViewWorkout extends AppCompatActivity {
 
     /**
      * Back to Dashboard button
-     * @param view
+     * @param view - Current View
      */
     public void goBack(View view) {
         ViewWorkout.this.finish();

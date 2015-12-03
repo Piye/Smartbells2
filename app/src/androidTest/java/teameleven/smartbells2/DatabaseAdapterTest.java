@@ -22,6 +22,10 @@ public class DatabaseAdapterTest extends AndroidTestCase {
     private static final String TEST_FILE_PREFIX = "test_";
     private DatabaseAdapter database;
 
+    /**
+     * setup for the test
+     * @throws Exception exception
+     */
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -29,7 +33,9 @@ public class DatabaseAdapterTest extends AndroidTestCase {
 
         Log.d("database created - ", " you created a database");
     }
-
+    /**
+     * teardown for the test
+     */
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
@@ -37,7 +43,8 @@ public class DatabaseAdapterTest extends AndroidTestCase {
     }
 
     /**
-     * @throws Exception
+     * Tests for Exercises
+     * @throws Exception exception
      */
     public void testExercise() throws Exception {
         this.initialDatabaseSync(0);
@@ -84,6 +91,10 @@ public class DatabaseAdapterTest extends AndroidTestCase {
         }
     }
 
+    /**
+     * runs Routine Test
+     * @throws Exception exception
+     */
     public void testRoutine() throws Exception {
         this.initialDatabaseSync(1);
         ArrayList<Routine> routines = database.selectAllRoutines();
@@ -126,6 +137,10 @@ public class DatabaseAdapterTest extends AndroidTestCase {
         }
     }
 
+    /**
+     * runs WorkoutSession test
+     * @throws Exception exception
+     */
     public void testWorkoutSession() throws Exception {
         this.initialDatabaseSync(2);
         ArrayList<WorkoutSession> sessions = database.selectAllWorkoutSessions();
@@ -169,6 +184,11 @@ public class DatabaseAdapterTest extends AndroidTestCase {
             //this should be zero, as all changed records are removed
         }
     }
+
+    /**
+     * runs SetGroup test
+     * @throws Exception exception
+     */
     public void testSetGroups() throws Exception {
         this.initialDatabaseSync(1);//retrieves routine list - should populate SetGroups
         ArrayList<SetGroup> setGroups = database.selectAllSetGroups();
@@ -291,21 +311,24 @@ public class DatabaseAdapterTest extends AndroidTestCase {
 //        return result;
 //    }
 
+    /**
+     * opens a Renaming delegating context to test the Database
+     * @return database connection
+     * @throws SQLException - if database cannot be opened
+     */
     public DatabaseAdapter getDatabase() throws SQLException {
         RenamingDelegatingContext context = new RenamingDelegatingContext(getContext().getApplicationContext(), TEST_FILE_PREFIX);
         if (database == null) {
             database = new DatabaseAdapter(context);
             database.openLocalDatabase();
         }
-
-
-        //database.updateDB();
         assertNotNull(database);
         return database;
     }
 
     /**
-     *
+     * Syncs the Database to the current Remote Database
+     * @param i the table to be synchronized
      */
     private void initialDatabaseSync(int i) {
         database.updateDB();

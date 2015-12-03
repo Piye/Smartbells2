@@ -51,17 +51,17 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
     private TextView workoutName;
     private String routineName;
     private ListView routineList;
+
+    ArrayList<String> routines;
+    private ArrayList<String> clickedRoutines;
+
     /**
      * The create set group page
-     *
      * @param inflater LayoutInflater
      * @param container ViewGroup
      * @param savedInstanceState  Bundle
      * @return view
      */
-    ArrayList<String> routines;
-    private ArrayList<String> clickedRoutines;
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         database = new DatabaseAdapter(this.getContext());
@@ -101,12 +101,14 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * Adds a listener to the ListView
+     * @return ArrayList of Strings
+     */
     private ArrayList<String> addListenerOnItems() {
         final ArrayList<String> routineNames = new ArrayList<>();
         routineList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             SparseBooleanArray sp;
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SparseBooleanArray sp = routineList.getCheckedItemPositions();
@@ -118,7 +120,6 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
                         routineNames.remove(i);
                     }
                 }
-
                 routineName = parent.getItemAtPosition(position).toString();
                 //Log.d("routineName " + routineName, "has been selected, its position is " + position);
             }
@@ -128,7 +129,6 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
 
     /**
      * The screen of add_setgoup,design_routine and cancel create workout
-     *
      * @param v View
      */
     @Override

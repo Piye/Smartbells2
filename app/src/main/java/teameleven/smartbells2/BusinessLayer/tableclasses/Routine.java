@@ -52,24 +52,26 @@ public class Routine {
      */
     private String updated_At;
     /**
-     * Boolean where the recors is public or not
+     * Boolean where the records is public or not
      */
     private boolean is_Public;
     /**
-     * Arraylist of Setgoups
+     * ArrayList of SetGroups
      */
     private ArrayList<SetGroup> setGroups = new ArrayList<>();
 
 
     /***********************************Constructors **********************************************/
-
+    /**
+     * Default Constructor
+     */
     public Routine(){
 
     }
     /**
-     *
-     * @param name
-     * @param id
+     * Constructor for the String and ID of a routine
+     * @param name Routine Name
+     * @param id Routine ID
      */
     public Routine(String name, int id) {
         this.setName(name);
@@ -110,12 +112,12 @@ public class Routine {
     }
 /************************************ Static Methods   ********************************************/
     /**
-     * Get a arraylist of all routines with user id
-     * @return
-     * @param userIDForSession
+     * Get a ArrayList of all routines with user id
+     * @param userIDForSession - user id of User
+     * @return ArrayList of Routines
      */
     public static ArrayList<Routine> restGetAll(int userIDForSession) {
-        try {;
+        try {
             //Log.d("Exercise.restGetAll - ", RESTID);
             AsyncTask result = new RESTCall().execute(RESTID  /*"?user_id=" userIDForSession */, "GET");
             JSONObject json = (JSONObject) result.get();
@@ -131,7 +133,7 @@ public class Routine {
      * Get routines by user id
      * @param json JSONObject
      * @param userIDForSession : user id for now session
-     * @return A arraylis of routines by user id
+     * @return An ArrayList of routines by user id
      */
     private static ArrayList<Routine> restGetRoutines(JSONObject json, int userIDForSession){
         ArrayList<Routine> routines = new ArrayList<>();
@@ -172,7 +174,7 @@ public class Routine {
     /**
      * Get all Routines of its table
      * @param routineAll : JSONObject to get all routines
-     * @return Arraylist of routines
+     * @return ArrayList of routines
      */
     public static ArrayList<Routine> getAllRoutine(JSONObject routineAll) {
         JSONArray routineArray = null;
@@ -315,11 +317,11 @@ public class Routine {
     }
 
     /**
-     * Set the setGroups as a Arraylist<SetGoup></SetGoup>
-     * @param setgroups: A list of setgroups
+     * Set the setGroups as a ArrayList
+     * @param setGroups: A list of setGroups
      */
-    public void setSetGroups(ArrayList<SetGroup> setgroups) {
-        this.setGroups = setgroups;
+    public void setSetGroups(ArrayList<SetGroup> setGroups) {
+        this.setGroups = setGroups;
     }
 
     /**

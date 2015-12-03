@@ -40,6 +40,11 @@ public class SessionManager {
     //public static final String KEY_EMAIL = "email";
 
     // Constructor
+
+    /**
+     * Session Manager Object Creation
+     * @param context - Application Context
+     */
     public SessionManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
@@ -48,6 +53,8 @@ public class SessionManager {
 
     /**
      * Create login session
+     * @param userName username of user
+     * @param password password of user
      */
     public void createLoginSession(String userName, String password) {
         // Storing login value as TRUE

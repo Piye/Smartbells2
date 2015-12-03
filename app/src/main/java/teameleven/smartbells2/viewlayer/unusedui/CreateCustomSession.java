@@ -43,9 +43,9 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
 
     /**
      * Display the input screen of the create_custom_session
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
+     * @param inflater - inflater
+     * @param container - container
+     * @param savedInstanceState - Bundle instance state
      * @return View of create_custom_session
      */
     //@Override
@@ -87,7 +87,7 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
 
     /**
      * Get a name of the custom session
-     * @return
+     * @return - Name of the Custom Session
      */
     public String addName() {
        // mName = (EditText) findViewById(R.id.editCustomRoutineName);
@@ -98,7 +98,7 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
     //Set Groups
     /**
      * View of the setGroups
-     * @param view
+     * @param view - current view
      */
     public void setGroups(View view) {
         //Set the Number of Exercise Groups you want to create in this routine
@@ -137,7 +137,7 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
     /**
      * Add Reps per set
      * @return A number of reps per set
-     * @throws NumberFormatException
+     * @throws NumberFormatException - non int return
      */
     public String addRepsPerSet() throws NumberFormatException {
         //mRepsPerSet = (EditText) findViewById(R.id.editRepsText);
@@ -147,7 +147,7 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
     /**
      * Add Number of sets
      * @return - number of Sets
-     * @throws NumberFormatException
+     * @throws NumberFormatException - non-int return
      */
     public String addNumberOfSets() throws NumberFormatException {
         //mNumOfSets = (EditText) findViewById(R.id.editSetsText);
@@ -209,7 +209,7 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
 
     /**
      * Display the list of routines
-     * @param v
+     * @param v - view
      */
     @Override
     public void onClick(View v) {

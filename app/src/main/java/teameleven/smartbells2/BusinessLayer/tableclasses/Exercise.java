@@ -16,7 +16,6 @@ import teameleven.smartbells2.businesslayer.RESTCall;
  * portion of the SmartBells Project, created by Team Eleven.
  * Edits
  * Updated to match API fields AR Oct 21, 2015
- * <p/>
  * created : October 4th, 2015
  *
  * @author Andrew Rabb
@@ -152,7 +151,6 @@ public class Exercise {
 
     /**
      * retrieves the name of the exercise
-     *
      * @return Exercise Name
      */
     public String getName() {
@@ -162,7 +160,6 @@ public class Exercise {
     /**
      * changes or creates the Name of the Exercise
      * User Defined
-     *
      * @param name : name to be changed to
      */
     public void setName(String name) {
@@ -171,7 +168,6 @@ public class Exercise {
 
     /**
      * returns the ID of the current Exercise
-     *
      * @return id of this exercise
      */
     public int getId() {
@@ -181,7 +177,6 @@ public class Exercise {
     /**
      * Sets the ID of the current Exercise
      * System Defined
-     *
      * @param id ID of the object to be set.
      */
     public void setId(int id) {
@@ -190,7 +185,6 @@ public class Exercise {
 
     /**
      * returns the Increase per session
-     *
      * @return integer, increase per session
      */
     public int getIncrease_Per_Session() {
@@ -200,7 +194,6 @@ public class Exercise {
     /**
      * sets the Increase Per Session
      * User Defined
-     *
      * @param increase_Per_Session sets the increase per session of this exercise
      */
     public void setIncrease_Per_Session(int increase_Per_Session) {
@@ -209,7 +202,6 @@ public class Exercise {
 
     /**
      * User who initially created the object
-     *
      * @return id of the user that created this object
      */
     public int getUser_Id() {
@@ -219,7 +211,6 @@ public class Exercise {
     /**
      * Sets the user who created the Object
      * System Defined
-     *
      * @param user_Id user id of this exercises creator.
      */
     public void setUser_Id(int user_Id) {
@@ -228,7 +219,6 @@ public class Exercise {
 
     /**
      * returns the most recent time that the exercise in question was updated
-     *
      * @return date of last update
      */
     public String getUpdated_At() {
@@ -236,7 +226,8 @@ public class Exercise {
     }
 
     /**
-     *
+     * Sets the most recently Updated Date
+     * @param updated_at String Date
      */
     public void setUpdated_At(String updated_at) {
         updated_At = updated_at;
@@ -244,7 +235,6 @@ public class Exercise {
 
     /**
      * returns the creation date of the Exercise
-     *
      * @return exercise creation date
      */
     public String getCreated_At() {
@@ -252,7 +242,8 @@ public class Exercise {
     }
 
     /**
-     * Set the created date of a record
+     * sets the Created At Date
+     * @param created_at String Date
      */
     public void setCreated_At(String created_at) {
         this.created_At = created_at;
@@ -292,7 +283,6 @@ public class Exercise {
     /**
      * Creates a JSON object from the parameters required to create a new object in API
      * missing some fields
-     *
      * @return - JSON object
      */
     public JSONObject createJSON() {

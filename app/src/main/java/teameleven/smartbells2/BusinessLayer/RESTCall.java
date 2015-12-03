@@ -106,6 +106,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
      * Gets a specific object or a collection of objects from the Server.
      *
      * @param modifier - URL to the specific object or objects in question
+     * @param page - unimplemented
      * @return - the string, or all of the strings if multiple strings are found.
      */
     private JSONObject getObject(String modifier, String page) {
@@ -172,6 +173,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
      *
      * @param modifier     - URL to the Server, specific to the object in question
      * @param dataToInsert - data to be updated. should be in the format specified in the API
+     * @param accessToken   - the access token that is required for certain post requests
      * @return - the object that was altered
      */
     private JSONObject putObject(String modifier, String dataToInsert, String accessToken) {
@@ -231,7 +233,6 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
     /**
      * Deletes a specific object from the database/server.
      * Accepts the URL to the specific object in question, and the Access Token
-     *
      * @param modifier- URL to a specific object on the Server, including Id of object to be deleted
      * @param accessToken Access token from Server, used for Authentication
      */
@@ -261,8 +262,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
 
     /**
      * This method creates the connection to the Smart Bells Server. It allows easy access to it,
-     * through a centralized method.
-     *
+     * through a centralized method
      * @param modifier - the specific URL addition of the object to be recovered / updated / deleted
      * @return a connection to the API.
      */
@@ -282,10 +282,10 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
     /**
      * accepts multiple parameters String parameters to define the REST Call.
      * Each parameter expects a certain value in a certain order.
-     * param[0] should be the modifier to the URL for the specific object in question
-     * param[1] should be the REST method parameter ("GET", "POST", "PUT", "DELETE")
-     * param[2] should be the JSON Object that is expected by the API
-     * param[3] should be the Access Token, if required by the API (PUT, POST, DELETE)
+     * @param params[0] should be the modifier to the URL for the specific object in question
+     * @param params[1] should be the REST method parameter ("GET", "POST", "PUT", "DELETE")
+     * @param params[2] should be the JSON Object that is expected by the API
+     * @param params[3] should be the Access Token, if required by the API (PUT, POST, DELETE)
      */
     protected JSONObject doInBackground(String... params) {
         JSONObject result;
@@ -305,5 +305,4 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
         } else result = null;
         return result;
     }
-
 }

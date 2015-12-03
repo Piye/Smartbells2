@@ -348,8 +348,10 @@ public class DatabaseAdapter {
      *                        1 - U - Update Statement
      *                        2 - D - Delete Statement
      * @return row number of the insert, 0 if a delete, or no rows created
+     * @throws SQLException SQL Exception, two rows created with the same Primary Key
      */
-    private long insertUpdateRecord(Long id_num, String tableIdentifier, int transactionType) throws SQLException {
+    private long insertUpdateRecord(Long id_num, String tableIdentifier, int transactionType)
+            throws SQLException {
         /*
         There are not currently any updates(U) in this database.
         If in the future we add them, ensure that they hit this method.
@@ -677,6 +679,7 @@ public class DatabaseAdapter {
 
     /**
      * Select All Public Routines
+      * @return ArrayList of Routines
      */
     public ArrayList<Routine> selectAllRoutines() {
         Cursor myCursor = database.query(ROUTINE_TABLE, new String[]{ROUTINE_NAME, PK_ROUTINE_ID},
@@ -703,7 +706,6 @@ public class DatabaseAdapter {
 
     /**
      * Get routine name
-     *
      * @return ArrayList of routine names
      */
     public ArrayList<String> getRoutinesAsStrings() {
@@ -923,7 +925,6 @@ public class DatabaseAdapter {
 
     /**
      * Select all workoutSessions
-     *
      * @return ArrayList of all workoutSessions
      */
     public ArrayList<WorkoutSession> selectAllWorkoutSessions() {
@@ -1004,9 +1005,8 @@ myCursor.close();
     }
     /**
      * Get an ArrayList of WorkoutSession Ids with WorkoutSession Id
-     *
      * @param workoutSessionId Workout Session Id
-     * @return ArrayList<String> of WorkoutSession IDs
+     * @return ArrayList of Strings of WorkoutSession IDs
      */
     public ArrayList<String> getMyWorkoutSetGroupIds(String workoutSessionId) {
         String[] columns = new String[]{PK_WORKOUTSETGROUP_ID};
@@ -1136,8 +1136,7 @@ myCursor.close();
 
     /**
      * Select all SetGroup records
-     *
-     * @return ArrayList<SetGroup>
+     * @return ArrayList of SetGroups
      */
     public ArrayList<SetGroup> selectAllSetGroups() {
         Cursor myCursor = database.query(SETGROUP_TABLE, new String[]{PK_SETGROUP_ID,
@@ -1153,13 +1152,8 @@ myCursor.close();
         myCursor.close();
         return setGroups;
     }
-
-    //Select UserId's Set Groups.
-    // Get private Routines of specific user and return a ArrayList<string>
-
     /**
      * Get private SetGroups by WorkoutSetGroup Id
-     *
      * @param workoutSetGroupId - id of the WorkoutSetGroup
      * @return ArrayList of SetGroup Exercise Ids.
      */
@@ -1202,6 +1196,7 @@ myCursor.close();
      *
      * @param exercise An record of exercise
      * @param sync     boolean whether it is sync or not
+     * @return returns the id of the created Exercise
      */
     public long insertExercise(Exercise exercise, boolean sync) {
         return insertExercise(
@@ -1217,6 +1212,7 @@ myCursor.close();
     /**
      * Insert an exercise record with its values
      *
+     * @param exerciseID         Id number of the Exercise (-1 to generate one)
      * @param exerciseName       Exercise Name
      * @param increasePerSession A number of the IncreasePerSession
      * @param createdAt          A date of creating a record, String
@@ -1304,7 +1300,6 @@ myCursor.close();
 
     /**
      * Select All exercises
-     *
      * @return ArrayList of all exercises
      */
     public ArrayList<Exercise> selectAllExercises() {
@@ -1490,8 +1485,8 @@ myCursor.close();
 
     /**
      * Insert an WorkoutSetGroup record from the parameter
-     *
      * @param workoutSetGroup WorkoutSetGroup
+     * @param sync true if sync needed, false otherwise
      * @return long result of inserting
      */
     public long insertWorkoutSetGroup(WorkoutSetGroup workoutSetGroup, boolean sync) {
@@ -1504,7 +1499,6 @@ myCursor.close();
 
     /**
      * Get a boolean of result of rawQuery of exercise table
-     *
      * @return boolean whether there is any exercise record or not
      */
     public boolean getDatabaseLoaded() {
@@ -1540,9 +1534,12 @@ myCursor.close();
     /**
      * Accepts old primary key, and changes any required fields, then returns new primary key if
      * successful
-     *
      * @param id primary key of old record
+     * @param exercise exercise to be updated
+     * @param sync true if sync needed, false otherwise
      * @return primary key of new record, if changed (otherwise will match id parameter
+     * @throws SQLException - database error
+     * @throws JSONException - JSON creation error
      */
     public long updateExercise(long id, Exercise exercise, boolean sync) throws SQLException, JSONException {
         long result;
@@ -1556,22 +1553,20 @@ myCursor.close();
 
     /**
      * Update a Routine record by parameter
-     *
      * @param id      Routine id
      * @param routine Routine.java
      * @param sync    boolean it is sync or not
      * @return long result after inserting a routine record
+     * @throws SQLException - database Error
      */
     public long updateRoutine(long id, Routine routine, boolean sync) throws SQLException {
         long result;
         this.deleteRoutine(id, false);
         result = this.insertRoutine(routine, false);
-
         if (sync) {
             insertUpdateRecord(result, ROUTINE_TABLE, 1);
         }
         return result;
-
     }
 
     /**
@@ -1581,6 +1576,7 @@ myCursor.close();
      * @param session WorkoutSession Attributes(WorkoutSession)
      * @param sync    boolean it is sync or not
      * @return long result of deleting
+     * @throws SQLException - database error
      */
     public long updateWorkoutSession(long id, WorkoutSession session, boolean sync) throws SQLException {
         long result;
@@ -1600,11 +1596,10 @@ myCursor.close();
      * @param setGroup SetGroup(java)
      * @param sync     whether it is sync or not
      * @return long result of updating
-     * @throws SQLException Exception of SQL
+     * @throws SQLException database Error
      */
     public long updateSetGroup(long id, SetGroup setGroup, boolean sync) throws SQLException {
         long result;
-
         this.deleteSetGroup(id, false);
         result = this.insertSetGroup(setGroup, false);
 

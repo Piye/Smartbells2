@@ -206,6 +206,7 @@ public class WorkoutSession {
     /**
      * Creates a JSON Object from the current Workout session Object
      * capable of changing all attributes to JSON (skips unnecessary null values if present)
+     * @return JSONObject of this Workout Session
      */
     public JSONObject createJSON() {
         JSONArray workoutSetGroup = new JSONArray();

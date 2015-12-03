@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 
 import teameleven.smartbells2.businesslayer.RESTCall;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
-import teameleven.smartbells2.Authentication;
+import teameleven.smartbells2.viewlayer.Authentication;
 
 /**
  * Base SetGroup Class that represents a number of numOfSets with a given number of repsPerSet

@@ -1,11 +1,13 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.viewlayer;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 
+import teameleven.smartbells2.R;
+
 /**
- * This class runs a splash screen on a seperate thread to avoid interupting the main program
+ * This class runs a splash screen on a separate thread to avoid interrupting the main program
  */
 public class LoadingSplashScreen extends Activity {
     /**
@@ -21,7 +23,7 @@ public class LoadingSplashScreen extends Activity {
         setContentView(R.layout.splash_loading_screen);
 
         /**
-         * Run splash screen on a seperate thread to avoid interupting the main program.
+         * Run splash screen on a separate thread to avoid interrupting the main program.
          */
         Thread timedThread = new Thread(){
             public void run(){

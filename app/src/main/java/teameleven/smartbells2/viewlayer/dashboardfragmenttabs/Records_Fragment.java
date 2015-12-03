@@ -1,4 +1,4 @@
-package teameleven.smartbells2.dashboardfragmenttabs;
+package teameleven.smartbells2.viewlayer.dashboardfragmenttabs;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import teameleven.smartbells2.SmartBellsMainActivity;
+import teameleven.smartbells2.viewlayer.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /** Created by Jordan Medwid on 10/18/2015.

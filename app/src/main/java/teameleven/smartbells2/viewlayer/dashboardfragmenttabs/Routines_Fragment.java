@@ -1,4 +1,4 @@
-package teameleven.smartbells2.dashboardfragmenttabs;
+package teameleven.smartbells2.viewlayer.dashboardfragmenttabs;
 
 
 import android.app.AlertDialog;
@@ -18,8 +18,8 @@ import android.widget.Toast;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import teameleven.smartbells2.RecordWorkoutRoutine;
-import teameleven.smartbells2.SmartBellsMainActivity;
+import teameleven.smartbells2.viewlayer.RecordWorkoutRoutine;
+import teameleven.smartbells2.viewlayer.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**

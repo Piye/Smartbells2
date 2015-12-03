@@ -1,4 +1,4 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.viewlayer;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
@@ -21,28 +19,24 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
+import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
 
-//import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
-//import teameleven.smartbells2.BusinessLayer.localdatabase.DatabaseAdapter;
 
 /**
+ * Dialog Fragment for the Routine Class.
+ * Allows creation of multiple set groups to be added to routine
  * Created by Jordan Medwid on 11/20/2015.
  */
 public class RoutineDialogFragment extends DialogFragment implements View.OnClickListener {
 
     private Spinner exerciseSpinner;
     private String exerciseName;
-    private Button addButton, cancelButton;
     private EditText reps, sets;
     private DatabaseAdapter database;
     private SetGroup setGroup;
 
-
-    Fragment fragment;
-    FragmentTransaction transaction;
-    private int resultCode = 1;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -51,8 +45,8 @@ public class RoutineDialogFragment extends DialogFragment implements View.OnClic
         final View rootView = getActivity().getLayoutInflater().inflate(R.layout.add_exercise_to_routine, new LinearLayout(getActivity()), false);
 
         //Set up the buttons
-        addButton = (Button) rootView.findViewById(R.id.addExerciseFromPrompt);
-        cancelButton = (Button) rootView.findViewById(R.id.cancelExerciseFromPrompt);
+        Button addButton = (Button) rootView.findViewById(R.id.addExerciseFromPrompt);
+        Button cancelButton = (Button) rootView.findViewById(R.id.cancelExerciseFromPrompt);
         reps = (EditText) rootView.findViewById(R.id.editRepsText);
         sets = (EditText) rootView.findViewById(R.id.editSetsText);
 
@@ -74,7 +68,7 @@ public class RoutineDialogFragment extends DialogFragment implements View.OnClic
         //Get list of Exercises from the database
         //ArrayList<String> exerciseList = new ArrayList<>();
         final ArrayList<String> exerciseList = database.getExercisesAsStrings();
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, exerciseList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, exerciseList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         exerciseSpinner.setAdapter(adapter);
 
@@ -97,7 +91,7 @@ public class RoutineDialogFragment extends DialogFragment implements View.OnClic
                     Intent intent = new Intent("DialogResult");
                     intent.putExtra("setGroup", setGroup.toString());
 
-                    Log.d("setgroups in CreateRoutine", setGroup.toString());
+                    Log.d("setGroups in CreateRoutine", setGroup.toString());
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
 
                     //getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
@@ -137,8 +131,6 @@ public class RoutineDialogFragment extends DialogFragment implements View.OnClic
 //                SetGroup setGroup = new SetGroup();
 //                setGroup.setExerciseId(database.getExerciseIdByName(exerciseName));
 //                Log.d("setGroup is -", setGroup.toString());
-//                //todo; sets = get exerciseName.position. Load saved set from DB
-//                //todo; reps = get exerciseName.position. Load saved reps from DB
             }
 
             @Override
@@ -164,8 +156,6 @@ public class RoutineDialogFragment extends DialogFragment implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        Fragment fragment;
-        FragmentTransaction transaction;
 
         switch (v.getId()) {
             //Move to a new FRAGMENT for each button

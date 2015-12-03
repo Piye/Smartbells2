@@ -1,8 +1,6 @@
 
 package teameleven.smartbells2.businesslayer.tableclasses;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -136,10 +134,6 @@ public class WorkoutSetGroup {
 
     /**
      * Creates a new workoutSetGroup JSON Object
-     //todo SPRINT 3:  pass this value to the ArrayList of WorkOutSetGroups in WorkoutSession
-     //todo then loop through the ArrayList and pass each value into the JSONArray jsonWorkoutSetGroupAttr() of WorkoutSession
-     //todo then adjust jsonWorkoutSession to take the array
-     //todo pass in the exerciseId, sets and reps in the Constructor of the WorkoutSetGroup, Instantiate when new SetGroup is created on button click
      * @return the JSONObject for the WorkoutSetGroup
      */
     public JSONObject createJSON() {

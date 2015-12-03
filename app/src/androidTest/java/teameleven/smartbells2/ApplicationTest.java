@@ -29,20 +29,4 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         suite.addTest(new ExerciseTest());
         return suite;
     }
-
-
-    private Context getTestContext(){
-        try{
-            Method getTestContext = ServiceTestCase.class.getMethod("getTestContext");
-            return (Context) getTestContext.invoke(this);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 }

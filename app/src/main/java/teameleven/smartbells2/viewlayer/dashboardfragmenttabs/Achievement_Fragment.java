@@ -1,4 +1,4 @@
-package teameleven.smartbells2.dashboardfragmenttabs;
+package teameleven.smartbells2.viewlayer.dashboardfragmenttabs;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
-import teameleven.smartbells2.AchievementDashboard;
+import teameleven.smartbells2.viewlayer.AchievementDashboard;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**

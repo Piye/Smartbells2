@@ -1,4 +1,4 @@
-package teameleven.smartbells2.create;
+package teameleven.smartbells2.viewlayer.create;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import java.sql.SQLException;
 
-import teameleven.smartbells2.Dashboard;
+import teameleven.smartbells2.viewlayer.Dashboard;
 import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
@@ -31,34 +31,11 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
      * DatabaseAdapter
      */
     private DatabaseAdapter database;
-    /**
-     * Exercise
-     */
-    private Exercise exercise;
-    /**
-     * Cancel Button
-     */
-    private Button cancel;
-    /**
-     * Save Button
-     */
-    private Button save;
-    /**
-     * FloatingActionButton
-     */
-    private FloatingActionButton fab;
-    /**
-     * Text View fields of the name
-     */
-    private TextView name;
-    /**
-     * TextView fields of the inscreas per session
-     */
-    private TextView increasePS;
 
     /**
      * onCreate Create the view of the input page of exercise
-     * @param savedInstanceState
+     *
+     * @param savedInstanceState - Bundle input
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,10 +44,16 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.create_exercise, container, false);
 
         //Save Button
-        save = (Button) view.findViewById(R.id.saveExercise);
+        /*
+      Save Button
+     */
+        Button save = (Button) view.findViewById(R.id.saveExercise);
         save.setOnClickListener(this);
         //CancelButton
-        cancel = (Button) view.findViewById(R.id.cancelCreateExercise);
+        /*
+      Cancel Button
+     */
+        Button cancel = (Button) view.findViewById(R.id.cancelCreateExercise);
         cancel.setOnClickListener(this);
 
         database = new DatabaseAdapter(getActivity());
@@ -84,20 +67,28 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
 
     /**
      * Add Exercise Name
+     *
      * @return name
      */
     public String addExerciseName() {
-        name = (TextView) getActivity().findViewById(R.id.editExNameText);
+        /*
+      Text View fields of the name
+     */
+        TextView name = (TextView) getActivity().findViewById(R.id.editExNameText);
         //Call setName() in Routine class
         return (name.getText().toString());
     }
 
     /**
      * Add Increase Per Session
+     *
      * @return increasePS.getText().toString()
      */
     public String addIncreasePerSession() {
-        increasePS = (TextView) getActivity().findViewById(R.id.editIncreasePerSessionText);
+        /*
+      TextView fields of the inscreas per session
+     */
+        TextView increasePS = (TextView) getActivity().findViewById(R.id.editIncreasePerSessionText);
         //call set method in exercise class
         return (increasePS.getText().toString());
 
@@ -115,7 +106,8 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
     /************************************** BUTTONS ***********************************************/
     /**
      * Cancel Button handler. Finish this activity and go back to Main
-     * @param view
+     *
+     * @param view - view of Fragment
      */
     @Override
     public void onClick(View view) {
@@ -125,9 +117,9 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
             // for each button
             case R.id.saveExercise:
                 //Add new Exercise
-                if(validate()){
+                if (validate()) {
                     try {
-                        exercise = new Exercise();
+                        Exercise exercise = new Exercise();
                         exercise.setName(addExerciseName());
                         exercise.setIncrease_Per_Session(Integer.parseInt(addIncreasePerSession()));
 
@@ -155,7 +147,10 @@ public class CreateExercise extends Fragment implements View.OnClickListener {
                 break;
             case R.id.cancelCreateExercise:
                 //Show the FAB again
-                fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+
+                //FloatingActionButton
+
+                FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
                 fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                 //Transfer back to the dashboard
                 fragment = new Dashboard();

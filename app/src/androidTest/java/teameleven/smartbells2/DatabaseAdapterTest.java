@@ -12,17 +12,15 @@ import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
 import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
 import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSession;
-import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSetGroup;
 
 /**
  * Created by Andrew Rabb on 2015-11-27.
- * based upon http://stackoverflow.com/questions/3096378/testing-database-on-android-providertestcase2-or-renamingdelegatingcontext
+ * based upon http://stackoverflow.com/questions/3096378/testing-database-on-android-providerTestCase2-or-renamingDelegatingContext
  */
 public class DatabaseAdapterTest extends AndroidTestCase {
 
     private static final String TEST_FILE_PREFIX = "test_";
     private DatabaseAdapter database;
-    private static boolean dBCreated = false;
 
     @Override
     public void setUp() throws Exception {
@@ -177,7 +175,7 @@ public class DatabaseAdapterTest extends AndroidTestCase {
         assertNotNull(database);
         assertTrue(setGroups.size() > 0);
 
-        for (SetGroup retrievedSetGroup : setGroups) {//test Get and Getall from Database and REST
+        for (SetGroup retrievedSetGroup : setGroups) {//test Get and GetAll from Database and REST
             //testing select
             SetGroup singleRetrievedSetGroup = new SetGroup(database.getSetGroup(retrievedSetGroup.getId()));
             assertTrue(retrievedSetGroup.getRoutineId() == singleRetrievedSetGroup.getRoutineId());
@@ -213,10 +211,10 @@ public class DatabaseAdapterTest extends AndroidTestCase {
         }
     }
 
-//    This code commented out because it is too relient on other classes. as a tertiary class,
+//    This code commented out because it is too reliant on other classes. as a tertiary class,
 //    it is dependant on all of the other classes,
 //    making it extremely difficult to test in this setting.
-//    I may come back to it, but for the time being it is functional, and unneccessary to continue.
+//    I may come back to it, but for the time being it is functional, and unneeded
 //
 //    /**
 //     *
@@ -228,7 +226,7 @@ public class DatabaseAdapterTest extends AndroidTestCase {
 //        assertNotNull(database);
 //        assertTrue(workoutSetGroups.size() > 0);
 //
-//        for (WorkoutSetGroup retrievedWSG : workoutSetGroups) {//test Get and Getall from Database and REST
+//        for (WorkoutSetGroup retrievedWSG : workoutSetGroups) {//test Get and GetAll from Database and REST
 //            //testing select
 //            WorkoutSetGroup singleRetrievedWSG =
 //                    new WorkoutSetGroup(database.getWorkoutSetGroup
@@ -278,20 +276,20 @@ public class DatabaseAdapterTest extends AndroidTestCase {
 //        }
 //    }
 
-    /**
-     * for debugging, turns int[] into readable string
-     *
-     * @param y int[]
-     * @return string of int[] input
-     */
-    private String x(int[] y) {
-        String result = "";
-
-        for (int num : y) {
-            result += " " + num;
-        }
-        return result;
-    }
+//    /**
+//     * for debugging, turns int[] into readable string
+//     *
+//     * @param y int[]
+//     * @return string of int[] input
+//     */
+//    private String x(int[] y) {
+//        String result = "";
+//
+//        for (int num : y) {
+//            result += " " + num;
+//        }
+//        return result;
+//    }
 
     public DatabaseAdapter getDatabase() throws SQLException {
         RenamingDelegatingContext context = new RenamingDelegatingContext(getContext().getApplicationContext(), TEST_FILE_PREFIX);
@@ -317,6 +315,7 @@ public class DatabaseAdapterTest extends AndroidTestCase {
         assertTrue("only supports values 0 <= x <= 2", 0 <= i && i <= 2);
         if (i == 0) {
             ArrayList<Exercise> exercise = Exercise.restGetAll();
+            assert exercise != null;
             Log.d("LoginActivity.initialDatabaseSync - Exercise row count = ", String.valueOf(exercise.size()));
             y = (System.currentTimeMillis() - x);
             Log.d("time taken = ", String.format("%s milliseconds", y));
@@ -324,6 +323,7 @@ public class DatabaseAdapterTest extends AndroidTestCase {
 
         } else if (i == 1) {
             ArrayList<Routine> routines = Routine.restGetAll(user_id);
+            assert routines != null;
             Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
             y = (System.currentTimeMillis() - x);
             Log.d("time taken = ", String.format("%s milliseconds", y));
@@ -331,6 +331,7 @@ public class DatabaseAdapterTest extends AndroidTestCase {
         } else if (i == 2) {
             ArrayList<WorkoutSession> workoutSessions = WorkoutSession.
                     restGetAll(user_id);
+            assert workoutSessions != null;
             Log.d("LoginActivity.initialDatabaseSync - WorkoutSession row count = ", String.valueOf(workoutSessions.size()));
             y = (System.currentTimeMillis() - x);
             Log.d("time taken = ", String.format("%s milliseconds", y));

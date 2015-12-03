@@ -1,5 +1,4 @@
-package teameleven.smartbells2.create;
-//// TODO: 08/11/2015 add database connectivity - also get exerciseId from spinner and pass to restCall
+package teameleven.smartbells2.viewlayer.unusedui;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,7 +18,7 @@ import android.widget.Toast;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import teameleven.smartbells2.BeginWorkout;
+import teameleven.smartbells2.viewlayer.BeginWorkout;
 import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
@@ -41,14 +40,6 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
     private EditText mNumOfSets;
     // Edit text field of the custom session a number of reps per set
     private EditText mRepsPerSet;
-    //Database Adapter
-    private DatabaseAdapter database;
-    // Save Button
-    private Button save;
-    // Cancel Button
-    private Button cancel;
-    // Floating Action Button
-    private FloatingActionButton fab;
 
     /**
      * Display the input screen of the create_custom_session
@@ -68,15 +59,15 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
         addListenerOnSpinnerExerciseSelection();
 
         //CancelButton
-        cancel = (Button) view.findViewById(R.id.cancelCreateCustomSession);
+        Button cancel = (Button) view.findViewById(R.id.cancelCreateCustomSession);
         cancel.setOnClickListener(this);
 
         //SaveButton
-        save = (Button) view.findViewById(R.id.saveNewCustomSession);
+        Button save = (Button) view.findViewById(R.id.saveNewCustomSession);
         save.setOnClickListener(this);
 
         //Set up the exercise Spinner
-        database = new DatabaseAdapter(getActivity());
+        DatabaseAdapter database = new DatabaseAdapter(getActivity());
         try {
             database.openLocalDatabase();
         } catch (SQLException e) {
@@ -155,7 +146,7 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
     }
     /**
      * Add Number of sets
-     * @return
+     * @return - number of Sets
      * @throws NumberFormatException
      */
     public String addNumberOfSets() throws NumberFormatException {
@@ -189,10 +180,10 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
 
     /**
      * Save the session of the current view
-     * @param view
+     * @param view -
      */
-    public void saveSession(View view) {
-/*
+/*    public void saveSession(View view) {
+
         if (!validate()) {
 
         } else {
@@ -213,8 +204,8 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
             Toast.makeText(this, "Session saved!", Toast.LENGTH_LONG).show();
             CreateCustomSession.this.finish();
         }
-*/
-    }
+
+    }*/
 
     /**
      * Display the list of routines
@@ -242,7 +233,7 @@ public class CreateCustomSession extends Fragment implements View.OnClickListene
                 break;
             case R.id.cancelCreateCustomSession:
 
-                fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+                FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
                 fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                 fragment = new BeginWorkout();
                 transaction = getFragmentManager().beginTransaction();

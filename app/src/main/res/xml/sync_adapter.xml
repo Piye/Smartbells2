@@ -9,7 +9,3 @@
     android:isAlwaysSyncable="true"
 
 />
-    <!-- todo its possible this application should only upload through this service, and push on
-    todo request something to think about, anyway
-     -->
-

@@ -1,4 +1,4 @@
-package teameleven.smartbells2.create;
+package teameleven.smartbells2.viewlayer.create;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,10 +18,9 @@ import android.widget.TextView;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import teameleven.smartbells2.BeginWorkout;
-import teameleven.smartbells2.Dashboard;
+import teameleven.smartbells2.viewlayer.Dashboard;
 import teameleven.smartbells2.R;
-import teameleven.smartbells2.SmartBellsMainActivity;
+import teameleven.smartbells2.viewlayer.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
@@ -145,9 +144,6 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
                 for (String routineName : clickedRoutines) {
                     id = database.getRoutineIDByName(routineName);
                 }
-
-
-                //Log.d("id is = " + id, " - is this correct?");//todo
                 WorkoutSession session = new WorkoutSession();
 
                 session.setName(workoutName.getText().toString());
@@ -156,8 +152,7 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
                     for (SetGroup setGroup : routine.getSetGroups()) {
                         session.getSetGroups().add(new WorkoutSetGroup(setGroup));
                     }
-                    //Log.d("Create Workout - session = ", session.toString());//todo remove
-                    //database.insertWorkoutSession(session, true);
+                    database.insertWorkoutSession(session, true);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -185,28 +180,3 @@ public class CreateWorkout extends Fragment implements View.OnClickListener {
         }
     }
 }
-//    public String addListenerOnSpinner() {
-//
-//        routineList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//
-//
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//
-//                //Get Set Groups(Exercise List)
-//                routineName = parent.getItemAtPosition(position).toString();
-//                Log.d("routineName " + routineName, "has been selected, its position is " + position);
-////                SetGroup setGroup = new SetGroup();
-////                setGroup.setExerciseId(database.getExerciseIdByName(exerciseName));
-////                Log.d("setGroup is -", setGroup.toString());
-////                //todo; sets = get exerciseName.position. Load saved set from DB
-////                //todo; reps = get exerciseName.position. Load saved reps from DB
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                //Do Nothing
-//            }
-//        });
-//        return routineName;
-//    }

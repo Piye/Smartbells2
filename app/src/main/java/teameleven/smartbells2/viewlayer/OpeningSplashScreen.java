@@ -1,8 +1,10 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.viewlayer;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import teameleven.smartbells2.R;
 
 /**
  * This class is a screen for opening splash

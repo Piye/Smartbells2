@@ -25,7 +25,7 @@ public class SyncService extends Service {
     /**
      * Override the syncAdaptor with syncAdapter Binder.
      * @param intent : Intent for binding
-     * @return
+     * @return returns Sync Adapter for SmartBells
      */
     @Nullable
     @Override

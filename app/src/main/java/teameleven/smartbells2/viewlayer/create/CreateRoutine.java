@@ -1,4 +1,4 @@
-package teameleven.smartbells2.create;
+package teameleven.smartbells2.viewlayer.create;
 
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
@@ -21,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -30,12 +29,12 @@ import org.json.JSONObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import teameleven.smartbells2.Dashboard;
+import teameleven.smartbells2.viewlayer.Dashboard;
 import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
 import teameleven.smartbells2.businesslayer.tableclasses.Routine;
-import teameleven.smartbells2.RoutineDialogFragment;
+import teameleven.smartbells2.viewlayer.RoutineDialogFragment;
 import teameleven.smartbells2.businesslayer.tableclasses.SetGroup;
 
 /**
@@ -53,42 +52,14 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
      */
     private DatabaseAdapter database;
     /**
-     * Routine
-     */
-    private Routine routine;
-    /**
-     * Exercise Spinner
-     */
-    private Spinner exerciseSpinner;
-    /**
      * Boolean where it is public or not
      */
     private Boolean isPublic = false;
-    /**
-     * Exercise id
-     */
-    private int exerciseId;
-    /**
-     * A number of sets of exercise
-     */
-    private int setsNum;
-    /**
-     * A number of reps per a set
-     */
-    private int repsNum;
-    /**
-     * exercise
-     */
-    private String exercise;
     /**
      * List of excercises(Exercise attribute)
      */
     ArrayList<String> exerciseName = new ArrayList<>();
     private ArrayList<SetGroup> setGroups = new ArrayList<>();
-    /**
-     * List of string exercise
-     */
-    private ArrayList<String> exerciseList = new ArrayList<>();
     /**
      * Radio Group for choosing a radio button of Public or Private
      */
@@ -100,61 +71,36 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
 
     private RadioButton publicRoutine;
     private RadioButton privateRoutine;
-    /**
-     * A number of groups
-     */
-    int numberOfGroups = 1;
-    /**
-     * Save Button
-     */
-    private Button save;
-    /**
-     * Cancel Button
-     */
-    private Button cancel;
-    /***
-     * Add Set Group Button
-     */
-    private Button addSetGroup;
-    /**
-     * FloatingActionButton
-     */
-    private FloatingActionButton fab;
-    /**
-     * onCreate - Create view of input screen for creating  set group
-     *
-     * @param savedInstanceState
-     */
-    private EditText mRoutineName;
-    private EditText mNumOfSets;
-    private EditText mRepsPerSet;
-    private ListView routineSetGroups;
-    private BroadcastReceiver localBroadcastReceiver;
-    private ArrayAdapter adapter;
+    private ArrayAdapter<String> adapter;
 
-    protected void addSetGroup(SetGroup setGroup) {
-        this.setGroups.add(setGroup);
-    }
 
     //@Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
 
-        localBroadcastReceiver = new LocalBroadcastReceiver();
+        BroadcastReceiver localBroadcastReceiver = new LocalBroadcastReceiver();
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
                 .registerReceiver(localBroadcastReceiver, new IntentFilter("DialogResult"));
         //Main view
         View view = inflater.inflate(R.layout.create_routine, container, false);
         //Save Button
-        save = (Button) view.findViewById(R.id.routineExerciseSaveButton);
+        /*
+      Save Button
+     */
+        Button save = (Button) view.findViewById(R.id.routineExerciseSaveButton);
         save.setOnClickListener(this);
         //CancelButton
-        cancel = (Button) view.findViewById(R.id.routineExerciseCancelButton);
+        /*
+      Cancel Button
+     */
+        Button cancel = (Button) view.findViewById(R.id.routineExerciseCancelButton);
         cancel.setOnClickListener(this);
 
-        routineSetGroups = (ListView) view.findViewById(R.id.routineSetGroups);
+        ListView routineSetGroups = (ListView) view.findViewById(R.id.routineSetGroups);
 
-        addSetGroup = (Button) view.findViewById(R.id.addExerciseListButton);
+        /**
+         Add Set Group Button
+         */Button addSetGroup = (Button) view.findViewById(R.id.addExerciseListButton);
         addSetGroup.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 FragmentManager fm = getActivity().getFragmentManager();
@@ -173,7 +119,7 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         }
         //ArrayList<String> exerciseList = database.getExercisesAsStrings();
 
-        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, exerciseName);
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, exerciseName);
         routineSetGroups.setAdapter(adapter);
 
         return view;
@@ -185,7 +131,11 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
      * @return Routine name
      */
     public String addRoutineName() {
-        mRoutineName = (EditText) getActivity().findViewById(R.id.editNameText);
+        /*
+      onCreate - Create view of input screen for creating  set group
+
+      */
+        EditText mRoutineName = (EditText) getActivity().findViewById(R.id.editNameText);
         //Call setName() in Routine class
         //routine.setName(name.getText().toString());
         return mRoutineName.getText().toString();
@@ -265,7 +215,10 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
                 //Back to menu
                 Toast.makeText(getActivity(), "routine " + routine.getName() + " created!!.", Toast.LENGTH_LONG).show();
 
-                fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+                /*
+      FloatingActionButton
+     */
+                FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
                 fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                 fragment = new Dashboard();
                 transaction = getFragmentManager().beginTransaction();
@@ -317,97 +270,3 @@ public class CreateRoutine extends Fragment implements View.OnClickListener {
         }
     }
 }
-
-/**
- * Text view fields of sets and reps
- *
- * @param view of set groups
- * <p/>
- * Return ther exercise name from the input page
- * @return Exercise Name
- * <p/>
- * Return a number of sets of exercise
- * @return a number of sets
- * <p/>
- * Get a number of reps per set
- * @return A number of reps
- */
-//    public void setGroups(View view) {
-//        //Set the Number of Exercise Groups you want to create in this routine
-//        numberOfGroups++;//When clicked the plus button, it should be added 1.
-//        for (int i = 1; i <= numberOfGroups; i++) {
-//
-//            TextView setsNum = (TextView) getActivity().findViewById(R.id.editSetsText);
-//            TextView repsNum = (TextView) getActivity().findViewById(R.id.editRepsText);
-//            //Add ArrayList exercises
-//            //exercises.add("1");//test : need to restCall get exercise ID.
-//            //exercises.add(setsNum.getText().toString());
-//            //exercises.add(repsNum.getText().toString());
-//        }
-//    }
-
-/**
- * Return ther exercise name from the input page
- * @return Exercise Name
- */
-//    public String addListenerOnSpinnerExerciseSelection() {
-//        exerciseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//
-//                //Get Set Groups(Exercise List)
-//                exerciseName = parent.getItemAtPosition(position).toString();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                //Do Nothing
-//            }
-//        });
-//
-//        return exerciseName;
-//    }
-
-/**
- * Return a number of sets of exercise
- * @return a number of sets
- */
-//    public String addNumberOfSets() {
-//        mNumOfSets = (EditText) getActivity().findViewById(R.id.editSetsText);
-//        //call set method in routine class
-//        //exercise.setSets(Integer.getInteger(setsText.toString()));
-//        return mNumOfSets.getText().toString();
-//    }
-
-
-//Add Reps Per Set
-
-/**
- * Get a number of reps per set
- * @return A number of reps
- */
-//    public String addRepsPerSet() {
-//        mRepsPerSet = (EditText) getActivity().findViewById(R.id.editRepsText);
-//        //call set method in routine class
-//        //exercise.setReps(Integer.getInteger(repsText.toString()));
-//        return mRepsPerSet.getText().toString();
-//    }
-
-//    private boolean validate() {
-//
-//        boolean valid = true;
-//        if(addNumberOfSets().isEmpty()){
-//            mNumOfSets.setError("Please enter the number of sets for your session");
-//            valid = false;
-//        }
-//        if(addRoutineName().isEmpty()){
-//            mRoutineName.setError("Please enter the name of your session");
-//            valid = false;
-//        }
-//        if(addRepsPerSet().isEmpty()){
-//            mRepsPerSet.setError("Please enter the number of reps per set");
-//            valid = false;
-//        }
-//        return valid;
-//        //return true;
-//    }

@@ -5,21 +5,20 @@ import junit.framework.TestCase;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
 
-/**
+import static teameleven.smartbells2.businesslayer.tableclasses.Exercise.restGetExercise;
+
+/**Basic tests on Exercises
  * Created by Andrew Rabb on 2015-11-26.
  */
 public class ExerciseTest extends TestCase{
 
     ArrayList<Exercise> exercises;
     JSONObject jsonResult;
-    DatabaseAdapter database;
 
     public void testExercise() throws Exception {
         int random = new Random().nextInt(exercises.size());
@@ -38,13 +37,13 @@ public class ExerciseTest extends TestCase{
      *
      * server bug gives us a null user_id at times, so method has been altered to account for that
      * server bug gives us a null is_public value at times. method has been altered to account
-     * @param x
+     * @param exercise - exercise
      * @throws JSONException
      */
-    public void testJSON(Exercise x) throws JSONException {
+    public void testJSON(Exercise exercise) throws JSONException {
 
-        jsonResult = Exercise.restGetExercise(x.getId()).getJSONObject("exercise");
-        JSONObject jsonTemp = x.createJSON().getJSONObject("exercise");
+        jsonResult = restGetExercise(exercise.getId()).getJSONObject("exercise");
+        JSONObject jsonTemp = exercise.createJSON().getJSONObject("exercise");
 
         assertTrue (jsonTemp.toString(), jsonTemp.remove("is_public") != null);
         assertTrue(jsonResult.toString(), jsonResult.remove("is_public") != null);

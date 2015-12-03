@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 /**
  * This class treats the account of user of the Smartbell system
+ * Dummy Authenticator class
  */
 public class Authenticator extends AbstractAccountAuthenticator {
     /**

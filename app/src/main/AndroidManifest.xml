@@ -10,7 +10,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name=".OpeningSplashScreen" android:launchMode="singleTask"
+            android:name=".viewlayer.OpeningSplashScreen" android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
@@ -22,7 +22,7 @@
         </activity>
 
         <activity
-            android:name=".SmartBellsMainActivity" android:launchMode="singleTask"
+            android:name=".viewlayer.SmartBellsMainActivity" android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
         <intent-filter>
@@ -31,16 +31,16 @@
         </activity>
 
         <!-- ACTIVITIES -->
-        <activity android:name=".SignupActivity"
+        <activity android:name=".viewlayer.SignUpActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".LoginActivity"
+        <activity android:name=".viewlayer.LoginActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
-        <activity android:name=".LoadingSplashScreen"
+        <activity android:name=".viewlayer.LoadingSplashScreen"
             android:screenOrientation="portrait"/>
-        <activity android:name=".RecordWorkoutRoutine"
+        <activity android:name=".viewlayer.RecordWorkoutRoutine"
             android:screenOrientation="portrait"/>
-        <activity android:name=".dashboardfragmenttabs.ViewWorkout"
+        <activity android:name=".viewlayer.dashboardfragmenttabs.ViewWorkout"
             android:screenOrientation="portrait"/>
 
 

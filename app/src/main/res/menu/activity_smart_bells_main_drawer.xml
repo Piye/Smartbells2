@@ -34,9 +34,6 @@
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_fast_bunny"
                 android:title="Logout" />
-            <item
-                android:id="@+id/nav_requestsync"
-                android:title="RequestSync"
                 />
         </menu>
     </item>

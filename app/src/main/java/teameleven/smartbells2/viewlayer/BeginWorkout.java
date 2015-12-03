@@ -1,4 +1,4 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.viewlayer;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,35 +9,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TabHost;
-import android.widget.TextView;
 
+import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
-import teameleven.smartbells2.dashboardfragmenttabs.MyRoutines_Fragment;
-import teameleven.smartbells2.dashboardfragmenttabs.PublicRoutines_Fragment;
+import teameleven.smartbells2.viewlayer.dashboardfragmenttabs.MyRoutines_Fragment;
+import teameleven.smartbells2.viewlayer.dashboardfragmenttabs.PublicRoutines_Fragment;
 
 /**
- * Created by Jare on 2015-11-19.
+ * Created by Jaret on 2015-11-19.
  * Updated by Jordan on 2015-11-29.
  */
 public class BeginWorkout extends Fragment {
 
-    private FragmentTabHost dashboardTabHost;
     //value to be passed to RecordWorkout Activity
     public static final String ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
     private int checkTabPage;
-    private FloatingActionButton fab;
 
     //Create the view and setup the tab host to view
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.tab_beginworkout_dashboard, container, false);
 
-        dashboardTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);
+        FragmentTabHost dashboardTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);
         dashboardTabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);
 
 
         //Show the FAB
-        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 
         //Creates a listener, and handles fragment manager to swap between list fragments
@@ -53,17 +51,17 @@ public class BeginWorkout extends Fragment {
 
                 android.support.v4.app.FragmentTransaction fragTransaction = fragManager.beginTransaction();
 
-                //Detach myroutines_fragment if it exists
+                //Detach myRoutines_fragment if it exists
                 if (myroutines_fragment != null) {
                     fragTransaction.detach(myroutines_fragment);
                 }
 
-                //Detach publicroutines_fragment if it exists
+                //Detach publicRoutines_fragment if it exists
                 if (publicroutines_fragment != null) {
                     fragTransaction.detach(publicroutines_fragment);
                 }
 
-                //If the current tab is on myroutines show only private routines
+                //If the current tab is on myRoutines show only private routines
                 if (tabId.equalsIgnoreCase("myroutines")) {
                     setCheckTabPage(4);
                     if (myroutines_fragment == null) {
@@ -76,7 +74,7 @@ public class BeginWorkout extends Fragment {
                     }
                 }
 
-                //If the current tab is on publicroutines show only public routines
+                //If the current tab is on publicRoutines show only public routines
                 if (tabId.equalsIgnoreCase("publicroutines")) {
                     setCheckTabPage(5);
                     if (publicroutines_fragment == null) {
@@ -107,18 +105,15 @@ public class BeginWorkout extends Fragment {
         //Records Tab creation
         dashboardTabHost.addTab(dashboardTabHost.newTabSpec("publicroutines").setIndicator("Public Routines"), PublicRoutines_Fragment.class, null);
 
-
         //Adjusting the text within the tabs to properly show titles
-        for (int i = 0; i < 2; i++)
-        {
-            TextView x = (TextView) dashboardTabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
-            if (i == 2)
-            {
-                x.setTextSize(15);
-            } else {x.setTextSize(15);}
-
-
-        }
+//        for (int i = 0; i < 2; i++)
+//        {
+//            TextView x = (TextView) dashboardTabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
+//            if (i == 2)
+//            {
+//                x.setTextSize(15);
+//            } else {x.setTextSize(15);}
+//        }
 
         //Return the view
         return rootView;

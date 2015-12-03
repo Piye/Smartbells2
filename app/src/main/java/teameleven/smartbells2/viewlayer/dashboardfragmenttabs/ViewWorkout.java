@@ -1,4 +1,4 @@
-package teameleven.smartbells2.dashboardfragmenttabs;
+package teameleven.smartbells2.viewlayer.dashboardfragmenttabs;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

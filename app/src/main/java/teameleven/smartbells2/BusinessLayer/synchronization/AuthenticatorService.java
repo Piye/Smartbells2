@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 /**
  * This class offers the Service of Authenticator
+ * Authenticator Service, runs the Dummy Authenticator
  * Created by Andrew Rabb on 2015-11-13.
  */
 public class AuthenticatorService extends Service {
@@ -26,7 +27,7 @@ public class AuthenticatorService extends Service {
     /**
      * Intent on Bind
      * @param intent : intent method
-     * @return : authericator.getIBinder()
+     * @return : authenticator.getIBinder()
      */
     @Nullable
     @Override

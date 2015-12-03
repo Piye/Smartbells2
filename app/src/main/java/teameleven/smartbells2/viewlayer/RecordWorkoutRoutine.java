@@ -1,4 +1,4 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.viewlayer;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,18 +9,17 @@ import android.widget.Toast;
 
 import java.sql.SQLException;
 
+import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
-import teameleven.smartbells2.dashboardfragmenttabs.MyRoutines_Fragment;
+import teameleven.smartbells2.viewlayer.dashboardfragmenttabs.MyRoutines_Fragment;
 
 /**
- * Created by Jare on 2015-11-03.
+ * Created by Jaret on 2015-11-03.
  * Updated by Brian McMahon
  */
 public class RecordWorkoutRoutine extends AppCompatActivity {
 
     private String nameValue;
-    private TextView nameView;
-    private TextView mExercise;
     private EditText mResistance;
     private EditText mSets;
     private EditText mReps;
@@ -30,13 +29,12 @@ public class RecordWorkoutRoutine extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.record_workout);
 
-        //Get the name value passed and set it to the textview value
+        //Get the name value passed and set it to the textView value
         //nameValue = getIntent().getStringExtra(BeginWorkout.ITEM_NAME);
         nameValue = getIntent().getStringExtra(MyRoutines_Fragment.ROUTINE_ITEM_NAME);
-        nameView = (TextView) findViewById(R.id.nameTextValue);
-        mExercise = (TextView) findViewById(R.id.exerciseTextViewCustom);
-        //todo need to get the exercise name here and set the mExercise text with it.
-        nameView.setText(nameValue.toString());
+        TextView nameView = (TextView) findViewById(R.id.nameTextValue);
+        //TextView mExercise = (TextView) findViewById(R.id.exerciseTextViewCustom);
+        nameView.setText(nameValue);
         mResistance = (EditText) findViewById(R.id.editResistanceText);
         mSets = (EditText) findViewById(R.id.editSetsTextCustom);
         mReps = (EditText) findViewById(R.id.editRepsTextCustom);
@@ -69,7 +67,7 @@ public class RecordWorkoutRoutine extends AppCompatActivity {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            //add new workout to the workoutsession in database
+            //add new workout to the workoutSession in database
             //the -1 is to signify a placeholder workout id number. it is replaced by an incrementer
             //in the database
             db.insertWorkoutSession(-1 ,db.getUserIDForSession(), nameValue, null, null, true);

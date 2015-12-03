@@ -1,4 +1,4 @@
-package teameleven.smartbells2.dashboardfragmenttabs;
+package teameleven.smartbells2.viewlayer.dashboardfragmenttabs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,11 +17,9 @@ import android.widget.Toast;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import teameleven.smartbells2.BeginWorkout;
-import teameleven.smartbells2.RecordWorkoutRoutine;
-import teameleven.smartbells2.SmartBellsMainActivity;
+import teameleven.smartbells2.viewlayer.RecordWorkoutRoutine;
+import teameleven.smartbells2.viewlayer.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
-import teameleven.smartbells2.businesslayer.tableclasses.Routine;
 
 /**
  * This class shows the list of user's routines
@@ -30,13 +28,8 @@ import teameleven.smartbells2.businesslayer.tableclasses.Routine;
  */
 public class MyRoutines_Fragment extends ListFragment {
 
-    BeginWorkout dashboard;
     public static final String ROUTINE_ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
-    //Temporary string array to populate list
-    private ArrayList<Routine> myroutines;
-    private ArrayList<Routine> myPrivateRoutines;
     private ArrayList<String> myPrivateRoutinesList;
-    private DatabaseAdapter db;
     private ArrayAdapter<String> adapter;
 
     /**
@@ -51,10 +44,9 @@ public class MyRoutines_Fragment extends ListFragment {
     {
         //Tells main activity ADD button what type of item to add (ACHIEVEMENTS)
         SmartBellsMainActivity.dashboardTab.setCheckTabPage(4);
-        //SmartBellsMainActivity.bw2.setCheckTabPage(4);
 
         //Open Database
-        db = new DatabaseAdapter(getActivity());
+        DatabaseAdapter db = new DatabaseAdapter(getActivity());
         try {
             db.openLocalDatabase();
             //insert more routines
@@ -63,7 +55,7 @@ public class MyRoutines_Fragment extends ListFragment {
             e.printStackTrace();
         }
         /*
-        * myroutine<Routine> will hold a list of all routines.
+        * myRoutine<Routine> will hold a list of all routines.
         * any routine whose is private will be added to myPrivateRoutines<Routine> <--
          * myPrivateRoutineList<String> will hold the name reference to each private routine.
         * */
@@ -77,8 +69,8 @@ public class MyRoutines_Fragment extends ListFragment {
 
         //Change adapter type to handle objects instead of strings later
         //Set the adapter to show in application
-        adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
-                                      android.R.layout.simple_list_item_1, myPrivateRoutinesList);
+        adapter = new ArrayAdapter<>(getActivity().getBaseContext(),
+                android.R.layout.simple_list_item_1, myPrivateRoutinesList);
         setListAdapter(adapter);
 
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -94,10 +86,10 @@ public class MyRoutines_Fragment extends ListFragment {
 
     /***
      *
-     * @param lv
-     * @param view
-     * @param position
-     * @param id
+     * @param lv - ListView
+     * @param view - View
+     * @param position - Position in Lv
+     * @param id - Id of the ListView item
      * This method will allow a routine to be deleted
      */
     @Override
@@ -134,14 +126,14 @@ public class MyRoutines_Fragment extends ListFragment {
             }
         });
 
-        Dialog mydialog = builder.setView(new View(getActivity())).create();
+        Dialog myDialog = builder.setView(new View(getActivity())).create();
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-        params.copyFrom(mydialog.getWindow().getAttributes());
+        params.copyFrom(myDialog.getWindow().getAttributes());
         params.width = 630;
         params.height = 250;
-        mydialog.show();
-        mydialog.getWindow().setAttributes(params);
+        myDialog.show();
+        myDialog.getWindow().setAttributes(params);
 
     }
 }

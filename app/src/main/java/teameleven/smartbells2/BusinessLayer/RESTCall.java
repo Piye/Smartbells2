@@ -1,10 +1,8 @@
 package teameleven.smartbells2.businesslayer;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,9 +11,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Objects;
 
 /**
  * ideally, this page will deal with all the meat of creating a restful api call.
@@ -25,17 +23,13 @@ import java.net.URL;
  */
 public class RESTCall extends AsyncTask<String, Void, JSONObject> {
     /**
-     * baseURL : An address of the Smartbells API of the SingularityXL
+     * baseURL : An address of the Smart Bells API of the SingularityXL
      */
-    private final String baseURL = "https://smart-bells-staging.herokuapp.com/api/v1/";
+    private static final String baseURL = "https://smart-bells-staging.herokuapp.com/api/v1/";
     /**
      * Tag is a text to system print for tracing to debug RESTCALL error
      */
     private final String TAG = "RESTCALL - Debug --";
-    /**
-     * Context
-     */
-    private Context context;
     /**
      * Creates a new Object on the server with the supplied data. Accepts the modifier defining
      * the object, as well as the object fields to be created.
@@ -52,6 +46,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
         JSONObject result = null;
         try {
             //set the connection method
+            assert connection != null;
             connection.setRequestMethod("POST");
             //set connection headers
             connection.setRequestProperty("Content-type", "application/json");
@@ -93,16 +88,13 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
             //close reader
             br.close();
 
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         } catch (RuntimeException re) {
             re.printStackTrace();
             Log.d(TAG, "RUNTIME ERROR OCCURRED");
         } finally {
+            assert connection != null;
             connection.disconnect();
 
             //moved disconnect and close to a finally block, in case of exception
@@ -228,11 +220,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
             Log.d(TAG, result.toString(4));
             br.close();
 
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         } finally {
             connection.disconnect();
@@ -250,6 +238,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
     private void deleteObject(String modifier, String accessToken) {
         HttpURLConnection connection = openConnection(modifier);
         try {
+            assert connection != null;
             connection.setRequestMethod("DELETE");
             connection.setRequestProperty("Content-type", "application/json");
             if (!accessToken.isEmpty()) {
@@ -258,14 +247,14 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
             if (connection.getResponseCode() != 200) {
                 throw new RuntimeException("Failed: HTTP error Code : "
                         + connection.getResponseCode());
-            } else if (connection.getResponseCode() == 204) {
+            } else //noinspection ConstantConditions
+                if (connection.getResponseCode() == 204) {
                 Log.d(TAG, "Object Deleted");
             }
-        } catch (ProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            assert connection != null;
             connection.disconnect();
         }
     }
@@ -282,10 +271,7 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
             String newURL = baseURL + modifier;
             URL url = new URL(newURL);
             Log.d(TAG, url.toString());
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            return connection;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+            return (HttpURLConnection) url.openConnection();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -303,16 +289,16 @@ public class RESTCall extends AsyncTask<String, Void, JSONObject> {
      */
     protected JSONObject doInBackground(String... params) {
         JSONObject result;
-        if (params[1] == "GET") {
+        if (Objects.equals(params[1], "GET")) {
             Log.d(TAG, "CALLING GET METHOD NOW...........");
             result = getObject(params[0], null);
-        } else if (params[1] == "POST") {
+        } else if (Objects.equals(params[1], "POST")) {
             Log.d(TAG, "CALLING POST METHOD NOW...........");
             result = postObject(params[0], params[2], params[3]);
-        } else if (params[1] == "PUT") {
+        } else if (Objects.equals(params[1], "PUT")) {
             Log.d(TAG, "CALLING PUT METHOD NOW...........");
             result = putObject(params[0], params[2], params[3]);
-        } else if (params[1] == "DELETE") {
+        } else if (Objects.equals(params[1], "DELETE")) {
             Log.d(TAG, "CALLING DELETE METHOD NOW...........");
             deleteObject(params[0], params[3]);
             result = null;

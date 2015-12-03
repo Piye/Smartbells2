@@ -1,6 +1,5 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.viewlayer;
 
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,9 +21,9 @@ public class Authentication extends User {
     private String TAG = "DEBUGGING!!!!!!!!!!!!!!!!!";
 
     /**
-     * Authentication with user anme and password
+     * Authentication with user name and password
      * @param userName user name
-     * @param password Passowrd of user's
+     * @param password Password of user's
      */
     public Authentication(String userName, String password) {
         super(userName, password);
@@ -44,7 +43,7 @@ public class Authentication extends User {
         }
        // Log.d(TAG, "PRINTING ACCESS_TOKEN");
         //Log.d(TAG, accessToken);
-        this.accessToken = accessToken;
+        Authentication.accessToken = accessToken;
     }
 
     //returns the access token to be used in headers for future requests

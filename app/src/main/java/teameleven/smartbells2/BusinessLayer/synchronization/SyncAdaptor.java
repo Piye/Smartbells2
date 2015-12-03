@@ -25,16 +25,24 @@ import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSession;
 import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSetGroup;
 
 /**
+ * Synchronizes with the Remote Database, allowing data transfer between multiple two devices
  * Created by Andrew Rabb on 2015-11-12.
  */
 public class SyncAdaptor extends AbstractThreadedSyncAdapter {
-
-    DatabaseAdapter database;
-    static int syncCount;
     /**
-     *
-     * @param context
-     * @param autoInitialize
+     * Database link, to allow access
+     */
+    DatabaseAdapter database;
+    /**
+     * counts the number of times a sync has occurred. forces a sync with the remote database
+     * every 15 regular syncs, which occur about once every 24 hours.
+     */
+    static int syncCount;
+
+    /**
+     * Main Constructor
+     * @param context        - Context of the Application, used to open the Database
+     * @param autoInitialize - AutoInitialize boolean
      */
     public SyncAdaptor(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -44,15 +52,18 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
         }
     }
+
     /**
+     * Secondary Constructor for backwards compatibility
      *
-     * @param context
-     * @param autoInitialize
-     * @param allowParalellSyncs
+     * @param context            - Context of the Application, used to open the Database
+     * @param autoInitialize     - AutoInitialize boolean
+     * @param allowParallelSync - backwards Compatibility variable
      */
-    public SyncAdaptor(Context context, boolean autoInitialize, boolean allowParalellSyncs){
-        super(context, autoInitialize, allowParalellSyncs);
-        try{
+    @SuppressWarnings("unused")
+    public SyncAdaptor(Context context, boolean autoInitialize, boolean allowParallelSync) {
+        super(context, autoInitialize, allowParallelSync);
+        try {
             database = new DatabaseAdapter(context).openLocalDatabase();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,72 +77,81 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
     }
 
     /**
-     *
-     * @param account
-     * @param extras
-     * @param authority
-     * @param provider
-     * @param syncResult
+     * Method that performs the actual synchronization. Pulls update table from database,
+     * and based on the values performs required operations upon the remote database.
+     * @param account - dummy account used for syncAdapter
+     * @param extras - extras pushed. used to determine whether a database recreation is required
+     * @param authority - Authority for the SyncAdapter
+     * @param provider - Provider for the SyncAdapter - dummy class
+     * @param syncResult - Result of the Sync Callback
      */
     @Override
     public void onPerformSync(
-                Account account,
-                Bundle extras,
-                String authority,
-                ContentProviderClient provider,
-                SyncResult syncResult) {
+            Account account,
+            Bundle extras,
+            String authority,
+            ContentProviderClient provider,
+            SyncResult syncResult) {
         Log.d("Syncing", "- SmartBells.OnPerformSync - checking for updates");
         if (extras.getBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED)) {
             Log.d("SmartBells Syncing", " - New User            - Recreating Database");
             initialDatabaseSync();
             syncCount = 0;
-        }else{
-            Log.d("SmartBells Syncing", " - Old user, checking for updates! testing");
+        } else {
+            Log.d("SmartBells Syncing", " - Old user, checking for updates!");
             if (database.hasUpdates()) {
                 Log.d("Syncing", " - SmartBells has Updates");
-                //table name
-                String tableID;
-                //type of call (GET, UPDATE, DELETE)
-                String httpType;
-                //Object, if required
-                String object = null;
-                String modifier = "";
-                //id of object to be changed
+
+                String tableID;//id of the table to be changed
+
+                String httpType; //type of call (GET, UPDATE, DELETE)
+
+                String object = null;//Object, if required
+
+                String modifier = ""; //id of object to be changed
+
                 //update table records
                 ArrayList<int[]> updates = database.readUpdateRecord();
-                for (int[] x : updates) {
-                    Log.d("results from update table are ", x(x));
-                }
-                for (int[] x : updates) {
-                    modifier = "/" + String.valueOf(x[0]);//sets the id of the object to be altered
-                    tableID = setRestID(x[1]);//sets the table id
-                    httpType = setHTTPType(x[2]);//sets the http call type
-                    if (x[2] == 0) {//if insert (POST) calltype, nullify modifier
+                for (int[] UpdateRecord : updates) {//iterates through Update Records
+                    tableID = setRestID(UpdateRecord[1]);//sets the table id
+                    httpType = setHTTPType(UpdateRecord[2]);//sets the http call type
+
+
+                    //if insert (POST) callType, nullify modifier
+                    if (UpdateRecord[2] == 0) {
                         modifier = "";
-                        object = getChangedObject(x[0], x[1]);
-                        database.deleteObject(x[0], x[1]);//delete old record -ensures no duplicates
-                    } else if (x[2] == 1) {//if call type update, table class to be changed to
-                        object = getChangedObject(x[0], x[1]);
-                        database.deleteObject(x[0], x[1]);//delete old record -ensures no duplicates
-                    }//if call type is delete, object remains null
+                        object = getChangedObject(UpdateRecord[0], UpdateRecord[1]);
+                        database.deleteObject(UpdateRecord[0], UpdateRecord[1]);
+                        //delete old record -ensures no duplicates
+                        }
 
-                    //perform the RESTCall, based upon parameters from update table
 
-                    try {
-                        Log.d("output from RESTCALL is ", object);
-                    }catch (Exception ex){
-                        ex.printStackTrace();
+                    //if call type update, obtain new object, and old object id (modifier)
+                    else if (UpdateRecord[2] == 1) {
+                        //sets the id of the object to be altered
+                        modifier = "/" + String.valueOf(UpdateRecord[0]);
+                        object = getChangedObject(UpdateRecord[0], UpdateRecord[1]);
+                        database.deleteObject(UpdateRecord[0], UpdateRecord[1]);
+                        //delete old record -ensures no duplicates
                     }
 
 
+                    //if call type is delete, object remains null
+                    else if (UpdateRecord[2] == 2){
+                        object = "";
+                    }
+
+                    //perform the RESTCall, based upon parameters from update table
                     AsyncTask result = new RESTCall()
-                            .execute(tableID + modifier, httpType, object, database.getTokenAsString());
-                    try {
-                        JSONObject json = (JSONObject) result.get();
-                        if (json != null) {
-                            saveToDatabase(json, x[1]);
+                            .execute(tableID + modifier, httpType, object,
+                                    database.getTokenAsString());
+                    try {//if not delete, retrieve object from RestCall
+                        if (UpdateRecord[2] != 2) {
+                            JSONObject json = (JSONObject) result.get();
+                            if (json != null) {
+                                saveToDatabase(json, UpdateRecord[1]);
+                            }
                         }
-                        else Log.d("json is null for some reason", " have to solve this");
 
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
@@ -150,63 +170,45 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                 }
                 syncCount++;
             }
-            else{
-                Log.d("no updates ", " hopefully that's right");
-            }
         }
     }
 
     /**
-     *
-     * @param json
-     * @param table
+     * Saves an object into the database, after retrieving it from the database.
+     * @param json - JsonObject result from RESTCall.
+     * @param table - Table to add the object to
      */
     private void saveToDatabase(JSONObject json, int table) {
-        switch (table){
-            case(0)://exercises
+        switch (table) {
+            case (0)://exercises
                 database.insertExercise(new Exercise(json), false);
-            break;
-            case(1)://set groups
+                break;
+            case (1)://set groups
                 database.insertSetGroup(new SetGroup(json), false);
-            break;
-            case(2)://routine
+                break;
+            case (2)://routine
                 database.insertRoutine(new Routine(json), false);
-            break;
-            case(3)://workout session
+                break;
+            case (3)://workout session
                 database.insertWorkoutSession(new WorkoutSession(json), false);
-            break;
-            case(4)://workout set group
+                break;
+            case (4)://workout set group
                 database.insertWorkoutSetGroup(new WorkoutSetGroup(json), false);
-            break;
+                break;
         }
     }
-
     /**
-     * for debugging, turns int[] into readable string
+     * accepts the id and table, to return the database object in question
      *
-     * @param y int[]
-     * @return string of int[] input
-     */
-    private String x(int[] y) {
-        String result = "";
-
-        for (int num : y) {
-            result += " " + num;
-        }
-        return result;
-    }
-
-    /**
-     *
-     * @param id
-     * @param table
-     * @return
+     * @param id - id of the object to be retrieved
+     * @param table - table of the object to be retrieved
+     * @return object in question, String format
      */
     private String getChangedObject(int id, int table) {
         try {
             switch (table) {
                 case (0)://exercises
-                    Log.d("attempting to retrieve exercise - ", String.valueOf(id) +" -  "+ table);
+                    //Log.d("attempting to retrieve exercise - ", String.valueOf(id) +" -  "+table);
                     return database.getExercise(id).toString();
                 case (1)://set groups
                     return database.getSetGroup(id).toString();
@@ -223,45 +225,52 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
 
         return null;
     }
+
     /**
-     *
-     * @param type
-     * @return
+     *  returns the type of HTTP call to use. Matches DatabaseAdapter.InsertUpdateRecords()
+     * @param type -
+     * @return -
      */
     private String setHTTPType(int type) {
-        switch (type){
-            case(0):
+        switch (type) {
+            case (0):
                 return "POST";
-            case(1):
+            case (1):
                 return "PUT";
-            case(2):
+            case (2):
                 return "DELETE";
         }
         return null;
     }
+
     /**
-     *
-     * @param table
-     * @return
+     * sets the table to be called in REST, Matches DatabaseAdapter.InsertUpdateRecord()
+     * @param table - int id of the table
+     * @return the table to be called in REST
      */
     private String setRestID(int table) {
 
-        switch (table){
-            case(0)://exercises
+        switch (table) {
+            case (0)://exercises
                 return "exercises";
-            case(1)://set groups
+            case (1)://set groups
                 return "set_groups";
-            case(2)://routines
+            case (2)://routines
                 return "routines";
-            case(3)://workout session
+            case (3)://workout session
                 return "workout_sessions";
-            case(4)://workout set group
+            case (4)://workout set group
                 return "workout_set_groups";
         }
         return null;
     }
+
     /**
-     *
+     * loads the database from the remote server. Loads the three main tables,
+     * which loads the secondary tables as well.
+     * Exercise
+     * Routine + Set Group
+     * WorkoutSessions + Workout Set Group
      */
     private void initialDatabaseSync() {
         database.updateDB();
@@ -270,14 +279,18 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
 
 
         ArrayList<Exercise> exercise = Exercise.restGetAll();
-        Log.d("LoginActivity.initialDatabaseSync - Exercise row count = ", String.valueOf(exercise.size()));
+        assert exercise != null;
+        Log.d("LoginActivity.initialDatabaseSync - Exercise row count = ",
+                String.valueOf(exercise.size()));
         y = (System.currentTimeMillis() - x);
         Log.d("time taken = ", String.format("%s milliseconds", y));
         database.loadAllExercises(exercise);
 
 
         ArrayList<Routine> routines = Routine.restGetAll(database.getUserIDForSession());
-        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ", String.valueOf(routines.size()));
+        assert routines != null;
+        Log.d("LoginActivity.initialDatabaseSync - Routine row count = ",
+                String.valueOf(routines.size()));
         y = (System.currentTimeMillis() - x);
         Log.d("time taken = ", String.format("%s milliseconds", y));
         database.loadAllRoutines(routines);
@@ -285,10 +298,11 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
 
         ArrayList<WorkoutSession> workoutSessions = WorkoutSession.
                 restGetAll(database.getUserIDForSession());
-        Log.d("LoginActivity.initialDatabaseSync - WorkoutSession row count = ", String.valueOf(workoutSessions.size()));
+        assert workoutSessions != null;
+        Log.d("LoginActivity.initialDatabaseSync - WorkoutSession row count = ",
+                String.valueOf(workoutSessions.size()));
         y = (System.currentTimeMillis() - x);
         Log.d("time taken = ", String.format("%s milliseconds", y));
         database.loadAllWorkoutSessions(workoutSessions);
     }
-
 }

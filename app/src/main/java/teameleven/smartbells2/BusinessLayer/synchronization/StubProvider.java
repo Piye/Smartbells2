@@ -8,8 +8,10 @@ import android.support.annotation.Nullable;
 
 /**
  * This class treats the ContentProvider
+ * Dummy Content Provider
  * Created by Andrew Rabb on 2015-11-13.
  */
+@SuppressWarnings("NullableProblems")
 public class StubProvider extends ContentProvider {
     @Override
     public boolean onCreate() {

@@ -1,4 +1,4 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.viewlayer;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -20,13 +20,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
+import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.SessionManager;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
-import teameleven.smartbells2.businesslayer.tableclasses.Exercise;
-import teameleven.smartbells2.businesslayer.tableclasses.Routine;
-import teameleven.smartbells2.businesslayer.tableclasses.WorkoutSession;
 
 /**
  * This class manages the Login Activities
@@ -43,14 +40,6 @@ public class LoginActivity extends Activity {
      */
     private EditText mPassword;
     /**
-     * Login Button
-     */
-    private Button mLogInButton;
-    /**
-     * Text view field of Description of Signup
-     */
-    private TextView mSignUp;
-    /**
      * Tag for debugging
      */
     String TAG = "DEBUGGING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
@@ -63,7 +52,7 @@ public class LoginActivity extends Activity {
     private static final String AUTHORITY =
             "teameleven.smartbells2.businesslayer.synchronization.provider";
     /**
-     * Accoutn type of the smartbells
+     * Account type of the smart bells
      */
     private static final String ACCOUNT_TYPE = "smart-bells-staging.herokuapp.com";
     /**
@@ -85,8 +74,8 @@ public class LoginActivity extends Activity {
     SessionManager session;
 
     /**
-     * Display the page of login and set the onclick listeners of the loginbutton or signup button
-     * @param savedInstanceState
+     * Display the page of login and set the onclick listeners of the login button or signUp button
+     * @param savedInstanceState - Bundle instance state
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,8 +84,14 @@ public class LoginActivity extends Activity {
 
         mUserName = (EditText) findViewById(R.id.editText1);
         mPassword = (EditText) findViewById(R.id.editText2);
-        mLogInButton = (Button) findViewById(R.id.logInButton);
-        mSignUp = (TextView) findViewById(R.id.sign_up_link);
+        /*
+      Login Button
+     */
+        Button mLogInButton = (Button) findViewById(R.id.logInButton);
+        /*
+      Text view field of Description of SignUp
+     */
+        TextView mSignUp = (TextView) findViewById(R.id.sign_up_link);
 
         //login when user clicks button
         mLogInButton.setOnClickListener(new View.OnClickListener() {
@@ -106,12 +101,12 @@ public class LoginActivity extends Activity {
             }
         });
 
-        //redirect to signup page for new users
+        //redirect to signUp page for new users
         mSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //move to signup activity
-                Intent intent = new Intent(v.getContext(), SignupActivity.class);
+                //move to signUp activity
+                Intent intent = new Intent(v.getContext(), SignUpActivity.class);
                 startActivity(intent);
                 //close activity
                 finish();
@@ -194,8 +189,8 @@ public class LoginActivity extends Activity {
     }
 
     /**
-     * Get the passoword from the user's entry field
-     * @return
+     * Get the password from the user's entry field
+     * @return - the password
      */
     public String getPassword() {
         return mPassword.getText().toString();
@@ -253,8 +248,8 @@ public class LoginActivity extends Activity {
 
     /**
      * Create an account for sync
-     * @param context
-     * @return
+     * @param context - Application Context
+     * @return - Sync Account
      */
     public static Account CreateSyncAccount(Context context){
         Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);

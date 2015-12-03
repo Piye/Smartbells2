@@ -1,4 +1,4 @@
-package teameleven.smartbells2.dashboardfragmenttabs;
+package teameleven.smartbells2.viewlayer.dashboardfragmenttabs;
 
 
 import android.app.AlertDialog;
@@ -18,12 +18,12 @@ import android.widget.Toast;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import teameleven.smartbells2.RecordWorkoutRoutine;
-import teameleven.smartbells2.SmartBellsMainActivity;
+import teameleven.smartbells2.viewlayer.RecordWorkoutRoutine;
+import teameleven.smartbells2.viewlayer.SmartBellsMainActivity;
 import teameleven.smartbells2.businesslayer.localdatabase.DatabaseAdapter;
 
 /**
- * Created by Jordan Medwid Medwid on 10/18/2015.
+ * Created by Jordan Medwid on 10/18/2015.
  * Updated by Brian McMahon
  * This class will handle an array of routine objects to show them to the user
  * This class will be edited to accept JSON objects retrieved from a server- *Sprint 2
@@ -34,7 +34,7 @@ public class Routines_Fragment extends ListFragment {
      */
     public static final String ROUTINE_ITEM_NAME = DatabaseAdapter.ROUTINE_NAME;
     /**
-     * Boolean of the routins is public or not
+     * Boolean of the routines is public or not
      */
     public static final String ROUTINE_ISPUBLIC = DatabaseAdapter.ROUTINE_IS_PUBLIC;
 
@@ -81,7 +81,7 @@ public class Routines_Fragment extends ListFragment {
         /**
          * Set the adapter to show in application
          */
-        adapter = new ArrayAdapter<String>(
+        adapter = new ArrayAdapter<>(
                 getActivity().getBaseContext(), android.R.layout.simple_list_item_1, list);
         setListAdapter(adapter);
 
@@ -99,7 +99,7 @@ public class Routines_Fragment extends ListFragment {
      * Override the view when the list item clicked
      * @param lv ListView of Routine name
      * @param view View
-     * @param position postion of the item
+     * @param position position of the item
      * @param id Id of the clicked item
      */
     @Override
@@ -123,7 +123,7 @@ public class Routines_Fragment extends ListFragment {
                     db.closeLocalDatabase();
                     Toast.makeText(getActivity(), "Routine Deleted", Toast.LENGTH_LONG).show();
                 }
-                });
+            });
             builder.setPositiveButton("Record", new DialogInterface.OnClickListener() {
 
                 public void onClick(DialogInterface arg0, int arg1) {
@@ -136,14 +136,14 @@ public class Routines_Fragment extends ListFragment {
 
             });
 
-            Dialog mydialog = builder.setView(new View(getActivity())).create();
+            Dialog myDialog = builder.setView(new View(getActivity())).create();
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-        params.copyFrom(mydialog.getWindow().getAttributes());
+        params.copyFrom(myDialog.getWindow().getAttributes());
         params.width = 630;
         params.height = 250;
-        mydialog.show();
-        mydialog.getWindow().setAttributes(params);
+        myDialog.show();
+        myDialog.getWindow().setAttributes(params);
 
     }
 

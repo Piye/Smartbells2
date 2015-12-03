@@ -1,7 +1,6 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.viewlayer;
 
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,12 +18,13 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
+import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.SessionManager;
-import teameleven.smartbells2.create.CreateExercise;
-import teameleven.smartbells2.create.CreateRoutine;
-import teameleven.smartbells2.create.CreateWorkout;
-import teameleven.smartbells2.dashboardfragmenttabs.Achievement_Fragment;
-import teameleven.smartbells2.dashboardfragmenttabs.New_Records_Fragment;
+import teameleven.smartbells2.viewlayer.create.CreateExercise;
+import teameleven.smartbells2.viewlayer.create.CreateRoutine;
+import teameleven.smartbells2.viewlayer.create.CreateWorkout;
+import teameleven.smartbells2.viewlayer.dashboardfragmenttabs.Achievement_Fragment;
+import teameleven.smartbells2.viewlayer.dashboardfragmenttabs.New_Records_Fragment;
 
 /**
  * This class is the Main Activity of SmartBells
@@ -34,24 +34,10 @@ import teameleven.smartbells2.dashboardfragmenttabs.New_Records_Fragment;
  */
 public class SmartBellsMainActivity extends AppCompatActivity
                                     implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String AUTHORITY =
-            "teameleven.smartbells2.businesslayer.synchronization.provider";
-    /**
-     * Account type of the smartbells
-     */
-    private static final String ACCOUNT_TYPE = "smart-bells-staging.herokuapp.com";
     /**
      * Dashboard of the tab menu
      */
     public static Dashboard dashboardTab = new Dashboard();
-    /**
-     * Display the beginworkout page at once
-     */
-    public static BeginWorkout bw2 = new BeginWorkout();
-    /**
-     * Fragment
-     */
-    private Fragment fragmentDashBoard = null;
     private Fragment fragment = null;
     /**
      * FragmentTransaction
@@ -68,7 +54,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
 
     /**
      * Create the view of main activity pages
-     * @param savedInstanceState
+     * @param savedInstanceState - Bundle instance state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +62,10 @@ public class SmartBellsMainActivity extends AppCompatActivity
         setContentView(R.layout.activity_smart_bells_main);
 
         //Go to the Dashboard
-        fragmentDashBoard = new Dashboard();
+        /*
+      Fragment
+     */
+        Fragment fragmentDashBoard = new Dashboard();
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_main, fragmentDashBoard);
         transaction.commit();
@@ -218,7 +207,7 @@ public class SmartBellsMainActivity extends AppCompatActivity
      * Handle action bar item clicks here. The action bar will
      * automatically handle clicks on the Home/Up button, so long
      * as you specify a parent activity in AndroidManifest.xml
-     * @param item : Item of the mene
+     * @param item : Item of the menu
      * @return super.onOptionsItemSelected(item);
      */
     @Override
@@ -230,16 +219,13 @@ public class SmartBellsMainActivity extends AppCompatActivity
         /**
          * noinspection SimplifiableIfStatement
          */
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     /**
      * Navigates when an item selected
      * @param item : An item of the menu
-     * @return
+     * @return boolean fragment Switch occurred
      */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -259,13 +245,13 @@ public class SmartBellsMainActivity extends AppCompatActivity
         } else if (id == R.id.nav_achievements) {
 
 
-        //start of github overwrite
+        //start of gitHub overwrite
             fragment = new Achievement_Fragment();
         } else if (id == R.id.nav_records){
             fragment = new New_Records_Fragment();
         }
         else if (id == R.id.nav_about) {
-        /* github overwrite - leaving in case of error
+        /* gitHub overwrite - leaving in case of error
             fragmentShowing = 2;
             fragment = new AchievementDashboard();
         } else if (id == R.id.nav_about) {
@@ -273,19 +259,11 @@ public class SmartBellsMainActivity extends AppCompatActivity
             fragmentShowing = 3;
         origin/master*/
 
-
-
-
             fragment = new About();
         } else if (id == R.id.nav_profile) {
             //View and edit profile
             fragmentShowing = 4;
             fragment = new ViewProfile();
-        }else if (id == R.id.nav_requestsync){//this should be removed - temporarily here for testing
-            Bundle sync = new Bundle();
-            sync.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-            ContentResolver.requestSync(LoginActivity.getAccount(), AUTHORITY, sync);
-
         }
         else if (id == R.id.nav_logout) {
             //Confirm logout

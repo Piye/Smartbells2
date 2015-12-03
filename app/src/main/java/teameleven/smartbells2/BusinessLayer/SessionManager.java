@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import teameleven.smartbells2.LoginActivity;
+import teameleven.smartbells2.viewlayer.LoginActivity;
 
 /**
  * Created by Brian McMahon on 28/10/2015.
@@ -25,7 +25,7 @@ public class SessionManager {
     // Shared pref mode
     int PRIVATE_MODE = 0;
 
-    // Sharedpref file name
+    // Shared Pref file name
     public static final String PREF_NAME = "Login";
 
     // All Shared Preferences Keys
@@ -37,7 +37,7 @@ public class SessionManager {
     public static final String KEY_PASSWORD = "password";
 
     // Email
-    public static final String KEY_EMAIL = "email";
+    //public static final String KEY_EMAIL = "email";
 
     // Constructor
     public SessionManager(Context context) {

@@ -8,7 +8,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 /**
- * This class treats the account of user of the Smartbell system
+ * This class treats the account of user of the Smart bells system
+ * Dummy Authenticator class
  */
 public class Authenticator extends AbstractAccountAuthenticator {
     /**
@@ -64,7 +65,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     }
 
     /**
-     * To get Authentication Token by the parmeter values
+     * To get Authentication Token by the parameter values
      * @param response : AccountAuthenticatorResponse
      * @param account  : Account of user
      * @param authTokenType : Authentication's type
@@ -80,7 +81,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     }
 
     /**
-     * To get the authentication Token Lavel by ahthentication token type
+     * To get the authentication Token Level by authentication token type
      * @param authTokenType : Authentication Token Type
      * @return : null
      */
@@ -90,7 +91,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     }
 
     /**
-     * Update a credentail records by the parameters
+     * Update a credential records by the parameters
      * @param response : AccountAuthenticatorResponse
      * @param account  : Account of user
      * @param authTokenType : Authentication Token Type
@@ -106,12 +107,12 @@ public class Authenticator extends AbstractAccountAuthenticator {
     }
 
     /**
-     * To get Features by paramer values
+     * To get Features by parameter values
      * @param response : AccountAuthenticatorResponse
      * @param account  : Account of user
      * @param features : List of array of features
      * @return : null
-     * @throws NetworkErrorException : Excetion of Networking Errors
+     * @throws NetworkErrorException : Exception of Networking Errors
      */
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response,

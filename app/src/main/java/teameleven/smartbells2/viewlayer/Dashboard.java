@@ -1,4 +1,4 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.viewlayer;
 
 
 import android.os.Bundle;
@@ -12,35 +12,28 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import teameleven.smartbells2.dashboardfragmenttabs.Exercises_Fragment;
-import teameleven.smartbells2.dashboardfragmenttabs.Routines_Fragment;
-import teameleven.smartbells2.dashboardfragmenttabs.Workouts_Fragment;
+import teameleven.smartbells2.R;
+import teameleven.smartbells2.viewlayer.dashboardfragmenttabs.Exercises_Fragment;
+import teameleven.smartbells2.viewlayer.dashboardfragmenttabs.Routines_Fragment;
+import teameleven.smartbells2.viewlayer.dashboardfragmenttabs.Workouts_Fragment;
 
 /**
  * Created by: Jarret Holden
  *             Jordan Medwid
- * This class treats the dashboard page that is the fisr page of the smartbells after login.
+ * This class treats the dashboard page that is the first page of the smart bells after login.
  */
 public class Dashboard extends Fragment {
-    /**
-     * FragmentTabHost of the dashboard tab host
-     */
-    private FragmentTabHost dashboardTabHost;
     /**
      * A number of tab page
      */
     private int checkTabPage;
-    /**
-     * FloatingActionButton
-     */
-    private FloatingActionButton fab;
 
     /**
      * Create the view and setup the tab host to view
      * @param inflater LayoutInflater
      * @param container ViewGroup
      * @param savedInstanceState Bundle
-     * @return view for dashborad of smartbells main
+     * @return view for dashboard of smart bells main
      */
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         /**
@@ -48,9 +41,12 @@ public class Dashboard extends Fragment {
          */
         View rootView = inflater.inflate(R.layout.tab_fragment_dashboard, container, false);
         /**
-         * Set the tabhost(title) at the dashboard tab host
+         * Set the tab host(title) at the dashboard tab host
          */
-        dashboardTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);
+        /*
+      FragmentTabHost of the dashboard tab host
+     */
+        FragmentTabHost dashboardTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);
         /**
          * Set the contents at the dashboard tab host
          */
@@ -59,7 +55,10 @@ public class Dashboard extends Fragment {
         /**
          * Show the FloatingActionButton
          */
-        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        /*
+      FloatingActionButton
+     */
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 
         /**

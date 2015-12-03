@@ -6,13 +6,12 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import teameleven.smartbells2.businesslayer.RESTCall;
 
 /**
- * This class treats User's information(name, email, passwork)
+ * This class treats User's information(name, email, password)
  * Created by Brian McMahon on 16/10/2015.
  */
 public class User {
@@ -51,8 +50,8 @@ public class User {
 
     /**
      * Constructor for when logging in a user supplying username/email and password
-     * @param usernameOrEmail
-     * @param password
+     * @param usernameOrEmail - Username or Email Input
+     * @param password - Password
      */
     public User(String usernameOrEmail, String password){
         this.userName = usernameOrEmail;
@@ -95,13 +94,7 @@ public class User {
             accessToken = (String) new JSONObject(result).get("authentication_token");
             Log.d(TAG, accessToken);
             //return result;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (InterruptedException | NullPointerException | JSONException | ExecutionException e) {
             e.printStackTrace();
         }
         return result;
@@ -143,9 +136,7 @@ public class User {
             Log.d(TAG, result);
             Log.d(TAG, result);
             return result;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return result;

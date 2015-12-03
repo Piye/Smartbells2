@@ -1,4 +1,4 @@
-package teameleven.smartbells2;
+package teameleven.smartbells2.viewlayer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,13 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import teameleven.smartbells2.R;
 import teameleven.smartbells2.businesslayer.tableclasses.User;
 
 /**
- * Sign up Activites
+ * Sign up Activities
  * Created by Brian McMahon on 14/10/2015.
  */
-public class SignupActivity extends Activity{
+public class SignUpActivity extends Activity{
     /**
      * Edit Text field of User name
      */
@@ -32,14 +33,10 @@ public class SignupActivity extends Activity{
      * Edit Text field of configuration password
      */
     private EditText mConfPassword;
-    /**
-     * Create Account button
-     */
-    private Button mCreateAccount;
 
     /**
      * Create the page of sign up
-     * @param savedInstanceState
+     * @param savedInstanceState - Bundle instance state
      */
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -50,13 +47,16 @@ public class SignupActivity extends Activity{
         mEmail = (EditText)findViewById(R.id.editText2);
         mPassword = (EditText)findViewById(R.id.editText3);
         mConfPassword = (EditText)findViewById(R.id.editText4);
-        mCreateAccount = (Button)findViewById(R.id.signup_button);
+        /*
+      Create Account button
+     */
+        Button mCreateAccount = (Button) findViewById(R.id.signup_button);
 
         //sign up a new user on click of button
         mCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signup();
+                signUp();
             }
         });
 
@@ -80,7 +80,7 @@ public class SignupActivity extends Activity{
 
     /**
      * Get the password of user
-     * @return Passowrd
+     * @return Password
      */
     public String getPassword(){
         return mPassword.getText().toString();
@@ -88,7 +88,7 @@ public class SignupActivity extends Activity{
 
     /**
      * Get the configuration password
-     * @return configuration passowrd
+     * @return configuration password
      */
     public String getConfPassword(){
         return mConfPassword.getText().toString();
@@ -97,18 +97,17 @@ public class SignupActivity extends Activity{
     /**
      * Create a user account
      */
-    public void signup(){
+    public void signUp(){
         if(!validate()){
-            Toast.makeText(this, "Signup Failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "SignUp Failed", Toast.LENGTH_LONG).show();
         }else{
-            //TODO save to database - check if user exists
             //create the new user
             User user = new User(getUsername(), getEmail(), getPassword());
 
             user.createUserJSON();
             user.createUser();
             //temporary
-            Toast.makeText(this, "Signup Successful", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "SignUp Successful", Toast.LENGTH_SHORT).show();
             //move to main activity
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -132,7 +131,7 @@ public class SignupActivity extends Activity{
     }
 
     /**
-     * Validate the user input datas
+     * Validate the user input data
      * @return boolean after validating
      */
     public boolean validate(){

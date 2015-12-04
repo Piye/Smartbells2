@@ -13,7 +13,6 @@ public class SetGroup {
      * Attributes
      ***********************************************/
     private Exercise exercise = new Exercise();
-    private int exerciseId;
     private int routineId;
     private int id;
     private int numOfSets;
@@ -38,7 +37,7 @@ public class SetGroup {
      * @param reps_per_set - number of reps
      */
     public SetGroup(int exerciseId, int num_of_sets, int reps_per_set) {
-        this.exerciseId = exerciseId;
+        setExerciseId(exerciseId);
         this.numOfSets = num_of_sets;
         this.repsPerSet = reps_per_set;
     }
@@ -49,7 +48,7 @@ public class SetGroup {
      */
     public SetGroup(JSONObject setGroup) {
         try {
-            exerciseId = setGroup.getInt("exercise_id");
+            setExerciseId(setGroup.getInt("exercise_id"));
             if (setGroup.has("routine_id")) routineId = setGroup.getInt("routine_id");
             if (setGroup.has("id")) id = setGroup.getInt("id");
             numOfSets = setGroup.getInt("number_of_sets");
@@ -71,7 +70,7 @@ public class SetGroup {
      */
     public SetGroup(int setGroupId, int exerciseId, int routineId, int reps, int sets) {
         this.id = setGroupId;
-        this.exerciseId = exerciseId;
+        this.setExerciseId(exerciseId);
         this.routineId = routineId;
         this.repsPerSet = reps;
         this.numOfSets = sets;
@@ -83,7 +82,7 @@ public class SetGroup {
      * @return the exercise ID
      */
     public int getExerciseId() {
-        return exerciseId;
+        return exercise.getId();
     }
 
     /**
@@ -91,7 +90,7 @@ public class SetGroup {
      * @param exerciseId - exercise ID
      */
     public void setExerciseId(int exerciseId) {
-        this.exerciseId = exerciseId;
+        this.exercise.setId(exerciseId);
     }
 
     /**
@@ -108,13 +107,6 @@ public class SetGroup {
      */
     public void setRoutineId(int routineId) {
         this.routineId = routineId;
-    }
-
-    /**
-     * sets the Exercise ID
-     */
-    public void setExerciseId() {
-        this.exerciseId = exercise.getId();
     }
 
     /**
@@ -237,7 +229,7 @@ public class SetGroup {
             JSONObject setGroup = new JSONObject();
             setGroup.put("number_of_sets", numOfSets);
             setGroup.put("reps_per_set", repsPerSet);
-            setGroup.put("exercise_id", exerciseId);
+            setGroup.put("exercise_id", this.getExerciseId());
             if (routineId != 0) setGroup.put("routine_id", routineId);
             if (id != 0) setGroup.put("id", id);
             return setGroup;

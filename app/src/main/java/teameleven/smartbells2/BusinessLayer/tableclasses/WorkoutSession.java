@@ -1,6 +1,7 @@
 package teameleven.smartbells2.businesslayer.tableclasses;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,9 +77,10 @@ public class WorkoutSession {
                     setGroups.add(sessionSetGroup);
                 }
             }
-            }catch(JSONException e){
-                e.printStackTrace();
-            }
+            }catch(JSONException e) {
+            e.printStackTrace();
+        }
+        //Log.d("Workout Set Group in session constructor ", this.toString());
     }
 
     /**

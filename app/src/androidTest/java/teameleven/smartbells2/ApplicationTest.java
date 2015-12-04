@@ -18,7 +18,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     public static Test testExercises(){
 
-        suite.addTest(new ExerciseTest());
         return suite;
     }
 }

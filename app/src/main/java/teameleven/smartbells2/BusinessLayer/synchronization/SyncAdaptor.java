@@ -121,7 +121,7 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                     if (UpdateRecord[2] == 0) {
                         modifier = "";
                         object = getChangedObject(UpdateRecord[0], UpdateRecord[1]);
-                        database.deleteObject(UpdateRecord[0], UpdateRecord[1]);
+                        database.deleteObject(UpdateRecord[0], UpdateRecord[1], false);
                         //delete old record -ensures no duplicates
                         }
 
@@ -131,7 +131,7 @@ public class SyncAdaptor extends AbstractThreadedSyncAdapter {
                         //sets the id of the object to be altered
                         modifier = "/" + String.valueOf(UpdateRecord[0]);
                         object = getChangedObject(UpdateRecord[0], UpdateRecord[1]);
-                        database.deleteObject(UpdateRecord[0], UpdateRecord[1]);
+                        database.deleteObject(UpdateRecord[0], UpdateRecord[1], false);
                         //delete old record -ensures no duplicates
                     }
 

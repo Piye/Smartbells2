@@ -113,24 +113,6 @@ public class Exercise {
         }
         return exercises;
     }
-
-    /**
-     * Get an exercise record by exercise id
-     * @param id : Exercise id
-     * @return : a result of rest call to get an record of exercise
-     */
-    public static JSONObject restGetExercise(int id) {
-        try {
-            String temp = RESTID + "/" + String.valueOf(id);
-            System.out.println(temp);
-            AsyncTask test = new RESTCall().execute(temp, "GET");
-            return (JSONObject) test.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     /**
      * Get all Exercise records
      * @return : ArrayList of Exercises
